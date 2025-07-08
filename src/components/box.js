@@ -23,7 +23,7 @@ const Box = ({ src, image, h3 }) => {
           
           {/* Mobile View */}
           <div className="w-full md:hidden flex items-center justify-center">
-            <div className="bg-gray-500/50 backdrop-blur-sm max-w-sm mx-auto px-8 py-6 rounded-3xl flex flex-col items-center justify-center text-center">
+            <div className="bg-gray-500/50 backdrop-blur-sm max-w-sm mx-auto px-10 py-10 rounded-3xl flex flex-col items-center justify-center text-center">
           
               <h3 className="text-lg font-normal text-white tracking-[0.2em] leading-relaxed">
                 {h3}

@@ -3,7 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 
 import Footer from '@/components/footer';
-
+import Header from '@/components/header';
 import { ArrowRight } from 'lucide-react';
 import { useState,useRef,useEffect,useMemo } from 'react';
 import { FaChevronUp,FaChevronDown } from 'react-icons/fa';
@@ -279,128 +279,7 @@ const Properties = () => {
 
   return (
     <div className="min-h-screen ">
-       <header className={`  
-        fixed top-0 w-full z-50  
-        flex justify-between items-center px-4 sm:px-6 py-2
-        transition-all duration-300 ease-in-out  
-        ${isVisible ? 'translate-y-0' : '-translate-y-full'}  
-        ${isAtTop ? 'bg-gray-950/90 backdrop-blur-sm' : 'bg-gray-950/90 backdrop-blur-sm'}  
-      `}>
-        {/* Logo */}
-        <div className="flex-shrink-0">
-          <Link href="/">
-            <Image 
-              src="https://static.wixstatic.com/media/36a881_0cd959d32d904bd7be76303fb23dec0a~mv2.png/v1/fill/w_279,h_63,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Untitled%20design.png" 
-              alt="KW Saudi Arabia Logo" 
-              width={279}
-              height={63}
-              className="h-12 w-auto object-contain"
-              priority
-            />
-          </Link>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-4 lg:space-x-6">
-          <Link href="/ourCulture" className="text-[0.8rem]  text-white hover:text-gray-300 transition-colors">
-            About Us
-          </Link>
-          <div className="w-px h-4 bg-gray-300/50"></div>
-          <Link href="/properties" className="text-[0.8rem] text-white hover:text-gray-300 transition-colors">
-            Search
-          </Link>
-          <div className="w-px h-4 bg-gray-300/50"></div>
-          <Link href="/franchise" className="text-[0.8rem] text-white hover:text-gray-300 transition-colors">
-            Join Us
-          </Link>
-          <div className="w-px h-4 bg-gray-300/50"></div>
-          <Link href="/contactUs" className="text-[0.8rem] text-white hover:text-gray-300 transition-colors">
-            Contact Us
-          </Link>
-          <div className="w-px h-4 bg-gray-300/50"></div>
-          <Link href="/contactUs" className="text-[0.8rem] text-white hover:text-gray-300 transition-colors">
-            Instant Valuation
-          </Link>
-          <div className="w-px h-4 bg-gray-300/50"></div>
-          <Link href="#" className="text-[0.8rem] text-white hover:text-gray-300 transition-colors">
-            عربي
-          </Link>
-          <Link 
-            href="#" 
-            className="border border-white px-4 py-1.5 rounded-full text-white hover:bg-white hover:text-black transition-colors text-[0.8rem]"
-          >
-            Sign In/Register
-          </Link>
-        </nav>
-
-        {/* Mobile Menu Button */}
-        <button 
-          className="md:hidden text-white focus:outline-none p-2" 
-          onClick={toggleMenu}
-          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-        >
-          {isMenuOpen ? (
-            <FaTimes size={20} className="text-white" />
-          ) : (
-            <FaBars size={20} className="text-white" />
-          )}
-        </button>
-
-       {/* Mobile Menu Dropdown */}
-       {isMenuOpen && (
-          
-          <div className="absolute md:hidden top-full ml-10 left-0 right-0 py-4  px-6 space-y-4 shadow-lg bg-gray-950/90 backdrop-blur-sm z-50">
-            {menuItems.map(item => (
-              <div key={item.key}>
-                {item.submenu ? (
-                  <div
-                    onClick={() => toggleSubmenu(item.key)}
-                    className="flex justify-between items-center text-white hover:text-gray-300 transition-colors cursor-pointer py-1"
-                  >
-                    <span
-                      className={
-                        openSubmenu === item.key
-                          ? (["JOIN US", "CONTACT US"].includes(item.label)
-                            ? 'text-[rgba(202,3,32,255)] font-semibold underline'
-                            : 'text-[rgba(202,3,32,255)] font-semibold underline')
-                          : ["JOIN US", "CONTACT US"].includes(item.label)
-                          ? 'text-[rgba(202,3,32,255)] font-semibold'
-                          : 'text-white'
-                      }
-                    >
-                      {item.label}
-                    </span>
-                    {item.submenu && (
-                      openSubmenu === item.key ? (
-                        <FaChevronUp size={14} className="text-white" />
-                      ) : (
-                        <FaChevronDown size={14} className="text-[rgba(202,3,32,255)]" />
-                      )
-                    )}
-                  </div>
-                ) : (
-                  <Link
-                    href={item.href}
-                    className={`block py-1 font-semibold transition-colors ${["JOIN US", "CONTACT US"].includes(item.label) ? 'text-[rgba(202,3,32,255)] hover:text-[rgba(202,3,32,255)]' : 'text-white hover:text-[rgba(202,3,32,255)]'}`}
-                  >
-                    {item.label}
-                  </Link>
-                )}
-                {/* Submenu */}
-                {item.submenu && openSubmenu === item.key && (
-                  <div className="mt-1 space-y-3 text-base text-gray-300">
-                    {item.submenu.map(sub => (
-                      <Link href={sub.href} key={sub.href} className="block hover:text-white">
-                        {sub.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-        </header>
+      <Header></Header>
 
       <main className="max-w-full mx-auto px-4 mt-10 md:mt-35 py-8 md:py-4">
         {/* Icon and Title */}
