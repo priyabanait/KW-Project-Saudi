@@ -9,7 +9,8 @@ const nextConfig = {
       'static.kw.com',
       "c.pxhere.com",
       "images.unsplash.com",
-      "images.pexels.com"
+      "images.pexels.com",
+      'www.kwuk.com'
     ],
   },
 };

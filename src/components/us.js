@@ -245,12 +245,12 @@ const Contact = (props) => {
      
                    
                      <div className="mt-8 flex justify-end">
-                       <button
-                         type="submit"
-                         className="w-32 md:w-32 bg-[rgba(202,3,32,255)] text-white py-2 rounded-full text-sm hover:bg-red-950 transition"
-                       >
-                         Submit
-                       </button>
+                     <button
+                    type="submit"
+                    className="w-full md:w-32 bg-[rgba(202,3,32,255)] text-white py-2 rounded-full text-base font-semibold hover:bg-gray-600 transition"
+                  >
+                    Submit
+                  </button>
                      </div>
                    </form>
                  </div>

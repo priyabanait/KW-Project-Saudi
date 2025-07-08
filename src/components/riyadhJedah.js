@@ -90,7 +90,7 @@ const RiyadhJedah = (props) => {
 <div className="flex-1 p-6 flex justify-center items-center">
   <form className="w-full md:max-w-full space-y-4 py-10 md:px-15">
     <div>
-      <label className="block mb-1 md:text-sm text-[0.7rem] font-sm">First Name</label>
+      <label className="block mb-1 md:text-base text-base font-sm">First Name</label>
       <input
         type="text"
         placeholder="First name"
@@ -98,7 +98,7 @@ const RiyadhJedah = (props) => {
       />
     </div>
     <div className='py-2'>
-      <label className="block mb-1 md:text-sm text-[0.7rem] font-sm">Last Name</label>
+      <label className="block mb-1 md:text-base text-base font-sm">Last Name</label>
       <input
         type="text"
         placeholder="Last name"
@@ -106,7 +106,7 @@ const RiyadhJedah = (props) => {
       />
     </div>
     <div className='py-2'>
-      <label className="block mb-1 md:text-sm text-[0.7rem] font-sm">Email *</label>
+      <label className="block mb-1 md:text-base text-base font-sm">Email *</label>
       <input
         type="email"
         placeholder="Email"
@@ -114,7 +114,7 @@ const RiyadhJedah = (props) => {
       />
     </div>
     <div className='py-2'>
-      <label className="block mb-1 md:text-sm text-[0.7rem] font-sm">Address To</label>
+      <label className="block mb-1 md:text-base text-base font-sm">Address To</label>
       <select className="w-full p-3 text-base mt-2 border-white rounded bg-white focus:outline-none">
         <option value="">Select</option>
         <option value="sales">Sales</option>
@@ -122,7 +122,7 @@ const RiyadhJedah = (props) => {
       </select>
     </div>
     <div className='py-2'>
-      <label className="block mb-1  md:text-sm text-[0.7rem] font-sm">Message *</label>
+      <label className="block mb-1  md:text-base text-base font-sm">Message *</label>
       <textarea
         placeholder="Message"
         rows="2"
@@ -130,11 +130,11 @@ const RiyadhJedah = (props) => {
       />
     </div>
     <button
-      type="submit"
-      className="bg-[rgba(202,3,32,255)] text-white px-8 py-2 rounded-full float-right"
-    >
-      Submit
-    </button>
+                    type="submit"
+                    className="w-full md:w-32 bg-[rgba(202,3,32,255)] text-white py-2 rounded-full text-base font-semibold hover:bg-gray-600 transition"
+                  >
+                    Submit
+                  </button>
   </form>
 </div>
 

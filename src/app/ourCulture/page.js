@@ -3,6 +3,8 @@ import Header from '@/components/header';
 import Box from '@/components/box';
 import Footer from '@/components/footer';
 import Image from 'next/image';
+import CeoTeam from '@/components/ceoTeam';
+import Howwill from '@/components/Howwill';
 import {
   FaArrowUpRightFromSquare,
   FaBookOpen,
@@ -54,50 +56,7 @@ EQUITY: OPPORTUNITIES FOR ALL
 SUCCESS: RESULTS THROUGH PEOPLE`
     },
   ];
-  const teamMembers = [
-  {
-    name: "MUHANNAD AWAD",
-    title: "CEO / OPERATING PRINCIPLE",
-    email: "M.AWAD@KWSAUDIARABIA.COM",
-    phone: "+966 56 505 7711",
-    image: "https://static.wixstatic.com/media/36a881_c32aecbd35de48f1839a4c8b90be6196~mv2.jpg/v1/fill/w_365,h_365,fp_0.46_0.15,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Pic48_edited.jpg", // Image must be in /public
-  },
-  {
-    name: "HAIFA SDIRI",
-    title: "REGIONAL MCA",
-    email: "HSDIRI@KWSAUDIARABIA.COM",
-    phone: "+966 55 469 1606",
-    image: "https://static.wixstatic.com/media/36a881_1d8efa05d1da4efcbcdcfd4a99921c79~mv2.png/v1/fill/w_365,h_365,fp_0.49_0.23,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Haifa%20Sdiri.png", // Image must be in /public
-  },
-  {
-    name: "ABDALLAH BAKEER",
-    title: "REGIONAL DIRECTOR",
-    email: "A.BAKEER@KWSAUDIARABIA.COM",
-    phone: "+966 50 006 1897",
-    image: "https://static.wixstatic.com/media/36a881_0ddd8c953b7b41509013bd8846239274~mv2.png/v1/fill/w_336,h_336,fp_0.51_0.24,lg_1,q_85,enc_avif,quality_auto/Abdullah%20Bakeer.png"
-  },
-  {
-    name: "ALAA MOFTAH",
-    title: "REGIONAL TECHNOLOGY MANAGER",
-    email: "ALAA.MOFTAH@KWSAUDIARABIA.COM",
-    phone: "+966 50 060 0592",
-    image: "https://static.wixstatic.com/media/36a881_e0f85e7b86444035b1f97950b5574a74~mv2.png/v1/fill/w_365,h_365,fp_0.51_0.24,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Alaa%20Moftah.png", // Image must be in /public
-  },
-  {
-    name: "AYAN HASSAN",
-    title: "REGIONAL OPERATION MANAGER",
-    email: "AYANH@KWSAUDIARABIA.COM",
-    phone: "+966 56 754 8770",
-    image: "https://static.wixstatic.com/media/36a881_2841965220f84b56b10665f5679c8081~mv2.png/v1/fill/w_365,h_365,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Nuha%20Alsubhi.png"
-  },
-  {
-    name: "OSAMA HAMZE",
-    title: "REGIONAL TECHNOLOGY",
-    email: "OSAMA.HAMZE@KWSAUDIARABIA.COM",
-    phone: "+966 59 848 0973",
-    image: "https://static.wixstatic.com/media/36a881_da8c9c2ce26a4f6bb8c54774c402735f~mv2.png/v1/fill/w_365,h_365,fp_0.49_0.22,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Osama%20Hamza.png", // Image must be in /public
-  },
-];
+  
 
   return (
     <div className="relative">
@@ -116,28 +75,28 @@ SUCCESS: RESULTS THROUGH PEOPLE`
       height={400}
       className="w-70 h-20 md:w-[800px] md:h-[400px] object-contain"
     />
-    <button className="bg-[rgba(202,3,32,255)] w-40 text-white px-8 py-1.5 text-[0.6rem] rounded-full block mx-auto md:hidden mt-4 mb-4">
+    <button className="bg-[rgba(202,3,32,255)] w-40 text-white px-8 py-1.5 text-xs font-semibold rounded-full block mx-auto md:hidden mt-4 mb-4">
       JOIN US
     </button>
   </div>
       {/* Insert mobile-only intro text above OUR BELIEFS */}
-      <div className="md:hidden px-4 md:py-4 py-18">
+      <div className="md:hidden px-4 md:py-4 py-4">
         <div className="mx-auto text-center">
           <div className="mt-1">
-            <p className="text-xs text-[0.6rem]">
-              We are looking to introduce the individuals who are instrumental in driving our success. We believe that every moment holds great promise, and we are passionate about our daily
+            <p className="text-xs leading-[1.6]">
+            We Are Looking To Introduce The Individuals Who Are Instrumental In Driving Our Success. We Believe That Every Moment Holds Great Promise, And We Are Passionate About Our Daily
           
        
-              work. We have the most skilled employees at every stage of our operations. Our leadership team is a diverse group of individuals who bring a wealth of experience from various
-         
-           
-              areas within the company.
+          Work. We Have The Most Skilled Employees At Every Stage Of Our Operations. Our Leadership Team Is A Diverse Group Of Individuals Who Bring A Wealth Of Experience From Various
+     
+       
+          Areas Within The Company.
             </p>
           </div>
         </div>
       </div>
       {/* Intro Text */}
-      <main className="px-4 mt-10">
+      <main className="px-4 md:mt-10 mt-4">
         <div className="mx-auto text-center">
         <span className="md:font-normal text-lg tracking-[0.2em] md:text-4xl no-underline bg-transparent leading-[1.3]">
   OUR BELIEFS
@@ -146,7 +105,7 @@ SUCCESS: RESULTS THROUGH PEOPLE`
 
           <hr className="w-30 md:w-46 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px] mt-1 md:mt-8" />
           <div className="md:mt-10 md:py-0 py-10">
-          <p className="md:mx-65 mx-4 font-normal tracking-[0em] md:text-[1rem] text-[0.7rem] md:font-normal  no-underline bg-transparent leading-[1.6]">
+          <p className="md:mx-65 mx-4 font-normal tracking-[0em] md:text-[1rem] text-xs md:font-normal  no-underline bg-transparent leading-[1.6]">
           We Believe That The Company We Keep Can Contribute To Our Lives In Untold Ways.
   To Help Cement This Understanding We&rsquo;ve Formalized A
 
@@ -223,153 +182,8 @@ SUCCESS: RESULTS THROUGH PEOPLE`
           </div>
         </div>
       </main>
-<div className="min-h-screen flex flex-col items-center justify-start pt-25 md:pt-10 md:mx-10 mx-6 ">
-  <div className="flex flex-col md:flex-row w-full ">
-    {/* Left Image */}
-    <div className="w-full md:w-full flex justify-center items-start ">
-      <Image
-        src="https://static.wixstatic.com/media/36a881_b66311c7d0ce4bab88e85a84321bd1b0~mv2.jpg/v1/fill/w_798,h_934,fp_0.50_0.33,q_85,enc_avif,quality_auto/Pic153%20(4).jpg"
-        alt="CEO"
-        width={500}
-        height={700}
-        className="object-cover h-auto w-full md:w-[100%] border rounded-[4rem] border-gray-400 "
-      />
-    </div>
-
-    {/* Right Content - Changed to items-start */}
-    <div className="w-full md:w-full flex flex-col justify-start items-center text-center mt-8 md:mt-12 px-2 md:px-10">
-      <h1 className="text-4xl md:text-5xl font-normal tracking-wide">
-        MEET OUR <span className="text-[rgba(202,3,32,255)] font-bold">CEO</span>
-      </h1>
-
-      <h2 className="text-[rgba(202,3,32,255)] py-4 md:py-4 mt-4 md:mt-14 text-[0.7rem] md:text-[0.9rem] font-semibold tracking-wider">
-        CEO MESSAGE
-      </h2>
-
-      <p className="mt-4 md:text-[0.9rem] text-[0.7rem] text-gray-700 md:leading-5 leading-normal max-w-md">
-        More than ever, we want to thank and recognize our agents and partners
-        for diligently bringing their very
-        
-
- best when their clients need it most.
-        As a company built by agents, and for agents, we wake up every day
-      
-         asking
-        ourselves how we can best support them.
-      </p>
-
-      <p className="mt-6 md:text-[0.9rem] text-[0.7rem] text-gray-700 md:leading-5 leading-normal max-w-md">
-        KW has cultivated a agent-  
-
-        centric, technology-driven, and
-
-        education-based culture that rewards agents as stakeholders.
-      
-        Regional team members, market center team members, and 
-      
-        agent partners. No
-        one succeeds alone, and  
-      
-
-        this is truly a shared moment in recognition of
-        our continuous achievements together.</p>
-     
-    </div>
-  </div>
-</div>
-     <div className="min-h-screen bg-white mt-4 md:mt-20">
-  {/* Changed outer container to stack on mobile */}
-  <div className="flex flex-col md:flex-row border-t border-b border-r border-black">
-    
-    {/* Left Section - Full width on mobile, sticky 50% on desktop */}
-    <div className="w-full md:w-1/2 flex justify-center items-center 
-                   md:sticky md:top-0 top-20 h-auto md:h-screen 
-                   border-b md:border-b-0 md:border-r border-black
-                   py-6 md:py-0">
-      <div className="text-center px-4">
-        <h2 className="text-3xl md:text-4xl md:font-normal font-semibold mb-2">OUR TEAM</h2>
-        <div className="w-30 h-0.5 bg-[rgba(202,3,32,255)] border-0 mb-2 mx-auto mt-4 md:mt-10"></div>
-        <p className="text-sm tracking-wider mt-4 md:mt-10">REGION TEAM</p>
-      </div>
-    </div>
-
-    {/* Right Section - Full width on mobile, 50% on desktop */}
-    <div className="w-full md:w-1/2">
-      {teamMembers.map((member, index) => (
-        <div key={index}>
-          <div className="flex flex-row gap-3 md:gap-6 p-6 md:p-6 items-start">
-          <div className="flex-shrink-0 w-32 h-32 sm:w-32 sm:h-32 md:w-60 md:h-60">
-  <Image
-    src={member.image}
-    alt={member.name}
-    width={160}
-    height={160}
-    className="rounded-xl object-cover w-32 h-32 sm:w-32 sm:h-32 md:w-60 md:h-60"
-  />
-</div>
-
-            <div className="flex-1 text-left">
-            <p className="text-xs font-normal md:font-semibold md:text-base md:tracking-[0.2em] uppercase md:mb-2">
-                {member.name}
-              </p>
-              <hr className="w-37 md:w-60 h-[1px] bg-[rgba(202,3,32,255)] border-0 my-2 mx-0"></hr>
-              <p className="font-sans font-normal not-italic no-underline md:text-[0.8rem] text-[10px] leading-[1.6] tracking-normal">
- 
-                {member.title}
-              </p>
-              <p className="text-[0.6rem] md:text-sm mb-1 text-gray-600 mt-8 md:mt-28">{member.email}</p>
-              <p className="text-xs md:text-sm text-gray-600">{member.phone}</p>
-            </div>
-          </div>
-          {index !== teamMembers.length - 1 && (
-            <hr className="border-t border-black" />
-          )}
-        </div>
-      ))}
-    </div>
-  </div>
-</div>
-<div className="order-1 md:order-2 flex flex-col items-center justify-center py-2 md:py-0">
-                   <Image
-                     src="/howwillyouthink.png"
-                     alt="How Will You Thrive"
-                     width={800}
-                     height={400}
-                     className="w-70 h-20 md:w-[950px] md:h-[400px] object-contain"
-                   />
-                 </div>
-           
-      <main className=" hidden md:block px-4 py-2 md:py-6 md:mt-2">
-        <div className="max-w-full mx-auto text-center md:mt-14">
-          <p className="text-2xl md:text-4xl font-normal">
-            KW SAUDI ARABIA
-          </p>
-          <hr className="w-48 md:w-96 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px] mt-6 md:mt-16" />
-          <p className='mt-4 md:mt-8'>Together We Do More</p>
-          <p className="px-4 md:px-0">Keller Williams Is There To Help At Every Big Step In The Realestate Journey.</p>
-        
-           <div className="flex justify-center md:justify-center mt-6 md:mt-10">
-  <button className="
-    w-56 bg-[rgba(202,3,32,255)] text-white py-3 rounded-full text-sm
-    relative overflow-hidden
-    group transition-all duration-300
-    hover:pr-8 hover:pl-4
-  ">
-    <span className="inline-block transition-all duration-300 group-hover:-translate-x-3">
-  JOIN US
-    </span>
-    <span className="
-      absolute right-4 top-1/2 -translate-y-1/2
-      opacity-0 group-hover:opacity-100
-      transition-all duration-300 text-black
-      group-hover:translate-x-0 translate-x-4
-    ">
-    ⟶
-    </span>
-  </button>
-</div>
-        </div>
-      </main>
+      <CeoTeam></CeoTeam>
+<Howwill></Howwill>
        <hr className=" hidden md:block w-8/12 md:w-6/12 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px] mt-10 md:mt-20 mb-10" />
       <Footer />
     </div>

@@ -63,15 +63,15 @@ const Tenant = () => {
       </main>
 
       {/* Section Boxes */}
-      <div className="max-w-full mx-auto mt-14 bg-gray-100">
+      <div className="max-w-full mx-auto mt-14 ">
         <hr className="w-full border-t border-gray-500" />
         {sections.map((section, index) => (
           <React.Fragment key={index}>
             {/* Mobile: stacked vertical layout */}
             <div className="md:hidden px-4 py-6 mx-6">
               <div className="text-3xl py-2 text-gray-400 font-normal mb-1">{section.number}</div>
-              <div className="text-xs font-semibold text-black mb-4 tracking-[0.1em] md:tracking-tight">{section.title}</div>
-              <div className="text-[0.6rem] leading-relaxed text-gray-700">{section.description}</div>
+              <div className="text-sm font-semibold text-black mb-4 tracking-[0.1em] md:tracking-tight">{section.title}</div>
+              <div className="text-xs leading-relaxed text-gray-700">{section.description}</div>
             </div>
             {/* Desktop: grid layout */}
             <div className="hidden md:grid grid-cols-12 items-stretch hover:bg-[rgba(202,3,32,255)] group transition duration-300 px-4 min-h-[200px]">
@@ -140,7 +140,7 @@ const Tenant = () => {
       height={400}
       className="w-70 h-20 md:w-[950px] md:h-[400px] object-contain"
     />
-    <button className="bg-[rgba(202,3,32,255)]w-40 text-white px-8 py-1.5 text-[0.6rem] rounded-full block mx-auto md:hidden mt-4 mb-4">
+    <button className="bg-[rgba(202,3,32,255)] w-40 text-white px-8 py-1.5 text-xs font-semibold rounded-full block mx-auto md:hidden mt-4 mb-4">
       JOIN US
     </button>
   </div>

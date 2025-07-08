@@ -80,8 +80,8 @@ Your KW Agent will guide you with a few suggestions such as  +`,
     
 
       {/* Main Content Section */}
-      <main className="px-4 md:px-40 py-6 mt-4 md:mt-2">
-        <div className="max-w-full mx-12 px-4 sm:px-6 lg:px-8">
+      <main className="px-4 md:px-40 py-2  md:mt-2">
+      <div className=" p-4 md:p-0 max-w-full mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
             <div className="w-full md:w-auto text-center">
 <p className='text-xs md:text-[1rem]'>
@@ -96,7 +96,7 @@ Your KW Agent will guide you with a few suggestions such as  +`,
       </main>
 
       {/* Timeline Section */}
-      <div ref={timelineRef} className="relative bg-white pt-12 pb-24">
+      <div ref={timelineRef} className="relative bg-white pt-2 pb-10">
         {/* Center Vertical Line - hidden on mobile */}
         <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-black z-0" />
 
@@ -126,7 +126,7 @@ Your KW Agent will guide you with a few suggestions such as  +`,
     {/* ✅ MOBILE ONLY */}
     <div className={`md:hidden mx-4 mb-4 ${step.align === 'right' ? 'text-left' : 'text-right'}`}>
     
-      <h2 className="text-[rgba(202,3,32,255)] text-3xl font-normal  inline-block">
+      <h2 className="text-[rgba(202,3,32,255)] md:text-3xl text-xl font-normal  inline-block">
       {step.title}
     </h2>
       <p className="whitespace-pre-line mt-2 text-xs">{step.content}</p>

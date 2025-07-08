@@ -97,7 +97,7 @@ const agents = [
   {/* Left: Agents List */}
   <div className="space-y-6 md:pr-6 md:my-15">
     <h2 className="font-semibold text-center text-sm ">OUR AGENTS</h2>
-    <hr className="bg-gray-500 h-[1px] border-0 w-160 mx-auto" />
+    <hr className="bg-gray-500 h-[1px] border-0 md:w-160 w-30mx-auto" />
 
 
     <div className="grid grid-cols-1 gap-6">
@@ -126,9 +126,12 @@ const agents = [
   <p className="text-sm text-gray-500 ml-auto">{agent.city}</p>
 </div>
 
-            <p className="md:text-sm text-[0.7rem]  mb-2 md:mb-2">{agent.phone}</p>
+            <p className="md:text-sm text-[0.7rem]  mb-2 md:mb-2 break-all">{agent.phone}</p>
           
-            <p className="md:text-sm text-[0.6rem] mb-4 md:mb-12">{agent.email}</p>
+            <p className="md:text-sm text-[0.7rem] mb-4 md:mb-12 break-all">
+  {agent.email}
+</p>
+
 
             <div className="space-y-1">
               <a href="#" className="block md:text-sm text-[0.8rem]">Get Evaluation</a>

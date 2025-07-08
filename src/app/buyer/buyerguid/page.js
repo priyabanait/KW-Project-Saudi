@@ -132,8 +132,8 @@ What's Next? +`,
     <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
       <div className="w-full md:w-auto">  {/* Removed text-center from here since parent has it */}
         <h1 className="text-lg md:text-3xl tracking-[0.2em] md:tracking-[0.1em] py-4  md:py-8">Home <span className='text-red-700'>Buying </span> Tips from Keller Williams</h1>
-       <div className='mx-12 md:mx-0 tracking-[0.1em] md:tracking-normal'>
-       <p className="text-xs md:text-[1rem]">
+       <div className='mx-4 md:mx-0 tracking-normal mt-2 md:mt-0  md:tracking-normal'>
+       <p className="text-xs md:text-[1rem] leading-5">
           Our Experience, A House Is Not A Dream Home Because Of Its Size Or Colour. Its About How You Feel When You Walk Through The Front Door – The Way You Can Instantly See
       
        
@@ -180,7 +180,7 @@ What's Next? +`,
 
   {/* Title - Reverse align compared to number */}
   <div className={`${step.align === 'right' ? 'text-left' : 'text-right'}`}>
-    <h2 className="text-[rgba(202,3,32,255)] text-2xl font-normal  inline-block">
+    <h2 className="text-[rgba(202,3,32,255)] md:text-3xl text-xl font-normal  inline-block">
       {step.title}
     </h2>
     <p className="whitespace-pre-line mt-2 text-xs">{step.content}</p>

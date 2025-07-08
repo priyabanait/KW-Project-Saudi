@@ -6,8 +6,10 @@ import Box from '@/components/box';
 import Image from 'next/image';
 
 const Technology = () => {
-  const timelineRef = useRef(null);
-  const [markerTop, setMarkerTop] = useState(0);
+  const timelineRef1 = useRef(null);
+  const timelineRef2 = useRef(null);
+  const [markerTop1, setMarkerTop1] = useState(0);
+  const [markerTop2, setMarkerTop2] = useState(0);
 
   const steps = [
     {
@@ -93,7 +95,7 @@ const Technology = () => {
     },
      {
       title: 'COMMAND YOUR TRANSACTIONS FOR TEAMS',
-      content: `With Opportunities Command Offers The Central Hub You’ve Been Searching For – Allowing You To Lead With Confidence And Support Your Team In Delivering High-quality Service At Every Step Of The Transaction.
+      content: `With Opportunities Command Offers The Central Hub You've Been Searching For – Allowing You To Lead With Confidence And Support Your Team In Delivering High-quality Service At Every Step Of The Transaction.
 
       • Create And Customize Your Team Opportunity Pipeline
 • Manage Your Team Opportunities
@@ -105,23 +107,35 @@ const Technology = () => {
   ]
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (!timelineRef.current) return;
-
-      const timelineRect = timelineRef.current.getBoundingClientRect();
+    const handleScroll1 = () => {
+      if (!timelineRef1.current) return;
+      const timelineRect = timelineRef1.current.getBoundingClientRect();
       const timelineStart = window.scrollY + timelineRect.top;
       const timelineHeight = timelineRect.height;
       const currentScroll = window.scrollY + 200;
-
       let progress = (currentScroll - timelineStart) / timelineHeight;
       progress = Math.max(0, Math.min(progress, 1));
-
-      setMarkerTop(progress * 100);
+      setMarkerTop1(progress * 100);
     };
+    window.addEventListener('scroll', handleScroll1);
+    handleScroll1();
+    return () => window.removeEventListener('scroll', handleScroll1);
+  }, []);
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+  useEffect(() => {
+    const handleScroll2 = () => {
+      if (!timelineRef2.current) return;
+      const timelineRect = timelineRef2.current.getBoundingClientRect();
+      const timelineStart = window.scrollY + timelineRect.top;
+      const timelineHeight = timelineRect.height;
+      const currentScroll = window.scrollY + 200;
+      let progress = (currentScroll - timelineStart) / timelineHeight;
+      progress = Math.max(0, Math.min(progress, 1));
+      setMarkerTop2(progress * 100);
+    };
+    window.addEventListener('scroll', handleScroll2);
+    handleScroll2();
+    return () => window.removeEventListener('scroll', handleScroll2);
   }, []);
 
   return (
@@ -151,7 +165,7 @@ const Technology = () => {
           
             Your Database, Your Business, And Your Future.</p>
             <p className="text-xs mt-2 md:text-[1rem]">
-               More Than A Crm, Command’s Interconnected Tools Support Connections Between Data And Clients, Keeping You In The Center Of It All.
+            More than a CRM, Command&apos;s interconnected tools support connections between data and clients, keeping you at the center of it all.
             </p>
           </div>
         </div>
@@ -173,7 +187,7 @@ const Technology = () => {
       </div>
 
       {/* Timeline Section */}
-      <div ref={timelineRef} className="relative bg-white pt-2 pb-2">
+      <div ref={timelineRef1} className="relative bg-white pt-2 pb-2">
         {/* Vertical Line */}
         <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-black z-0" />
 
@@ -182,12 +196,12 @@ const Technology = () => {
           <div
             className="absolute left-1/2 transform -translate-x-1/2"
             style={{
-              top: `${markerTop}%`,
+              top: `${markerTop1}%`,
               transition: 'top 0.1s ease-out',
             }}
           >
-            <div className="w-4 h-4 relative flex items-start justify-center">
-              <span className="w-4 h-0.5 bg-[rgba(202,3,32,255)]" />
+            <div className="w-6 h-6 relative flex items-start justify-center">
+              <span className="w-6 h-0.5 bg-[rgba(202,3,32,255)]" />
             </div>
           </div>
         </div>
@@ -245,7 +259,7 @@ const Technology = () => {
       </div>
 
 {/* Timeline Section */}
-      <div ref={timelineRef} className="relative bg-white pt-2 pb-2">
+      <div ref={timelineRef2} className="relative bg-white pt-2 pb-2">
         {/* Vertical Line */}
         <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-px bg-black z-0" />
 
@@ -254,12 +268,12 @@ const Technology = () => {
           <div
             className="absolute left-1/2 transform -translate-x-1/2"
             style={{
-              top: `${markerTop}%`,
+              top: `${markerTop2}%`,
               transition: 'top 0.1s ease-out',
             }}
           >
-            <div className="w-4 h-4 relative flex items-start justify-center">
-              <span className="w-4 h-0.5 bg-[rgba(202,3,32,255)]" />
+            <div className="w-6 h-6 relative flex items-start justify-center">
+              <span className="w-6 h-0.5 bg-[rgba(202,3,32,255)]" />
             </div>
           </div>
         </div>

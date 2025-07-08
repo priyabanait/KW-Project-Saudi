@@ -297,7 +297,7 @@ const[expanded,setExpanded]=useState(false);
       </div>
     </div>
     
-    <div className="w-full text-center py-5 text-gray-400 text-sm">
+    <div className="w-full text-center py-5 text-gray-400 md:text-sm text-xs">
       Each Keller Williams® office is independently owned and operated
     </div>
     
@@ -344,7 +344,7 @@ const[expanded,setExpanded]=useState(false);
             <p>ABR, SRS, PSA, RENE</p>
           </div>
         </div>
-        <div className="flex justify-center lg:justify-center">
+        <div className="flex justify-left lg:justify-center">
           <div>
             <p className='font-semibold'>MARKET CENTER</p>
             <p>Keller Williams Frisco Stars</p>

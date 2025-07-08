@@ -46,7 +46,7 @@ const Franchise = () => {
                   </h1>
                   <hr className="w-34 md:w-96 mx-auto bg-[rgba(202,3,32,255)] 0 h-[4px] md:h-[2px] rounded-full mt-6 md:mt-14" />
                   <div className="mt-6"> 
-                    <p className="text-[0.6rem] md:text-[0.8rem] text-white">
+                    <p className="text-sm md:text-[0.8rem] text-white">
                       As A Company Founded On Proven Systems And Models, Keller Williams Provides The Blueprint For Building A Big Business And An Even Bigger Life.
                     </p>
                     <div className=" hidden md:flex justify-center md:justify-center mt-6 md:mt-10">
@@ -74,7 +74,7 @@ const Franchise = () => {
               </main>
             </div>
             {/* Big Life Box */}
-            <main className="px-4 py-32 md:mt-32 mt-10">
+            <main className="px-4 md:py-32 md:mt-32 py-10">
               <div className="text-center mx-4">
                 <h1 className="text-xl md:text-4xl tracking-[0.2em]  font-light text-gray-800">
                   WE WANT YOU TO <span className="
@@ -83,10 +83,10 @@ const Franchise = () => {
                 <hr className="w-60 md:w-96 mx-auto bg-[rgba(202,3,32,1)] h-[2px] border-0 mt-6 md:mt-14" />
 
                 <div className="mt-10">
-                  <p className="text-[0.7rem] md:text-[0.8rem]">
+                  <p className="text-sm md:text-[0.8rem]">
                     Our mission is to help you to build careers worth having, businesses worth owning, lives worth living, experiences worth giving and legacies worth leaving. To that end we want
                   </p>
-                  <p className="text-[0.7rem] md:text-[0.8rem]">
+                  <p className="text-sm md:text-[0.8rem]">
                     this to be the most amazing place to be an estate agent in the UK and globally. And we want the best leadership for our market centres.
                   </p>
                 </div>

@@ -17,10 +17,10 @@ export default function Training() {
         }
       />
 
-      <section className="bg-white mt-4 md:mt-10 md:pb-16 mb-4 px-4 text-center py-15 md:py-0">
+      <section className="bg-white mt-4 md:mt-10 md:pb-16 mb-4 px-4 text-center py-4 md:py-0">
         <div className="max-w-full mx-auto">
           
-          <Image src="/keller.png" alt="Gary Keller" width={1800} height={600} className="mx-auto w-full h-auto" />
+          <Image src="/keller.png" alt="Gary Keller" width={1800} height={700} className="mx-auto w-full h-auto" />
         </div>
       </section>
 
@@ -98,7 +98,7 @@ export default function Training() {
     group transition-all duration-300
     hover:pr-8 hover:pl-4
   ">
-    <span className="inline-block text-base font-semibold transition-all duration-300 group-hover:-translate-x-3">
+    <span className="inline-block md:text-base text-xs font-semibold transition-all duration-300 group-hover:-translate-x-3">
       CONTACT US
     </span>
     <span className="
@@ -112,7 +112,7 @@ export default function Training() {
   </button>
 </div>
 </div>
-          <div className="text-center md:text-center mt-20 md:mt-0">
+          <div className="text-center md:text-center mt-4 md:mt-0">
           <h2 className="text-xl md:text-3xl md:font-semibold font-semibold text-[rgba(202,3,32,255)] mb-6">Events</h2>
           <p className="md:text-[1.3rem] text-[0.8rem] text-gray-700 mx-6 md:mx-0 mb-8 md:px-20">Network and learn with top real estate talent at Keller Williams events. 
               From Family Reunion to Mega Agent Camp and Masterminds, connect with top producers, bold thinkers, 
@@ -124,7 +124,7 @@ export default function Training() {
     group transition-all duration-300
     hover:pr-8 hover:pl-4
   ">
-    <span className="inline-block text-base font-semibold transition-all duration-300 group-hover:-translate-x-3">
+    <span className="inline-block md:text-base text-xs font-semibold transition-all duration-300 group-hover:-translate-x-3">
     LEARN MORE
     </span>
     <span className="
@@ -148,7 +148,7 @@ export default function Training() {
           <h1 className="text-2xl md:text-4xl font-normal md:tracking-[0.1rem] tracking-[0.2rem] md:mb-10 mb-5">BUILD EXPERTISE</h1>
           <hr className="w-30 md:w-72 mx-auto bg-[rgba(202,3,32,255)] h-[2px] border-0 md:mb-8 mb-10" />
 
-          <p className="text-[0.7rem] md:text-[1rem] leading-relaxed md:font-normal md:mx-50 mx-8">Keller Williams University Provides The Most Advanced And Comprehensive Learning
+          <p className="text-xs md:text-[1rem] leading-relaxed md:font-normal md:mx-50 mx-4">Keller Williams University Provides The Most Advanced And Comprehensive Learning
              Opportunities In Real 
             Estate And Empowers You To Become The
          Expert In Your Local Market.</p>
@@ -240,7 +240,7 @@ export default function Training() {
         <div className="relative z-10 w-full max-w-full px-6 text-center">
            <h1 className="text-2xl md:text-4xl font-normal md:tracking-[0.1rem] tracking-[0.2rem] md:mb-10 mb-5">REMOVE LIMITS</h1>
           <hr className="w-34 md:w-72 mx-auto bg-[rgba(202,3,32,255)] h-[2px] border-0 mb-8" />
-          <p className="text-[0.7rem] md:text-[1rem] leading-relaxed md:font-normal md:mx-50 mx-6">Your Business Grows To The Extent That You Do! Award-winning Kw Maps Coaching Offers 
+          <p className="text-xs md:text-[1rem] leading-relaxed md:font-normal md:mx-50 mx-4">Your Business Grows To The Extent That You Do! Award-winning Kw Maps Coaching Offers 
             A Breadth Of High-accountability Programs Designed To Turn Your
            Biggest Goals Into Realty. Our Coaches Are Experts On Industry Best Practices, The Models Of Mrea And Keller Williams Systems,
              Putting Them In A Unique Position

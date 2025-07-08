@@ -27,20 +27,20 @@ const Footer = () => {
           <hr className="block md:hidden w-20 md:w-5/12 border-0 mx-auto bg-[rgba(202,3,32,255)]  h-[2px] mt-1 md:mt-14 mb-5" />
           
           <div className="flex flex-col items-center justify-center mb-2 md:hidden w-full">
-            <span className="text-sm mb-2">EMAIL  <span className="inline-block w-2" />  - <span className="inline-block w-4" />  <span className="text-[0.8rem]">info@kwsaudiarabia.com</span></span>
-            <span className="text-sm">TELEPHONE  <span className="inline-block w-2" /> - <span className="inline-block w-4" />  <span className="text-[0.8rem]">9200-15671</span></span>
+            <span className="text-sm mb-2">EMAIL  <span className="inline-block w-2" />  - <span className="inline-block w-4" />  <span className="text-[0.8rem] font-bold">info@kwsaudiarabia.com</span></span>
+            <span className="text-sm">TELEPHONE  <span className="inline-block w-2" /> - <span className="inline-block w-4" />  <span className="text-[0.8rem] font-bold">9200-15671</span></span>
           </div>
           
           {/* Email - Desktop */}
           <div className="hidden md:flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start text-[1rem] mb-1 md:mb-0">
-            <span className="font-semibold md:mr-1">EMAIL<span className="inline-block w-4" />-<span className="inline-block w-4" /></span>
-            <span>INFO@KWSAUDIARABIA.COM</span>
+            <span className="font-normal md:mr-1">EMAIL<span className="inline-block w-4" />-<span className="inline-block w-4" /></span>
+            <span className='font-bold'>info@kwsaudiarabia.com</span>
           </div>
 
           {/* Telephone - Desktop */}
           <div className="hidden md:flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start text-[1rem]">
-            <span className="font-semibold md:mr-1">TELEPHONE<span className="inline-block w-4" />-<span className="inline-block w-4" /></span>
-            <span>9200-15671</span>
+            <span className="font-normal md:mr-1">TELEPHONE<span className="inline-block w-4" />-<span className="inline-block w-4" /></span>
+            <span className='font-bold'>9200-15671</span>
           </div>
 
           {/* Social Icons - Desktop */}
@@ -133,7 +133,7 @@ const Footer = () => {
               items: [
                 { name: "Search Property", path: "/properties" },
                 { name: "Property Auction", path: "/properties/auction" },
-                { name: "New Development", path: "/properties/newDevelopment" },
+                { name: "New Development", path: "/properties/newdevelopment" },
                 { name: "Buyer Guide", path: "/buyer/buyerguid" },
               ],
             },
@@ -161,11 +161,11 @@ const Footer = () => {
               imageUrl: "https://static.wixstatic.com/media/36a881_795b387ef3734f7b97a97edd833d71b7~mv2.png/v1/fill/w_230,h_189,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/8.png",
               path: "/ourCulture",
               items: [
-                { name: "About Us", path: "/ourCulture" },
+                { name: "About Us", path: "/aboutus" },
                 { name: "Why KW", path: "/ourCulture/whyKW" },
                 { name: "KW Training", path: "/training" },
                 { name: "KW Technology", path: "/ourCulture/technology" },
-                { name: "KW University", path: "/ourCulture/kwuniversity" },
+                { name: "KW University", path: "https://console.command.kw.com/connect/learning			" },
                 { name: "Events", path: "/ourCulture/event" },
                 { name: "News", path: "/ourCulture/event" },
                 { name: "Join Us", path: "/joinus" },
@@ -194,7 +194,7 @@ const Footer = () => {
               <div className="border-l border-[rgba(202,3,32,255)] md:border-gray-300 pl-3 ml-4">
                 <ul className="md:text-base text-xs space-y-1 md:space-y-6 text-left">
                   {items.map((item, index) => (
-                    <li key={index} className="hover:text-gray-600 transition-colors">
+                    <li key={index} className="hover:text-[rgba(202,3,32,255)] transition-colors">
                       <a href={item.path} className="block w-full py-1">
                       {["LOGIN", "Join Us", "Contact Us"].includes(item.name) ? (
   <span className="text-[rgba(202,3,32,255)] font-semibold">{item.name}</span>
@@ -236,9 +236,9 @@ const Footer = () => {
               <div className="w-px h-4 bg-gray-500/50  mt-1"></div>
               <a href="#" className="hover:underline ml-2 mr-4">KW Saudi Arabia</a>
               <div className="w-px h-4 bg-gray-500/50 mt-1"></div>
-              <a href="#" className="hover:underline ml-2 mr-4">Privacy Policy</a>
+              <a href="https://www.kwsaudiarabia.com/privacypolicy		" className="hover:underline ml-2 mr-4">Privacy Policy</a>
               <div className="w-px h-4 bg-gray-500/50 mt-1"></div>
-              <a href="#" className="hover:underline ml-2">Terms Of Use</a>
+              <a href="https://www.kwsaudiarabia.com/termsofuse		" className="hover:underline ml-2">Terms Of Use</a>
             </div>
           </div>
         </div>

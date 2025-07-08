@@ -166,7 +166,7 @@ const Properties = () => {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 text-[10px] md:text-xs w-full mt-4 md:mt-12 max-w-full px-4 md:px-34">
   {/* Row 1 - First two dropdowns */}
   <div className="col-span-1">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1.5 md:p-0 flex justify-center text-center">
+    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
       <option>PROPERTY TYPE</option>
       <option>All</option>
       <option>Commercial</option>
@@ -177,7 +177,7 @@ const Properties = () => {
   </div>
   
   <div className="col-span-1">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1.5 md:p-0 flex justify-center text-center">
+    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
       <option>MARKET CENTER</option>
       <option>All</option>
       <option>Jasmin</option>
@@ -187,7 +187,7 @@ const Properties = () => {
 
   {/* Row 2 - Next two dropdowns */}
   <div className="col-span-1 mt-3 md:mt-0">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1.5 md:p-0 flex justify-center text-center">
+    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
       <option>PROPERTY SUBTYPE</option>
       <option>All</option>
       <option>Apartment</option>
@@ -209,7 +209,7 @@ const Properties = () => {
   </div>
 
   <div className="col-span-1 mt-3 md:mt-0">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1.5 md:p-0 flex justify-center text-center">
+    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
       <option>CITY</option>
       <option>All</option>
       <option>ALRIYADH</option>
@@ -325,12 +325,13 @@ const Properties = () => {
 
       {visibleCount < properties.length && (
         <div className="flex justify-center items-center md:mt-5">
-          <button
-            className="md:w-3/6 w-40 md:py-2 py-1 mb-10 md:mb-0 px-8 bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white text-[0.6rem] md:text-lg md:font-normal rounded-full transition"
-            onClick={() => setVisibleCount(c => c + 6)}
-          >
-            View More Properties..
-          </button>
+         <button
+  className="md:w-3/6 w-40 md:py-2 py-2 mb-10 md:mb-0 px-4  bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white text-xs md:text-lg font-semibold rounded-full transition whitespace-nowrap"
+  onClick={() => setVisibleCount(c => c + 6)}
+>
+  View More Properties..
+</button>
+
         </div>
       )}
 <div className="hidden md:flex justify-center py-4 md:py-16">

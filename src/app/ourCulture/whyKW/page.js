@@ -86,7 +86,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
       <Header />
       <Box
         src="/agentbg.jpg"
-        h3="Why Kw"
+        h3="Why KW"
         image="https://static.wixstatic.com/media/36a881_a82aacde83a9442dae07d99a846cadf4~mv2.png/v1/fill/w_271,h_180,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/8-removebg-preview%20(1).png"
       />
 
@@ -97,7 +97,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
         <hr className="w-full border-t border-gray-300" />
         {sections.map((section, index) => (
           <React.Fragment key={index}>
-            <div className="grid grid-cols-12 items-stretch hover:bg-red-700 group transition duration-300 px-4 min-h-[120px]">
+            <div className="grid grid-cols-12 items-stretch hover:bg-[rgba(202,3,32,255)] group transition duration-300 px-4 min-h-[120px]">
               {/* Number */}
               <div className=" md:ml-30 col-span-2 md:col-span-1 flex items-center justify-center text-2xl md:text-4xl text-gray-400 group-hover:text-black font-light">
                 {section.number}
@@ -110,7 +110,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
 
                {/* Vertical Line Between Title and Description - disappears on hover */}
               <div className="col-span-1 flex justify-center">
-                <div className=" ml-22 w-[1px] bg-red-500 h-auto md:h-28 my-4 group-hover:opacity-0 transition-opacity duration-300"></div>
+                <div className=" ml-22 w-[1px] bg-[rgba(202,3,32,255)] h-auto md:h-28 my-4 group-hover:opacity-0 transition-opacity duration-300"></div>
               </div>
 
               {/* Description */}
@@ -132,7 +132,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
         
          
           <p className="mt-2 md:mt-8 text-xs md:text-xs">WHY KELLER WILLIAMS SAUDI ?</p>
-           <hr className="w-32 md:w-60 mx-auto bg-red-500 h-[1.5px] mt-4 md:mt-8" />
+           <hr className="w-32 md:w-60 mx-auto bg-[rgba(202,3,32,255)] h-[1.5px] mt-4 md:mt-8" />
         
         </div>
       </main>
@@ -142,7 +142,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
         <hr className="w-full border-t border-gray-300" />
         {sections2.map((section, index) => (
           <React.Fragment key={index}>
-            <div className="grid grid-cols-12 items-stretch hover:bg-red-700 group transition duration-300 px-4 min-h-[120px]">
+            <div className="grid grid-cols-12 items-stretch hover:bg-[rgba(202,3,32,255)] group transition duration-300 px-4 min-h-[120px]">
               {/* Number */}
               <div className=" md:ml-30 col-span-2 md:col-span-1 flex items-center justify-center text-2xl md:text-4xl text-gray-400 group-hover:text-black font-light">
                 {section.number}
@@ -155,7 +155,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
 
                {/* Vertical Line Between Title and Description - disappears on hover */}
               <div className="col-span-1 flex justify-center">
-                <div className=" ml-22 w-[1px] bg-red-500 h-auto md:h-28 my-4 group-hover:opacity-0 transition-opacity duration-300"></div>
+                <div className=" ml-22 w-[1px] bg-[rgba(202,3,32,255)] h-auto md:h-28 my-4 group-hover:opacity-0 transition-opacity duration-300"></div>
               </div>
 
               {/* Description */}
@@ -182,7 +182,8 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
         />
       </div>
 
-      <hr className="w-8/12 md:w-5/12 mx-auto bg-red-500 h-[1.5px] mt-2 md:mt-14 mb-10" />
+                <div className=" ml-22 w-[1px] bg-[rgba(202,3,32,255)] h-auto md:h-28 my-4 group-hover:opacity-0 transition-opacity duration-300"></div>
+      <hr className="w-8/12 md:w-5/12 mx-auto bg- h-[1.5px] mt-2 md:mt-14 mb-10" />
       <Footer />
     </div>
   );

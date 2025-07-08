@@ -1,228 +1,161 @@
 'use client'
-import React, { useEffect, useState } from 'react';
-import Box from '@/components/box';
+import React from 'react';
+import Image from 'next/image';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
-import Image from 'next/image';
-import { FaGlobe } from 'react-icons/fa'
-
-const Instantvaluation = () => {
-  // Add state to track screen size
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
+import Box from '@/components/box';
+const InstantValuation = (props) => {
   return (
-    <div className="relative">
-      <Header />
-
+    <div className="">
+      {/* Hero Section */}
+      <Header></Header>
       <Box
-        h3={"Let The Kw Agents"}
-        src="/buildexperties.jpg"
-        image={
-          '/instantval4.png'
-        }
-      ></Box>
+       
+       src="/training.jpg"
+       h3='Instant Valuation'
+       image={
+         '/instantvaluation.png'
+       }
+     ></Box>
+  {/* Intro Text */}
+      <main className="px-4 py-6 md:mt-10 mt-10">
+        <div className="mx-auto text-center">
+            <p className='text-xs md:text-[1rem] tracking-[0.1em] mb-4' >  Partner With A Winning Team </p>
+          <h1 className="text-xl md:text-5xl font-normal text-gray-800">
+           KW SAUDI ARABIA
+          </h1>
+          <hr className="w-60 md:w-60 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px] mt-6 md:mt-14" />
+          <div className="mt-10">
+            <p className="text-xs md:text-[1rem]">
+            You Join A Winning Team Of Real Estate Professionals Who Are Leading The  Industry To Greater Heights
+            </p>
+            
+          </div>
+        </div>
+      </main>
+      <div className="bg-[#f8f8f8] py-20 px-4 md:px-20">
+      <div className="grid md:grid-cols-2 gap-12 items-start md:mx-20">
+        {/* Left Column */}
+        <div className="space-y-8">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-bold md:py-16 text-black">
+              Shape Your <br /> 
+              <span className="text-[rgba(202,3,32,255)]">Future </span>
+              in Real Estate </h2>
+            <p className="mt-4 text-gray-700">
+           
+            Our experienced KW agents are
+ here to help you every step of
+ the way. With deep market
+ knowledge and powerful tools,
+ we provide a free, no-obligation
+ evaluation of your property —
+ helping you understand its true
+ market value and how to
+ position it for a successful sale.
+</p>
+<div className="flex gap-4 items-center mt-4">
+  {/* Red vertical line */}
+  <div className="w-1 bg-[rgba(202,3,32,255)] rounded-full min-h-[100px]" />
 
-     
-      <main className="px-4 py-6 md:mt-32 mt-10">
-              <div className="md:mx-auto text-center">
-                <h1 className="text-xl md:text-4xl font-light md:font-normal tracking-[0.1em] text-gray-800">
-                Sell Your Home
-                </h1>
-                <hr className="w-60 md:w-80 border-0 mx-auto bg-[rgba(202,3,32,255)]
-                 h-[1.5px] mt-6 md:mt-14" />
-                <div className="mt-10 md:mx-40">
-                  <p className="text-xs md:text-[1rem]">
-                  Your Valuation Is Based On Millions Of Pieces Of Data, From Sold House Prices In Your Area To Current Market Trends And The Size Of Your Home.
-                  </p>
-                </div>
-              </div>
-            </main>
-      {/* Form Section */}
-      <div className="min-h-screen md:mt-20">
-        {/* Title Banner */}
-        <div className="bg-[rgba(202,3,32,255)] md:py-2 py-2 flex justify-center relative">
+  {/* Text paragraph */}
+  <p className="text-gray-700">
+    Whether you&apos;re ready to list or just exploring your options, our
+    team is committed to giving you honest insights and a seamless
+    experience.
+  </p>
+</div>
 
-          <div className="relative">
-            {/* KW Logo */}
-            <Image
-              src="/kwlinelogo.png"
-              alt="KW Logo"
-              width={120}
-              height={120}
-              className="object-contain w-10 h-10 md:w-30 md:h-25"
-            />
-            <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-white font-normal text-base md:text-3xl tracking-[0.2em] whitespace-nowrap">
-            GET IN TOUCH WITH US !
-</span>
 
-            </div>
+          </div>
+
+          {/* Why Attend */}
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Why Us?</h3>
+            <ul className="text-gray-700 space-y-2">
+  <li className="flex items-start gap-2">
+    <span className="text-[rgba(202,3,32,255)] font-bold mt-1">✓</span>
+    <span>One-of-a-kind culture</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-[rgba(202,3,32,255)] font-bold mt-1">✓</span>
+    <span>Limitless earning potential</span>
+  </li>
+  <li className="flex items-start gap-2">
+    <span className="text-[rgba(202,3,32,255)] font-bold mt-1">✓</span>
+    <span>Industry-leading technology</span>
+  </li>
+</ul>
+
           </div>
         </div>
 
-        {/* Form + Sidebar Container */}
-        <div className="flex flex-col lg:flex-row bg-gray-200 min-h-screen">
-          {/* Left Black Sidebar */}
-          <div className="hidden md:flex bg-black text-white flex-col items-center w-full md:w-80 lg:w-90 border-r-2 md:rounded-r-2xl relative min-h-full px-4 md:px-0">
-            <div className="flex flex-col items-center w-full pt-6 md:pt-0">
-              {/* Logo in sidebar */}
-              <Image
-                src="/KellerWilliams_KSA.png"
-                alt="logo"
-                width={230}
-                height={230}
-                className="mb-2 w-32 md:w-[230px] h-auto mx-auto"
-              />
-            </div>
-            <div className="md:pt-20 space-y-2 group flex flex-col items-center justify-center  w-full">
-              <div className="relative h-auto w-full mb-4 text-center ">
-                <div className="text-center text-xs md:text-sm md:mx-8">
-                <p>Thinking About Selling Your Property?</p><br />
-<p>
-  Our Experienced Kw Agents Are Here To Help You Every Step Of The Way. With Deep Market Knowledge 
-  And Powerful Tools, We Provide A Free, No-obligation Evaluation Of Your Property — Helping You Understand Its 
-  True Market Value And How To Position It For A Successful Sale.
-</p>
-<p>
-  Whether You&apos;re Ready To List Or Just Exploring Your Options, Our Team Is Committed To Giving You 
-  Honest Insights And A Seamless Experience.
-</p>
-<p className="mt-10 md:mt-40 font-bold">
-  Let Us Guide You — From Evaluation To Closing.
-</p>
-
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile Sidebar (show only on mobile) */}
-          <div className="flex md:hidden bg-black text-white flex-col items-center w-full rounded-b-2xl py-6 px-4">
-            <Image
-              src="/KellerWilliams_KSA.png"
-              alt="logo"
-              width={120}
-              height={120}
-              className="mb-2 w-20 h-auto mx-auto"
+        {/* Right Column - Form */}
+        <div className="bg-white shadow-md rounded-xl p-8">
+          <h3 className="text-xl font-bold text-center mb-6">CONTACT US TODAY</h3>
+          <form className="space-y-4">
+            <label className='block mb-2'>Full Name</label>
+            <input
+              type="text"
+              placeholder="Full Name"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2"
             />
-            <div className="text-center text-xs mt-2">
-            <p>Thinking About Selling Your Property?</p><br />
-<p>
-  Our Experienced Kw Agents Are Here To Help You Every Step Of The Way. With Deep Market Knowledge 
-  And Powerful Tools, We Provide A Free, No-obligation Evaluation Of Your Property — Helping You Understand Its 
-  True Market Value And How To Position It For A Successful Sale.
-</p>
-<p>
-  Whether You&apos;re Ready To List Or Just Exploring Your Options, Our Team Is Committed To Giving You 
-  Honest Insights And A Seamless Experience.
-</p>
-<p className='mt-6 font-bold'>Let Us Guide You — From Evaluation To Closing.</p>
+              <label className='block mb-2'>Mobile Number</label>
+            <input
+              type="tel"
+              placeholder="Mobile Number"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 "
+            />
+               <label className='block mb-2'>Email Address</label>
+            <input
+              type="email"
+              placeholder="Email Address"
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 "
+            />
+             <label className='block mb-2'>City</label>
+            <select className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 ">
+              <option>Select your city</option>
+              <option>Riyadh</option>
+              <option>Jeddah</option>
+              <option>Dammam</option>
+              <option>Other</option>
+            </select>
+            {/* ✅ Message textarea added */}
+            <label className="block mb-2">Message</label>
 
-            </div>
-          </div>
+            <textarea
+              placeholder="Your Message"
+              className="w-full px-4 py-2 border rounded-md h-24 resize-none focus:outline-none focus:ring-2 "
+            ></textarea>
 
-          {/* Right Form Section */}
-          <div className="flex-1 py-6 md:py-10 px-4 md:px-30">
-            <form className="w-full max-w-full space-y-4">
-              <div>
-              <label className="block mb-2 ml-2 md:text-[18px] font-normal">First Name</label>
-                <input
-                  type="text"
-                  placeholder="First name"
-                      className="w-full  pl-4 py-2 md:py-3 text-base md:text-lg rounded-lg bg-white"
-                />
-              </div>
-              <div>
-              <label className="block mb-2 ml-2 md:text-[18px] font-normal">Phone</label>
-                <input
-                  type="text"
-                  placeholder="Phone"
-                      className="w-full  pl-4 py-2 md:py-3 text-base md:text-lg rounded-lg bg-white"
-                />
-              </div>
-              <div>
-              <label className="block mb-2 ml-2 md:text-[18px] font-normal">City</label>
-                <input
-                  type="text"
-                  placeholder="City"
-                       className="w-full  pl-4 py-2 md:py-3 text-base md:text-lg rounded-lg bg-white"
-                />
-              </div>
-              <div>
-              <label className="block mb-2 ml-2 md:text-[18px] font-normal">Email *</label>
-                <input
-                  type="email"
-                  placeholder="Email"
-                     className="w-full  pl-4 py-2 md:py-3 text-base md:text-lg rounded-lg bg-white"
-                />
-              </div>
-              <div>
-              <label className="block mb-2 ml-2 md:text-[18px] font-normal">Property Type</label>
-                <input
-                  type="text"
-                  placeholder="Property Type"
-    className="w-full  pl-4 py-2 md:py-3 text-base md:text-lg rounded-lg bg-white"
-                />
-              </div>
-              <div>
-              <label className="block mb-2 ml-2 md:text-[18px] font-normal">Upload Photos</label>
-                <input
-                  type="file"
-                  placeholder="Upload Photos"
-                      className="w-full  pl-4 py-2 md:py-3 text-base md:text-lg rounded-lg bg-white"
-                />
-              </div>
-              <div>
-              <label className="block mb-2 ml-2 md:text-[18px] font-normal">Enter the Property Details *</label>
-                <textarea
-                  placeholder="Enter the Property Details"
-                  rows="3"
-                       className="w-full  pl-4 py-2 md:py-3 text-base md:text-lg rounded-lg bg-white"
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-red-700 text-white px-8 py-2 md:font-semibold text-sm md:text-base  rounded-full float-right mt-4 md:mt-0"
-              >
-                Submit
-              </button>
-            </form>
-          </div>
+            {/* ✅ Submit Button */}
+            <button
+              type="submit"
+              className="w-full bg-[rgba(202,3,32,255)] text-white font-semibold py-2 rounded-md hover:bg-red-700 transition"
+            >
+              Submit
+            </button>
+          </form>
         </div>
       </div>
-
-      <div  className="hidden md:flex order-2 bg-[rgba(202,3,32,255)] md:order-1 items-center justify-center h-[25px] md:h-[76px]">
-    <Image
-      src="/kwline1.png"
-      alt="KW Logo Center"
-      width={80}
-      height={80}
-      className="object-contain mx-auto w-7 h-7 md:w-20 md:h-20"
-    />
-  </div>
-  <div className="order-1 md:order-2 flex flex-col items-center justify-center">
-    <Image
-      src="/howwillyouthink.png"
-      alt="How Will You Thrive"
-      width={800}
-      height={400}
-      className="w-70 h-20 md:w-[950px] md:h-[400px] object-contain"
-    />
-   
-  </div>
-        <hr className=" hidden md:flex w-160 mx-auto bg-[rgba(202,3,32,255)] h-[1.5px] border-0 mt-2 md:mt-8 mb-10" />
-        <Footer></Footer>
-        </div>
+    </div>
+     
+          
+          <div className="flex justify-center py-2 md:py-0">
+                   <Image
+                     src="/howwillyouthink.png"
+                     alt="How Will You Thrive"
+                     width={800}
+                     height={400}
+                   
+                   />
+                 </div>
+           
+                 <hr className="w-8/12 md:w-5/12 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px] mt-2 md:mt-14 mb-10" />
+      
+      <Footer></Footer>
+    </div>
   );
 };
 
-export default Instantvaluation;
+export default InstantValuation;

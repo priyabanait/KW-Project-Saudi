@@ -21,13 +21,7 @@ export default function PropertyListing() {
   const prevScrollY = useRef(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false); // simulate toggle
   const [openSubmenu, setOpenSubmenu] = useState(null);
-
-  const toggleSubmenu = (key) => {
-    setOpenSubmenu(prev => (prev === key ? null : key));
-  };
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  const [property, setProperty] = useState(null);
 
   useEffect(() => {  
     const handleScroll = () => {  
@@ -57,6 +51,25 @@ export default function PropertyListing() {
     window.addEventListener('scroll', handleScroll, { passive: true });  
     return () => window.removeEventListener('scroll', handleScroll);  
   }, []);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('selectedProperty');
+    console.log(stored);
+    
+    if (stored) {
+      setProperty(JSON.parse(stored));
+    }
+  }, []);
+
+  const toggleSubmenu = (key) => {
+    setOpenSubmenu(prev => (prev === key ? null : key));
+  };
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+  const bedIconUrl = "/bed.png";
+  const bathIconUrl = "/bath.png";
+  const areaIconUrl = "/area.png";
   const menuItems = [
     { label: 'PROPERTIES', key: 'properties',  submenu: [
       { label: 'ACTIVE', href: '/properties/active' },
@@ -104,22 +117,22 @@ export default function PropertyListing() {
     email: '',
     countryCode: '+974',
     phone: '',
-    message: "I'm interested in Astounding 4-BDR Villa in Lusail Entertainment City. Please provide me more details about this property."
+    message: property ? `I'm interested in ${property.prop_type}. Please provide me more details about this property.` : ''
   });
-  const propertyImages = [
-    'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    'https://images.pexels.com/photos/2121121/pexels-photo-2121121.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    'https://images.pexels.com/photos/1571453/pexels-photo-1571453.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    'https://images.pexels.com/photos/1648776/pexels-photo-1648776.jpeg?auto=compress&cs=tinysrgb&w=1200'
+
+  // Use property images or fallback
+  const propertyImages = property?.photos?.map(photo => photo.ph_url) || [
+    "/placeholder1.jpg",
+    "/placeholder2.jpg",
+    "/placeholder3.jpg",
+    "/placeholder4.jpg",
+    "/placeholder5.jpg",
+    "/placeholder6.jpg",
+    "/placeholder7.jpg"
   ];
 
-  const thumbnailImages = [
-    'https://images.pexels.com/photos/2079246/pexels-photo-2079246.jpeg?auto=compress&cs=tinysrgb&w=400',
-    'https://images.pexels.com/photos/1571470/pexels-photo-1571470.jpeg?auto=compress&cs=tinysrgb&w=400',
-    'https://images.pexels.com/photos/2121121/pexels-photo-2121121.jpeg?auto=compress&cs=tinysrgb&w=400',
-    'https://images.pexels.com/photos/1571467/pexels-photo-1571467.jpeg?auto=compress&cs=tinysrgb&w=400'
-  ];
+  // Use property images for thumbnails or fallback
+  const thumbnailImages = propertyImages.slice(0, 8);
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % propertyImages.length);
@@ -142,6 +155,10 @@ export default function PropertyListing() {
     console.log('Form submitted:', formData);
     alert('Enquiry submitted successfully!');
   };
+
+  if (!property) {
+    return <div className="p-8 text-center">Loading property details...</div>;
+  }
 
   return (
     <div>
@@ -283,7 +300,7 @@ export default function PropertyListing() {
           <span className="mx-1">{'>'}</span>
           <span className="font-bold underline">Lusail</span>
           <span className="mx-1">{'>'}</span>
-          <span className="text-gray-900">Astounding 4-BDR Villa in Lusail Entertainment City</span>
+          <span className="text-gray-900">{property.prop_type || 'Property'}</span>
         </div>
       </div>
 
@@ -378,37 +395,37 @@ export default function PropertyListing() {
 
             {/* Property Title */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 md:mb-8">
-              Astounding 4-BDR Villa in Lusail Entertainment City
+              {property.prop_type || 'Property'}
             </h1>
 
             {/* Property Details Cards */}
        <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-y sm:divide-y-0 bg-white rounded-lg border overflow-hidden mb-6 md:mb-8 text-xs sm:text-sm">
   <div className="p-4">
     <div className="text-sm text-gray-700 mb-1">Reference no.</div>
-    <div className="font-semibold text-gray-900">AREDC-20465</div>
+    <div className="font-semibold text-gray-900">{property.reference_no || '-'}</div>
   </div>
 
   <div className="p-4">
     <div className="text-sm text-gray-700 mb-1">Bedroom</div>
     <div className="flex items-center space-x-2 font-semibold text-gray-900">
-      <Bed className="w-4 h-4" />
-      <span>Four</span>
+      <Image src={bedIconUrl} alt="Bed" width={20} height={20} />
+      <span>{property.total_bed || '-'}</span>
     </div>
   </div>
 
   <div className="p-4">
     <div className="text-sm text-gray-700 mb-1">Bathroom</div>
     <div className="flex items-center space-x-2 font-semibold text-gray-900">
-      <Bath className="w-4 h-4" />
-      <span>Two</span>
+      <Image src={bathIconUrl} alt="Bath" width={20} height={20} />
+      <span>{property.total_bath || '-'}</span>
     </div>
   </div>
 
   <div className="p-4">
     <div className="text-sm text-gray-700 mb-1">Area</div>
     <div className="flex items-center space-x-2 font-semibold text-gray-900">
-      <Square className="w-4 h-4" />
-      <span>259 sqm</span>
+      <Image src={areaIconUrl} alt="Area" width={20} height={20} />
+      <span>{property.lot_size_area || '-'} {property.lot_size_units || ''}</span>
     </div>
   </div>
 </div>
@@ -417,14 +434,8 @@ export default function PropertyListing() {
             <div className="bg-white p-4 sm:p-6 rounded-lg border mb-6 md:mb-8">
               <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-4">Property Description</h2>
               <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-             
-  This stunning 4-bedroom villa in Lusail Entertainment City offers luxurious living with modern amenities.
-  The property features spacious rooms, high-end finishes, and beautiful outdoor spaces perfect for entertaining.
-  Located in one of Qatar&apos;s most prestigious developments, this villa provides easy access to shopping, dining,
-  and entertainment options while maintaining privacy and tranquility.
-</p>
-
-             
+                {property.list_desc_en || 'No description available.'}
+              </p>
             </div>
 
             {/* Features */}
@@ -437,11 +448,11 @@ export default function PropertyListing() {
               {/* Price & Location */}
               <div className="mb-4 md:mb-6">
                 <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1">
-                  26,500 <span className="text-base sm:text-lg font-normal text-gray-600">QAR/month</span>
+                  {property.current_list_price || '-'} <span className="text-base sm:text-lg font-normal text-gray-600">QAR/month</span>
                 </div>
                 <div className="flex items-center text-gray-600 ">
                   <MapPin className="w-4 h-4 mr-1" />
-                  <span className="text-xs sm:text-sm">Les Maisons Blanches, Lusail</span>
+                  <span className="text-xs sm:text-sm">{property.list_address?.address || '-'}</span>
                 </div>
               </div>
 
