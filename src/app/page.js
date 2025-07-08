@@ -472,85 +472,87 @@ const Home = () => {
     )}
   </div>
 </div>
-      <main className="w-full md:mt-4 mt-0">
-        <div className="flex flex-col lg:flex-row h-auto lg:h-screen">
-          {/* Left Side - Image (Full Height on Laptops) */}
-          <div className="w-full lg:w-1/2 h-[30vh] sm:h-[40vh] md:h-[50vh] lg:h-full relative">
-            <Image
-              src="/formimage.jpg"
-              alt="Property"
-              fill
-              className="object-cover"
-            />
-          </div>
+    <main className="w-full md:mt-4 mt-0">
+  <div className="flex flex-col lg:flex-row min-h-screen">  {/* Ensures full height on large screens */}
 
-          {/* Right Side - Form (Full Height & Centered Content) */}
-         <div className="flex-1 md:py-16 md:p-4 min-h-full py-4 bg-[rgba(202,3,32,255)]">
-            <div className="px-4 sm:px-4 lg:px-6 text-gray-800 ">
-    <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-normal text-white mb-4 sm:mb-6 md:mb-8 text-center sm:text-left">
-      YOUR FUTURE MARKET CENTER STARTS WITH ONE BOLD STEP
-    </h2>
-
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4 md:mb-6">
-      <div>
-        <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="first-name">
-          First Name
-        </label>
-        <input
-          className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-          id="first-name"
-          type="text"
-          placeholder="First Name"
-        />
-      </div>
-
-      <div>
-        <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="last-name">
-          Last Name
-        </label>
-        <input
-          className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-          id="last-name"
-          type="text"
-          placeholder="Last Name"
-        />
-      </div>
-    </div>
-
-    <div className="mb-4 md:mb-6">
-      <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="purpose">
-        I Want To
-      </label>
-      <input
-        className="w-1/2 px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-        id="purpose"
-        type="text"
-        placeholder="Buy Property, Find agent"
+    {/* Left Side - Image */}
+    <div className="w-full lg:w-1/2 h-[40vh] md:h-[50vh] lg:h-auto relative min-h-[400px]"> {/* Fixed height for image */}
+      <Image
+        src="/formimage.jpg"
+        alt="Property"
+        fill
+        className="object-cover"
       />
     </div>
 
-    <div className="mb-4 md:mb-6">
-      <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="notes">
-        Notes
-      </label>
-      <textarea
-        className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-        id="notes"
-        rows="3"
-        placeholder="Your message"
-      ></textarea>
+    {/* Right Side - Form */}
+    <div className="w-full lg:w-1/2 flex items-center justify-center bg-[rgba(202,3,32,255)] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8">
+      <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl">
+
+        <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-normal text-white mb-4 sm:mb-6 md:mb-8 text-center sm:text-left leading-snug">
+          YOUR FUTURE MARKET CENTER STARTS WITH ONE BOLD STEP
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4 md:mb-6">
+          <div>
+            <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="first-name">
+              First Name
+            </label>
+            <input
+              className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-transparent"
+              id="first-name"
+              type="text"
+              placeholder="First Name"
+            />
+          </div>
+
+          <div>
+            <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="last-name">
+              Last Name
+            </label>
+            <input
+              className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-transparent"
+              id="last-name"
+              type="text"
+              placeholder="Last Name"
+            />
+          </div>
+        </div>
+
+        <div className="mb-4 md:mb-6">
+          <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="purpose">
+            I Want To
+          </label>
+          <input
+            className="w-full sm:w-3/4 md:w-1/2 px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-transparent"
+            id="purpose"
+            type="text"
+            placeholder="Buy Property, Find agent"
+          />
+        </div>
+
+        <div className="mb-4 md:mb-6">
+          <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="notes">
+            Notes
+          </label>
+          <textarea
+            className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 bg-transparent resize-none"
+            id="notes"
+            rows="3"
+            placeholder="Your message"
+          ></textarea>
+        </div>
+
+        <button className="w-full sm:w-3/5 md:w-2/5 bg-white text-[rgba(202,3,32,255)] font-bold text-sm sm:text-base py-3 sm:py-4 border px-4 sm:px-6 rounded-3xl transition duration-200 hover:bg-gray-100  block">
+          Submit
+        </button>
+
+      </div>
     </div>
 
-    <button className="w-full sm:w-3/5 md:w-2/5 bg-white text-[rgba(202,3,32,255)] font-bold text-sm sm:text-base py-3 sm:py-4 border px-4 sm:px-6 rounded-3xl transition duration-200 hover:bg-gray-100 block">
-      Submit
-    </button>
   </div>
-</div>
+</main>
 
-
-
-        </div>
-      </main>
 
       {/* Stats Section */}
       <div className="relative h-[200px] md:h-400">
