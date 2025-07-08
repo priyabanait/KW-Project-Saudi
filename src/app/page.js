@@ -485,66 +485,81 @@ const Home = () => {
           </div>
 
           {/* Right Side - Form (Full Height & Centered Content) */}
-          <div className="w-full lg:w-1/2 bg-[rgba(202,3,32,255)] flex items-center justify-center min-h-[40vh] md:min-h-[50vh] lg:min-h-full">
-            <div className="w-full max-w-md md:max-w-lg lg:max-w-2xl p-4 sm:p-8 md:p-2">
-              <h2 className="text-xl sm:text-4xl font-normal text-white mb-4 sm:mb-8">
-                YOUR FUTURE MARKET CENTER STARTS WITH ONE BOLD STEP
-              </h2>
+         <div className="w-full lg:w-1/2 bg-[rgba(202,3,32,255)] flex items-center justify-center min-h-[50vh] lg:min-h-full px-4 sm:px-6 md:px-8 py-8">
+  <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl p-4 sm:p-6 md:p-8">
+    <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-normal text-white mb-4 sm:mb-6 md:mb-8 text-center sm:text-left">
+      YOUR FUTURE MARKET CENTER STARTS WITH ONE BOLD STEP
+    </h2>
 
-              {/* Form Inputs */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4 mb-4 md:mb-6">
-                <div>
-                  <label className="block text-white md:text-lg text-sm ml-2 font-normal mb-1 md:mb-2 sm:mb-4" htmlFor="first-name">
-                    First Name
-                  </label>
-                  <input
-                    className="w-full px-4 py-2 sm:py-3 border text-white md:text-lg text-sm border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    id="first-name"
-                    type="text"
-                    placeholder="First Name"
-                  />
-                </div>
-                <div>
-                  <label className="block text-white text-sm md:text-lg font-normal ml-2 mb-1 md:mb-2 sm:mb-4" htmlFor="last-name">
-                    Last Name
-                  </label>
-                  <input
-                    className="w-full px-4 py-2 sm:py-3 border text-white md:text-lg text-sm border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    id="last-name"
-                    type="text"
-                    placeholder="Last Name"
-                  />
-                </div>
-              </div>
+    {/* Form Inputs */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4 md:mb-6">
+      <div>
+        <label
+          className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
+          htmlFor="first-name"
+        >
+          First Name
+        </label>
+        <input
+          className="w-full px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+          id="first-name"
+          type="text"
+          placeholder="First Name"
+        />
+      </div>
 
-              <div className="mb-4 md:mb-6">
-                <label className="block text-white text-sm md:text-lg font-normal ml-2 mb-1 md:mb-2" htmlFor="purpose">
-                  I Want To
-                </label>
-                <input
-                  className="w-full md:w-80 px-4 py-2 sm:py-3 border text-white md:text-lg text-sm border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  id="purpose"
-                  type="text"
-                  placeholder="Buy Property, Find agent"
-                />
-              </div>
+      <div>
+        <label
+          className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
+          htmlFor="last-name"
+        >
+          Last Name
+        </label>
+        <input
+          className="w-full px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+          id="last-name"
+          type="text"
+          placeholder="Last Name"
+        />
+      </div>
+    </div>
 
-              <div className="mb-4 md:mb-6">
-                <label className="block text-white text-sm md:text-lg font-normal ml-2 mb-1 md:mb-2" htmlFor="notes">
-                  Notes
-                </label>
-                <textarea
-                  className="w-full px-4 py-1 sm:py-3 border text-white md:text-lg text-sm border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  id="notes"
-                  rows="4"
-                ></textarea>
-              </div>
+    <div className="mb-4 md:mb-6">
+      <label
+        className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
+        htmlFor="purpose"
+      >
+        I Want To
+      </label>
+      <input
+        className="w-full sm:w-1/2 px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+        id="purpose"
+        type="text"
+        placeholder="Buy Property, Find agent"
+      />
+    </div>
 
-              <button className="w-full md:w-2/5 bg-white md:text-base hover:bg-gray-100 text-[rgba(202,3,32,255)] font-bold text-sm py-3 md:py-4 border px-4 md:px-6 rounded-3xl transition duration-200">
-                Submit
-              </button>
-            </div>
-          </div>
+    <div className="mb-4 md:mb-6">
+      <label
+        className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
+        htmlFor="notes"
+      >
+        Notes
+      </label>
+      <textarea
+        className="w-full px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+        id="notes"
+        rows="4"
+        placeholder="Your message"
+      ></textarea>
+    </div>
+
+    <button className="w-full sm:w-3/5 md:w-2/5 bg-white text-[rgba(202,3,32,255)] font-bold text-sm sm:text-base py-3 sm:py-4 border px-4 sm:px-6 rounded-3xl transition duration-200 hover:bg-gray-100  block">
+      Submit
+    </button>
+  </div>
+</div>
+
         </div>
       </main>
 
