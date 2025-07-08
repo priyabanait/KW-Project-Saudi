@@ -486,7 +486,7 @@ const Home = () => {
 
           {/* Right Side - Form (Full Height & Centered Content) */}
         <div className="w-full lg:w-1/2 bg-[rgba(202,3,32,255)] flex items-center justify-center min-h-[50vh] lg:min-h-full px-4 sm:px-6 md:px-8 py-8">
-  <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl p-4 sm:p-6 md:p-8">
+  <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl p-2">
     <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-normal text-white mb-4 sm:mb-6 md:mb-8 text-center sm:text-left">
       YOUR FUTURE MARKET CENTER STARTS WITH ONE BOLD STEP
     </h2>
@@ -549,7 +549,7 @@ const Home = () => {
       <textarea
         className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
         id="notes"
-        rows="4"
+        rows="3"
         placeholder="Your message"
       ></textarea>
     </div>
