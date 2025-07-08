@@ -254,7 +254,7 @@ const Home = () => {
       <hr className="w-44 mx-auto bg-[rgba(202,3,32,255)] h-[1.5px] border-0 my-12 md:hidden" />
 
         {/* Image Grid Section */}
-        <div className="md:mx-8 mx-2 md:py-18 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-0 md:gap-2">
+        <div className="md:mx-8 mx-2 md:py-16 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-0 md:gap-2">
     {[
       { label: "Properties", path: 'properties', imageUrl: "/properties.jpg" },
       { label: "Market Center", path: 'marketCenter', imageUrl: "/marketcenter.jpg" },
@@ -279,7 +279,7 @@ const Home = () => {
     ))}
   </div>
 
-        <div className="flex justify-center items-center md:my-0 my-8 mt-10 md:mt-20 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-8">
+        <div className="flex justify-center items-center md:my-0 my-8 mt-10 md:mt-0 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-8">
           <hr className="md:w-170 w-44 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px]" />
         </div>
         <div className="md:w-1/3 md:text-center text-center mb-6 md:mb-0">
@@ -485,7 +485,7 @@ const Home = () => {
           </div>
 
           {/* Right Side - Form (Full Height & Centered Content) */}
-         <div className="w-full lg:w-1/2 bg-[rgba(202,3,32,255)] flex items-center justify-center min-h-[50vh] lg:min-h-full px-4 sm:px-6 md:px-8 py-8">
+        <div className="w-full lg:w-1/2 bg-[rgba(202,3,32,255)] flex items-center justify-center min-h-[50vh] lg:min-h-full px-4 sm:px-6 md:px-8 py-8">
   <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl p-4 sm:p-6 md:p-8">
     <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-normal text-white mb-4 sm:mb-6 md:mb-8 text-center sm:text-left">
       YOUR FUTURE MARKET CENTER STARTS WITH ONE BOLD STEP
@@ -501,7 +501,7 @@ const Home = () => {
           First Name
         </label>
         <input
-          className="w-full px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+          className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
           id="first-name"
           type="text"
           placeholder="First Name"
@@ -516,7 +516,7 @@ const Home = () => {
           Last Name
         </label>
         <input
-          className="w-full px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+         className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
           id="last-name"
           type="text"
           placeholder="Last Name"
@@ -532,7 +532,7 @@ const Home = () => {
         I Want To
       </label>
       <input
-        className="w-full sm:w-1/2 px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+       className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
         id="purpose"
         type="text"
         placeholder="Buy Property, Find agent"
@@ -547,18 +547,19 @@ const Home = () => {
         Notes
       </label>
       <textarea
-        className="w-full px-4 py-2 sm:py-3 border text-white text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 placeholder-white"
+        className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
         id="notes"
         rows="4"
         placeholder="Your message"
       ></textarea>
     </div>
 
-    <button className="w-full sm:w-3/5 md:w-2/5 bg-white text-[rgba(202,3,32,255)] font-bold text-sm sm:text-base py-3 sm:py-4 border px-4 sm:px-6 rounded-3xl transition duration-200 hover:bg-gray-100  block">
+    <button className="w-full sm:w-3/5 md:w-2/5 bg-white text-[rgba(202,3,32,255)] font-bold text-sm sm:text-base py-3 sm:py-4 border px-4 sm:px-6 rounded-3xl transition duration-200 hover:bg-gray-100 block">
       Submit
     </button>
   </div>
 </div>
+
 
         </div>
       </main>
