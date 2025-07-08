@@ -485,23 +485,19 @@ const Home = () => {
           </div>
 
           {/* Right Side - Form (Full Height & Centered Content) */}
-        <div className="w-full lg:w-1/2 bg-[rgba(202,3,32,255)] flex items-center justify-center min-h-[50vh] lg:min-h-full px-4 sm:px-6 md:px-8 py-8">
-  <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl">
+        <div className="w-full lg:w-1/2 bg-[rgba(202,3,32,255)] flex items-center justify-center px-4 sm:px-6 md:px-8 py-8">
+  <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl p-4">
     <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-normal text-white mb-4 sm:mb-6 md:mb-8 text-center sm:text-left">
       YOUR FUTURE MARKET CENTER STARTS WITH ONE BOLD STEP
     </h2>
 
-    {/* Form Inputs */}
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4 md:mb-6">
       <div>
-        <label
-          className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
-          htmlFor="first-name"
-        >
+        <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="first-name">
           First Name
         </label>
         <input
-          className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
+          className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
           id="first-name"
           type="text"
           placeholder="First Name"
@@ -509,14 +505,11 @@ const Home = () => {
       </div>
 
       <div>
-        <label
-          className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
-          htmlFor="last-name"
-        >
+        <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="last-name">
           Last Name
         </label>
         <input
-         className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
+          className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
           id="last-name"
           type="text"
           placeholder="Last Name"
@@ -525,14 +518,11 @@ const Home = () => {
     </div>
 
     <div className="mb-4 md:mb-6">
-      <label
-        className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
-        htmlFor="purpose"
-      >
+      <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="purpose">
         I Want To
       </label>
       <input
-       className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
+        className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
         id="purpose"
         type="text"
         placeholder="Buy Property, Find agent"
@@ -540,14 +530,11 @@ const Home = () => {
     </div>
 
     <div className="mb-4 md:mb-6">
-      <label
-        className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2"
-        htmlFor="notes"
-      >
+      <label className="block text-white text-sm sm:text-base md:text-lg font-normal ml-2 mb-1 sm:mb-2" htmlFor="notes">
         Notes
       </label>
       <textarea
-        className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400 "
+        className="w-full px-4 py-2 sm:py-3 border text-gray-200 text-sm sm:text-base md:text-lg border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-gray-400"
         id="notes"
         rows="3"
         placeholder="Your message"
@@ -559,6 +546,7 @@ const Home = () => {
     </button>
   </div>
 </div>
+
 
 
         </div>
