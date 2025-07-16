@@ -169,20 +169,21 @@ export default function Training() {
           height={150}
           className="absolute bottom-0 md:left-[0%] -translate-x-[20%] md:-translate-x-[20%] md:w-[450px] md:h-[300px] w-[200px] h-[140px] rotate-[-8deg] z-30"
         />
-        <Image
-          src="/book.png"
-          alt="Your First Home"
-          width={200}
-          height={150}
-          className="absolute bottom-0 left-[30%] md:left-[30%] -translate-x-[7%] md:-translate-x-[20%] md:w-[450px] md:h-[300px] w-[170px] h-[140px] rotate-[-6deg] z-40"
-        />
-        <Image
-          src="/bookred.png"
-          alt="The Millionaire Real Estate Agent"
-          width={200}
-          height={150}
-          className="absolute bottom-0 left-[60%] md:left-[66%] -translate-x-[0%] md:-translate-x-[20%] md:w-[450px] md:h-[300px] w-[180px] h-[140px] rotate-[-6deg] z-50"
-        />
+       <Image
+  src="/book.png"
+  alt="Your First Home"
+  width={200}
+  height={150}
+  className="absolute bottom-0 left-[30%] md:left-[30%] -translate-x-[7%] md:-translate-x-[20%] md:w-[450px] md:h-[300px] w-[170px] h-[140px] rotate-[-6deg] z-30"
+/>
+<Image
+  src="/bookred.png"
+  alt="The Millionaire Real Estate Agent"
+  width={200}
+  height={150}
+  className="absolute bottom-0 left-[60%] md:left-[66%] -translate-x-[0%] md:-translate-x-[20%] md:w-[450px] md:h-[300px] w-[180px] h-[140px] rotate-[-6deg] z-30"
+/>
+
         <Image
           src="/bookwhite.png"
           alt="The ONE Thing"

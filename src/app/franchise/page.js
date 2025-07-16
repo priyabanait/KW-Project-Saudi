@@ -4,11 +4,25 @@ import Box from '@/components/box';
 import Header from '@/components/header';
 import Footer from '@/components/footer';
 import Image from 'next/image';
-import { FaGlobe } from 'react-icons/fa'
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+import { FaGlobe } from 'react-icons/fa';
 
 const Franchise = () => {
   // Add state to track screen size
   const [isMobile, setIsMobile] = useState(false);
+  const [phone, setPhone] = useState('');
+  const [form, setForm] = useState({
+    name: '',
+    surname: '',
+    email: '',
+    company: '',
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,7 +32,11 @@ const Franchise = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form Data:', form);
+    console.log('Phone:', phone);
+  };
   return (
     <div className="relative">
       <Header />
@@ -190,188 +208,239 @@ const Franchise = () => {
               />
             </div>
 
-            <div className="pt-30 space-y-2 group  ">
-              {/* Target Icon */}
-              <div className="relative h-[140px] w-[1400px] ml-10 mb-4 transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
-                <Image
-                  src="https://static.wixstatic.com/media/36a881_b93011b55c3c4cc5a3fec96a287e4564~mv2.png/v1/crop/x_0,y_37,w_289,h_255/fill/w_171,h_188,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202025-02-18%20135420.png"
-                  alt="Target Icon"
-                  fill
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-            </div>
+            <div className="pt-30 space-y-10 flex flex-col items-center">
+  {/* Target Icon */}
+  <div className="relative ml-10 h-[140px] w-[140px] transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
+    <Image
+      src="https://static.wixstatic.com/media/36a881_b93011b55c3c4cc5a3fec96a287e4564~mv2.png/v1/crop/x_0,y_37,w_289,h_255/fill/w_171,h_188,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202025-02-18%20135420.png"
+      alt="Target Icon"
+      fill
+      style={{ objectFit: "contain" }}
+    />
+  </div>
 
-            {[279, 568, 0, 279, 568].map((x, i) => (
-              <div key={i} className={`flex flex-col items-center group ${i === 2 ? 'ml-10' : ''}`}>
-                <div className="relative h-[140px] w-[140px] mb-10 transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
-                  <Image
-                    src={`https://static.wixstatic.com/media/36a881_b93011b55c3c4cc5a3fec96a287e4564~mv2.png/v1/crop/x_${x},y_${i < 2 ? 23 : 324},w_289,h_255/fill/w_211,h_188,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202025-02-18%20135420.png`}
-                    alt="Rocket Icon"
-                    fill
-                    style={{ objectFit: "contain" }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Right Form Section */}
-          <div className="flex-1 md:py-20 md:p-10 min-h-full py-4">
-            <div className="px-10 sm:px-10 lg:px-20 text-gray-800 ">
-              <form className="space-y-6 ">
-                {[
-                  "Your Name",
-                  "Your Surname",
-                  "Your Email Address",
-                  "Your Company Name",
-                ].map((label, i) => (
-                  <div key={i}>
-                    <label className="block mb-2 ml-2 md:text-[1rem] text-[0.8rem] font-normal md:font-normal ">
-                      {label} *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full p-1 py-2 md:py-3 rounded-2xl bg-white"
-                    />
-                  </div>
-                ))}
-                {/* Separate Mobile Phone Input */}
-                <div>
-                  <label className="block mb-2 ml-2 md:text-[1rem] text-[0.8rem] font-normal md:font-normal">
-                    Your Mobile Phone *
-                  </label>
-                  <div className="flex items-center bg-white rounded-2xl  px-2 py-1">
-                    {/* World Map Icon */}
-                    <span className="mr-2 text-gray-500">
-                      <FaGlobe className="w-4 h-4" />
-                    </span>
-                    {/* Country Code Dropdown */}
-                   
-
-                    {/* Phone Number Input */}
-                    <input
-                      type="tel"
-                      required
-                      
-                      className="flex-1 bg-white py-2 md:py-3 border-none focus:outline-none text-sm"
-                    />
-                  </div>
-                </div>
-
-                {/* Date of Birth */}
-                <div className="mb-8">
-                  <label className="block mb-2 ml-2 md:text-[1rem] text-[0.7rem] font-normal md:font-normal">
-                    Date of Birth *
-                  </label>
-                  <div className="flex gap-3">
-                    <select className="w-full px-3 py-2 rounded-2xl bg-white text-[0.8rem] md:text-[1rem]">
-                      <option value="month">Month</option>
-                      {[
-                        "January",
-                        "February",
-                        "March",
-                        "April",
-                        "May",
-                        "June",
-                        "July",
-                        "August",
-                        "September",
-                        "October",
-                        "November",
-                        "December",
-                      ].map((month, i) => (
-                        <option key={i} value={String(i + 1).padStart(2, "0")}>
-                          {month}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      type="number"
-                      placeholder="Day"
-                      required
-                      className="w-full px-3 py-2 md:py-3 rounded-2xl bg-white text-[0.8rem] md:text-[0.9rem]"
-                    />
-                    <input
-                      type="number"
-                      placeholder="Year"
-                      required
-                      className="w-full px-3 py-2 md:py-3 rounded-2xl bg-white text-[0.8rem] md:text-[0.9rem]"
-                    />
-                  </div>
-                </div>
-
-                {[
-                  "Your Education Status",
-                  "Province You Want to Apply",
-                  "How Did You Hear About the Keller Williams Brand ?",
-                ].map((label, i) => (
-                  <div key={i}>
-                    <label className="block mb-2 ml-2 md:text-[1rem] text-[0.8rem] font-normal md:font-normal">
-                      {label} *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      className="w-full p-1 py-2 md:py-3 rounded-2xl bg-white"
-                    />
-                  </div>
-                ))}
-
-                <label className="md:text-[1rem] ml-2  text-[0.8rem] font-normal md:font-normal">
-                  Promotional Permissions*
-                </label>
-                <div className="flex items-start space-x-2  ">
-                  <input
-                    type="checkbox"
-                    required
-                    id="promoConsent"
-                    className="mt-3"
-                  />
-                  <label
-                    htmlFor="promoConsent"
-                    className="text-base md:text-[0.9rem] mt-2 text-[0.8rem] leading-5 font-normal md:font-thin"
-                  >
-                    I consent to receiving promotional emails, text messages, and calls regarding Keller Williams&apos; services.
-                  </label>
-                </div>
-
-                <label className="md:text-[1rem] ml-2 text-[0.8rem]  font-normal md:font-normal">
-                  Personal Data Protection Declaration *
-                </label>
-                <div className="flex items-start space-x-2">
-                  <input
-                    type="checkbox"
-                    id="dataConsent"
-                    required
-                    className="mt-6"
-                  />
-                  <label
-                    htmlFor="dataConsent"
-                    className="text-base md:text-[0.9rem] mt-2 text-[0.8rem] leading-5 font-normal md:font-thin"
-                  >
-                    As Keller Williams Saudi Arabia, we care about your security. In
-                    order to fulfill our obligation to inform arising from Article 10
-                    of the Personal Data Protection Law and to obtain your &quot;Personal
-                    Data Protection and Personal Data Sharing Permission&quot; from our
-                    valued visitors; we kindly request you to read and approve the
-                    text in the link below.
-                  </label>
-                </div>
-                <div className="mt-8 flex md:justify-end justify-center">
-                  <button
-                    type="submit"
-                    className="w-full md:w-32 bg-[rgba(202,3,32,255)] text-white py-2 rounded-full text-base font-semibold hover:bg-gray-600 transition"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+  {/* Rocket Icons */}
+  <div className="flex flex-wrap justify-center gap-8">
+    {[279, 568, 0, 279, 568].map((x, i) => (
+      <div key={i} className={`group ${i === 2 ? 'ml-5' : ''}`}>
+        <div className="relative h-[140px] w-[140px] transition-transform duration-300 ease-in-out group-hover:-translate-y-2">
+          <Image
+            src={`https://static.wixstatic.com/media/36a881_b93011b55c3c4cc5a3fec96a287e4564~mv2.png/v1/crop/x_${x},y_${i < 2 ? 23 : 324},w_289,h_255/fill/w_211,h_188,fp_0.50_0.50,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Screenshot%202025-02-18%20135420.png`}
+            alt="Rocket Icon"
+            fill
+            style={{ objectFit: "contain" }}
+          />
         </div>
       </div>
+    ))}
+  </div>
+</div>
+</div>
+
+          {/* Right Form Section */}
+<div className="md:py-20 md:p-10 py-4 min-h-full w-full">
+  <div className="px-4 sm:px-10 lg:px-20 text-gray-800">
+  <form onSubmit={handleSubmit} className="space-y-6">
+      
+      {/* Name */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Your Name *
+        </label>
+        <input
+          type="text"
+          name="name"
+          value={form.name}
+          onChange={handleInputChange}
+          required
+          className="w-full py-2 md:py-3 px-3 rounded-2xl bg-white"
+        />
+      </div>
+
+      {/* Surname */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Your Surname *
+        </label>
+        <input
+          type="text"
+          name="surname"
+          value={form.surname}
+          onChange={handleInputChange}
+          required
+          className="w-full py-2 md:py-3 px-3 rounded-2xl bg-white"
+        />
+      </div>
+
+      {/* Email */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Your Email Address *
+        </label>
+        <input
+          type="email"
+          name="email"
+          value={form.email}
+          onChange={handleInputChange}
+          required
+          className="w-full py-2 md:py-3 px-3 rounded-2xl bg-white"
+        />
+      </div>
+
+      {/* Company */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Your Company Name *
+        </label>
+        <input
+          type="text"
+          name="company"
+          value={form.company}
+          onChange={handleInputChange}
+          required
+          className="w-full py-2 md:py-3 px-3 rounded-2xl bg-white"
+        />
+      </div>
+
+      {/* Mobile Phone */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Your Mobile Phone *
+        </label>
+        <div className="flex items-center bg-white rounded-2xl px-2 py-1">
+          <span className="mr-2 text-gray-500">
+            <FaGlobe className="w-4 h-4" />
+          </span>
+          <PhoneInput
+            inputProps={{
+              name: 'mobile-phone',
+              id: 'mobile-phone',
+              required: true,
+            }}
+            country={'sa'}
+            value={phone}
+            onChange={setPhone}
+            enableSearch={true}
+            searchPlaceholder="Search Country"
+            inputStyle={{
+              width: '100%',
+              border: 'none',
+              background: 'white',
+              fontSize: '14px',
+              borderRadius: '12px',
+              paddingTop: '10px',
+              paddingBottom: '10px',
+              paddingLeft: '40px',
+            }}
+            buttonStyle={{
+              border: 'none',
+              background: 'white',
+            }}
+            containerStyle={{ width: '100%' }}
+          />
+        </div>
+      </div>
+
+      {/* Date of Birth */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Date of Birth *
+        </label>
+        <div className="flex gap-3">
+          <select className="w-full py-2 px-3 rounded-2xl bg-white text-[0.8rem] md:text-[1rem]">
+            <option value="">Month</option>
+            {[
+              "January", "February", "March", "April", "May", "June",
+              "July", "August", "September", "October", "November", "December"
+            ].map((month, i) => (
+              <option key={i} value={String(i + 1).padStart(2, '0')}>
+                {month}
+              </option>
+            ))}
+          </select>
+          <input
+            type="number"
+            placeholder="Day"
+            required
+            className="w-full py-2 px-3 rounded-2xl bg-white text-[0.8rem] md:text-[1rem]"
+          />
+          <select required className="w-full py-2 px-3 rounded-2xl bg-white text-[0.8rem] md:text-[1rem]">
+            <option value="">Year</option>
+            {Array.from({ length: 100 }, (_, i) => {
+              const year = new Date().getFullYear() - i;
+              return (
+                <option key={year} value={year}>{year}</option>
+              );
+            })}
+          </select>
+        </div>
+      </div>
+
+      {/* Education, Province, Source */}
+      {[
+        "Your Education Status",
+        "Province You Want to Apply",
+        "How Did You Hear About the Keller Williams Brand ?"
+      ].map((label, idx) => (
+        <div key={idx}>
+          <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+            {label} *
+          </label>
+          <input
+            type="text"
+            required
+            className="w-full py-2 md:py-3 px-3 rounded-2xl bg-white"
+          />
+        </div>
+      ))}
+
+      {/* Promotional Permissions */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Promotional Permissions *
+        </label>
+        <div className="flex items-start gap-2">
+          <input type="checkbox" required id="promoConsent" className="mt-1" />
+          <label
+            htmlFor="promoConsent"
+            className="text-[0.8rem] md:text-[0.9rem] leading-5"
+          >
+            I consent to receiving promotional emails, text messages, and calls regarding Keller Williams services.
+          </label>
+        </div>
+      </div>
+
+      {/* Personal Data Protection */}
+      <div>
+        <label className="block mb-2 ml-2 text-[0.8rem] md:text-[1rem] font-normal">
+          Personal Data Protection Declaration *
+        </label>
+        <div className="flex items-start gap-2">
+          <input type="checkbox" required id="dataConsent" className="mt-2" />
+          <label
+            htmlFor="dataConsent"
+            className="text-[0.8rem] md:text-[0.9rem] leading-5"
+          >
+            As Keller Williams Saudi Arabia, we care about your security. In order to fulfill our obligation to inform arising from Article 10 of the Personal Data Protection Law and to obtain your{' '}
+            <strong>&quot;Personal Data Protection and Personal Data Sharing Permission&quot;</strong> from our valued visitors, we kindly request you to read and approve the text in the link below.
+          </label>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <div className="mt-8 flex md:justify-end justify-center">
+        <button
+          type="submit"
+          className="w-full md:w-32 bg-[rgba(202,3,32,255)] text-white py-2 rounded-full text-base font-semibold hover:bg-gray-600 transition"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>
 
       <div  className="hidden md:flex order-2 bg-[rgba(204,0,31)] md:order-1 items-center justify-center h-[25px] md:h-[76px]">
     <Image

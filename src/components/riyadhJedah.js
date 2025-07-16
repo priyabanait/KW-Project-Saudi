@@ -1,9 +1,42 @@
-import React from 'react';
+'use client'
+import React, { useState } from 'react';
 import Header from './header';
 import Footer from './footer';
 import Box from './box';
 import Image from 'next/image';
 const RiyadhJedah = (props) => {
+
+    const [form, setForm] = useState({
+      firstName: '',
+      lastName: '',
+      email: '',
+      addressTo: '',
+      message: ''
+    });
+    const [status, setStatus] = useState(null); // null | 'success' | 'error'
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setForm((prev) => ({ ...prev, [name]: value }));
+    };
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      setStatus(null);
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(form),
+        });
+        if (res.ok) {
+          setStatus('success');
+          setForm({ firstName: '', lastName: '', email: '', addressTo: '', message: '' });
+        } else {
+          setStatus('error');
+        }
+      } catch {
+        setStatus('error');
+      }
+    };
 
     const teamMembers = [
   {
@@ -88,34 +121,52 @@ const RiyadhJedah = (props) => {
 
           {/* Right Side (Form) */}
 <div className="flex-1 p-6 flex justify-center items-center">
-  <form className="w-full md:max-w-full space-y-4 py-10 md:px-15">
+  <form className="w-full md:max-w-full space-y-4 py-10 md:px-15" onSubmit={handleSubmit}>
     <div>
       <label className="block mb-1 md:text-base text-base font-sm">First Name</label>
       <input
         type="text"
+        name="firstName"
+        value={form.firstName}
+        onChange={handleChange}
         placeholder="First name"
         className="w-full text-base p-3 mt-2 border-white rounded bg-white focus:outline-none"
+        required
       />
     </div>
     <div className='py-2'>
       <label className="block mb-1 md:text-base text-base font-sm">Last Name</label>
       <input
         type="text"
+        name="lastName"
+        value={form.lastName}
+        onChange={handleChange}
         placeholder="Last name"
         className="w-full p-3 text-base mt-2 border-white rounded bg-white focus:outline-none"
+        required
       />
     </div>
     <div className='py-2'>
       <label className="block mb-1 md:text-base text-base font-sm">Email *</label>
       <input
         type="email"
+        name="email"
+        value={form.email}
+        onChange={handleChange}
         placeholder="Email"
         className="w-full p-3 text-base mt-2 border-white rounded bg-white focus:outline-none"
+        required
       />
     </div>
     <div className='py-2'>
       <label className="block mb-1 md:text-base text-base font-sm">Address To</label>
-      <select className="w-full p-3 text-base mt-2 border-white rounded bg-white focus:outline-none">
+      <select
+        name="addressTo"
+        value={form.addressTo}
+        onChange={handleChange}
+        className="w-full p-3 text-base mt-2 border-white rounded bg-white focus:outline-none"
+        required
+      >
         <option value="">Select</option>
         <option value="sales">Sales</option>
         <option value="support">Support</option>
@@ -124,17 +175,27 @@ const RiyadhJedah = (props) => {
     <div className='py-2'>
       <label className="block mb-1  md:text-base text-base font-sm">Message *</label>
       <textarea
+        name="message"
+        value={form.message}
+        onChange={handleChange}
         placeholder="Message"
         rows="2"
         className="w-full p-4 text-base border-white mt-2 rounded bg-white focus:outline-none"
+        required
       />
     </div>
     <button
-                    type="submit"
-                    className="w-full md:w-32 bg-[rgba(202,3,32,255)] text-white py-2 rounded-full text-base font-semibold hover:bg-gray-600 transition"
-                  >
-                    Submit
-                  </button>
+      type="submit"
+      className="w-full md:w-32 bg-[rgba(202,3,32,255)] text-white py-2 rounded-full text-base font-semibold hover:bg-gray-600 transition"
+    >
+      Submit
+    </button>
+    {status === 'success' && (
+      <p className="text-green-600 text-center mt-2">Thank you! Your message has been sent.</p>
+    )}
+    {status === 'error' && (
+      <p className="text-red-600 text-center mt-2">Sorry, there was an error. Please try again.</p>
+    )}
   </form>
 </div>
 

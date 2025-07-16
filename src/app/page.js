@@ -10,10 +10,21 @@ import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import React, { useRef,useState,useEffect,useMemo  } from 'react';
 import { ChevronRight } from 'lucide-react';
+import axios from 'axios';
 const Home = () => {
  
   const scrollRef = useRef(null);
   const [showScrollButton, setShowScrollButton] = useState(false);
+  // Hero background images array and index state
+  const heroImages = [
+    "https://www.kwuk.com/wp-content/uploads/2023/04/home-banner-img-1.jpg",
+    "https://www.kwuk.com/wp-content/uploads/2023/04/home-banner-img-2.jpg",
+    "https://www.kwuk.com/wp-content/uploads/2023/04/home-banner-img-3.jpg",
+    "https://www.kwuk.com/wp-content/uploads/2023/04/home-banner-img-4.jpg"
+  ];
+  const [heroIndex, setHeroIndex] = useState(0);
+  const [isBlurring, setIsBlurring] = useState(true);
+  const [prevHeroIndex, setPrevHeroIndex] = useState(null);
   const stats = [
     { value: '$532B', label1: 'Total Sales Volume', label2: 'Worldwide' },
     { value: '$1.4B', label1: 'Closed Transactions', label2: 'Worldwide' },
@@ -49,35 +60,48 @@ const Home = () => {
 
     return () => clearInterval(interval);
   }, [testimonials.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPrevHeroIndex(heroIndex);
+      setHeroIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000); // 5 seconds
+    return () => clearInterval(interval);
+  }, [heroIndex, heroImages.length]);
+
+  useEffect(() => {
+    setIsBlurring(true);
+    const timeout = setTimeout(() => setIsBlurring(false), 800); // 0.8s blur duration
+    return () => clearTimeout(timeout);
+  }, [heroIndex]);
+
+  useEffect(() => {
+    if (prevHeroIndex !== null) {
+      const timeout = setTimeout(() => setPrevHeroIndex(null), 800); // match transition duration
+      return () => clearTimeout(timeout);
+    }
+  }, [prevHeroIndex]);
   const handleDotClick = (index) => {
     setCurrentIndex(index);
   };
-  const properties =useMemo(() => [
-    {
-      title: "Marina View Tower",
-      location: "Mecca, KSA",
-      price: "SAR 6,500",
-      image: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29",
-    },
-    {
-      title: "Al Noor Villas",
-      location: "Medina, KSA",
-      price: "SAR 6,500",
-      image: "https://images.unsplash.com/photo-1523217582562-09d0def993a6",
-    },
-    {
-      title: "The Haven Residences",
-      location: "Dammam, KSA",
-      price: "SAR 6,500",
-      image: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae",
-    },
-    {
-      title: "Pearl Gardens",
-      location: "Khobar, KSA",
-      price: "SAR 6,500",
-      image: "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd",
-    },
-  ], []);
+  // Trending properties state
+  const [properties, setProperties] = useState([]);
+  const [loadingProperties, setLoadingProperties] = useState(false);
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoadingProperties(true);
+      try {
+        const response = await axios.post('https://kw-backend-q6ej.vercel.app/api/listings/list/properties', {});
+        setProperties(response.data.data || []);
+      } catch (error) {
+        setProperties([]);
+        // Optionally handle error
+      } finally {
+        setLoadingProperties(false);
+      }
+    };
+    fetchProperties();
+  }, []);
   const [clear, setClear] = useState(false)
 
   useEffect(() => {
@@ -109,6 +133,32 @@ const Home = () => {
     }
   }
   const [activeTab, setActiveTab] = useState('property');
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // Mouse drag handlers for carousel
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 1; // scroll-fastness multiplier
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
   return (
     <div className="relative p-6 md:p-8">
     
@@ -117,22 +167,56 @@ const Home = () => {
     <Header />
 
 
-    <div className="absolute top-0 left-0 w-[100px] h-[100px] md:w-[150px] md:h-[150px] bg-red-700 z-0"></div>
+    <div className="absolute top-0 left-0 w-[100px] h-[100px] md:w-[150px] md:h-[150px] bg-[rgba(202,3,32,255)] z-0"></div>
 
 {/* Hero Section */}
 <div className="relative min-h-[74vh] md:min-h-screen">
 
   <section className="relative w-full h-[74vh] md:h-[146vh] text-white">
-    {/* Background Image */}
-    <Image
-      src="https://www.kwuk.com/wp-content/uploads/2023/04/home-banner-img-1.jpg"
-      alt="Hero Background"
-      layout="fill"
-      objectFit="cover"
-      objectPosition="center"
-      priority
-      className="z-0"
-    />
+    {/* Background Image with previous blurring out and next coming in */}
+    <div className="absolute inset-0 z-0">
+      {/* Previous image, if any */}
+      {prevHeroIndex !== null && (
+        <motion.div
+          key={prevHeroIndex}
+          initial={{ opacity: 1, filter: "blur(0.5rem)" }}
+          animate={{ opacity: 0, filter: "blur(1.5rem)" }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+          className="absolute inset-0"
+          style={{ zIndex: 1 }}
+        >
+          <Image
+            src={heroImages[prevHeroIndex]}
+            alt="Previous Hero Background"
+            layout="fill"
+            objectFit="cover"
+            objectPosition="center"
+            priority
+            className="z-0"
+          />
+        </motion.div>
+      )}
+      {/* Current image */}
+      <motion.div
+        key={heroIndex}
+        initial={{ opacity: 0, filter: "blur(1.5rem)" }}
+        animate={{ opacity: 1, filter: "blur(0rem)" }}
+        transition={{ duration: 0.8 }}
+        className="absolute inset-0"
+        style={{ zIndex: 2 }}
+      >
+        <Image
+          src={heroImages[heroIndex]}
+          alt="Hero Background"
+          layout="fill"
+          objectFit="cover"
+          objectPosition="center"
+          priority
+          className="z-0"
+        />
+      </motion.div>
+    </div>
     <div className="absolute inset-0 bg-black/50"></div>
     <div className="inset-0 bg-opacity-60 z-10" />
 
@@ -155,7 +239,7 @@ const Home = () => {
         <span
           onClick={() => setActiveTab('property')}
           className={`pb-1 sm:pb-2 cursor-pointer border-b-4 ${
-            activeTab === 'property' ? 'border-red-600' : 'border-transparent'
+            activeTab === 'property' ? 'border-[rgba(202,3,32,255)]' : 'border-transparent'
           }`}
         >
           Find a property
@@ -164,7 +248,7 @@ const Home = () => {
         <span
           onClick={() => setActiveTab('agent')}
           className={`pb-1 sm:pb-2 cursor-pointer border-b-4 ${
-            activeTab === 'agent' ? 'border-red-600' : 'border-transparent'
+            activeTab === 'agent' ? 'border-[rgba(202,3,32,255)]' : 'border-transparent'
           }`}
         >
           Find an agent
@@ -172,30 +256,33 @@ const Home = () => {
       </div>
 
       {/* Desktop View */}
-      <div className="hidden md:flex w-full max-w-full md:max-w-xl p-2 bg-white flex-col md:flex-row items-center gap-2 rounded-3xl">
+      <div className="hidden md:flex w-full max-w-full md:max-w-2xl p-2 bg-white  flex-col md:flex-row items-center gap-2 md:gap-3 rounded-full shadow-lg">
 
         {activeTab === 'property' ? (
           <>
-            <input
-              type="text"
-              placeholder="City, Area or Building"
-              className="flex-1 px-3 py-2 text-black text-sm sm:text-base md:text-xl outline-none"
-            />
-            <button className="w-full md:w-auto bg-red-700 hover:bg-red-800 text-white px-4 sm:px-6 md:px-8 py-2 md:py-3 text-sm sm:text-base md:text-xl font-semibold border rounded-3xl mt-2 md:mt-0">
-              Sale
-            </button>
-            <button className="w-full md:w-auto bg-red-700 hover:bg-red-800 text-white px-4 sm:px-6 md:px-8 py-2 md:py-3 text-sm sm:text-base md:text-xl font-semibold border rounded-3xl mt-2 md:mt-0">
-              Rent
-            </button>
+          <FaSearch className="text-gray-500 ml-3 md:text-xl text-sm" />
+    <input
+        type="text"
+        placeholder="City, Area or Buildings"
+        className="flex-1 w-full px-2 py-2 md:py-3 text-black text-base md:text-xl rounded-full outline-none"
+      />
+      <div className="flex gap-2 md:gap-3 w-full md:w-auto">
+        <button className="flex-1 md:flex-none bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 md:px-6 py-2 md:py-3 text-base md:text-xl font-semibold rounded-full">
+          Sale
+        </button>
+        <button className="flex-1 md:flex-none bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 md:px-6 py-2 md:py-3 text-base md:text-xl font-semibold rounded-full">
+          Rent
+        </button>
+      </div>
           </>
         ) : (
           <>
             <input
               type="text"
-              placeholder="Postcode"
-              className="flex-1 px-3 py-2 text-black text-sm sm:text-base md:text-xl outline-none"
+              placeholder="Name or Market Center"
+              className="flex-1 px-3 py-2  text-black text-sm sm:text-base md:text-xl outline-none"
             />
-            <button className="w-full md:w-auto bg-red-700 hover:bg-red-800 text-white px-4 sm:px-6 md:px-8 py-2 md:py-3 text-sm sm:text-base md:text-xl font-semibold border rounded-3xl mt-2 md:mt-0">
+            <button className="w-full md:w-auto bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 sm:px-6 md:px-12 py-2 md:py-3 text-sm sm:text-base md:text-xl font-semibold border rounded-full mt-2 md:mt-0">
               Search 
             </button>
           </>
@@ -203,19 +290,20 @@ const Home = () => {
       </div>
 
       {/* Mobile View */}
-      <div className="flex md:hidden w-full max-w-full p-2 bg-white items-center gap-2 rounded-3xl shadow-lg overflow-x-auto">
+      <div className="flex md:hidden w-full max-w-full p-2 bg-white items-center gap-2 rounded-full ">
 
         {activeTab === 'property' ? (
           <>
+          <FaSearch className="text-gray-500  text-3xl" />
             <input
               type="text"
               placeholder="City, Area or Buildings"
-              className="flex-shrink-0 w-[150px] px-4 py-2 text-black text-xs rounded-3xl outline-none"
+              className="flex-shrink-0 w-[150px]  py-2 text-black text-xs rounded-full outline-none"
             />
-            <button className="flex-shrink-0 bg-red-700 hover:bg-red-800 text-white px-3 py-2 text-xs font-semibold rounded-3xl">
+            <button className="flex-shrink-0 bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-2 py-2 text-xs font-semibold rounded-full">
               Sale
             </button>
-            <button className="flex-shrink-0 bg-red-700 hover:bg-red-800 text-white px-3 py-2 text-xs font-semibold rounded-3xl">
+            <button className="flex-shrink-0 bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-2 py-2 text-xs font-semibold rounded-full">
               Rent
             </button>
           </>
@@ -223,10 +311,10 @@ const Home = () => {
           <>
             <input
               type="text"
-              placeholder="Postcode"
-              className="flex-shrink-0 w-[150px] px-4 py-2 text-black text-xs rounded-3xl outline-none"
+               placeholder="Name or Market Center"
+              className="flex-shrink-0 w-[150px] px-2 py-2 text-black text-xs rounded-full outline-none"
             />
-             <button className="w-full md:w-auto bg-red-700 hover:bg-red-800 text-white px-4 sm:px-6 md:px-8 py-2 md:py-3 text-sm sm:text-base md:text-xl font-semibold border rounded-3xl mt-2 md:mt-0">
+             <button className="w-full md:w-auto bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 sm:px-6 md:px-8 py-2 md:py-3 text-sm sm:text-base md:text-xl font-semibold border rounded-full mt-2 md:mt-0">
               Search 
             </button>
           </>
@@ -254,7 +342,7 @@ const Home = () => {
       <hr className="w-44 mx-auto bg-[rgba(202,3,32,255)] h-[1.5px] border-0 my-12 md:hidden" />
 
         {/* Image Grid Section */}
-        <div className="md:mx-8 mx-2 md:py-16 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-0 md:gap-2">
+        {/* <div className="md:mx-8 mx-2 md:py-16 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-0 md:gap-2">
     {[
       { label: "Properties", path: 'properties', imageUrl: "/properties.jpg" },
       { label: "Market Center", path: 'marketCenter', imageUrl: "/marketcenter.jpg" },
@@ -277,9 +365,9 @@ const Home = () => {
         </div>
       </Link>
     ))}
-  </div>
+  </div> */}
 
-        <div className="flex justify-center items-center md:my-0 my-8 mt-10 md:mt-0 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-8">
+        {/* <div className="flex justify-center items-center md:my-0 my-8 mt-10 md:mt-0 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-8">
           <hr className="md:w-170 w-44 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px]" />
         </div>
         <div className="md:w-1/3 md:text-center text-center mb-6 md:mb-0">
@@ -290,7 +378,7 @@ const Home = () => {
         </div>
         <div className="w-full mx-auto px-2 md:px-12 lg:px-18 md:py-14 py-4 md:mt-12">
           <div className="flex flex-col lg:flex-row gap-4 lg:gap-20">
-            {/* First Image Block */}
+       
             <div className="lg:w-1/2 overflow-hidden">
           <Link href="/riyadh">
             <Image
@@ -305,7 +393,7 @@ const Home = () => {
           </Link>
         </div>
 
-        {/* Second Image */}
+       
         <div className="lg:w-1/2 overflow-hidden">
           <Link href="/jeddah">
             <Image
@@ -320,17 +408,17 @@ const Home = () => {
           </Link>
         </div>
           </div>
-        </div>
+        </div> */}
 
-        <div className="flex flex-col justify-center items-center md:my-16 my-8 md:gap-2">
-      {/* Heading */}
+        {/* <div className="flex flex-col justify-center items-center md:my-16 my-8 md:gap-2">
+     
       <div className="w-full text-center mb-8">
         <h1 className="text-[1rem] md:text-[2.2rem] font-bold">
           <span className="text-[rgba(202,3,32,255)]">TOOLS</span> FOR YOUR NEEDS
         </h1>
       </div>
 
-      {/* Grid */}
+      
       <div className="w-full md:px-100 px-2 md:px-20">
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 justify-center">
           {[
@@ -369,114 +457,16 @@ const Home = () => {
           ))}
         </div>
       </div>
-    </div>
+    </div> */}
 
 
-        <div className="flex justify-center items-center mt-8 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-8  md:mb-0">
-          <hr className="md:w-170 w-44 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px]" />
-        </div>
-        <div className="flex flex-col items-center justify-center my-8 md:my-0 md:mt-30 text-center px-2 md:px-4 bg-gray-100 border border-gray-100 rounded-3xl">
-  <h1 className="text-lg md:text-[2.5rem] mt-6 md:mt-10 font-bold mb-2 md:mb-4">
-    <span className="text-[rgba(202,3,32,255)]">OUR </span>TRENDING PROPERTIES
-  </h1>
-  <h2 className="text-base md:text-xl font-semibold text-gray-600 mb-4 md:mb-6">
-    Start Your Search <span className="text-red-700">Here</span>
-  </h2>
+       
+      
+    {/*  <main className="w-full md:mt-4 mt-0">
+  <div className="flex flex-col lg:flex-row min-h-screen"> 
 
-  <div className="hidden md:flex w-full max-w-full md:max-w-3xl p-2 bg-white  flex-col md:flex-row items-center gap-2 md:gap-3 rounded-3xl shadow-lg">
-    <input
-      type="text"
-      placeholder="City, Area or Buildings"
-      className="flex-1 w-full px-4 py-2 md:py-3 text-black text-base md:text-xl rounded-3xl outline-none"
-    />
-    <div className="flex gap-2 md:gap-3 w-full md:w-auto">
-      <button className="flex-1 md:flex-none bg-red-700 hover:bg-red-800 text-white px-4 md:px-6 py-2 md:py-3 text-base md:text-xl font-semibold rounded-3xl">
-        Sale
-      </button>
-      <button className="flex-1 md:flex-none bg-red-700 hover:bg-red-800 text-white px-4 md:px-6 py-2 md:py-3 text-base md:text-xl font-semibold rounded-3xl">
-        Rent
-      </button>
-    </div>
-  </div>
-
-  <div className="flex md:hidden w-full max-w-full p-2 bg-white items-center gap-2 rounded-3xl shadow-lg overflow-x-auto">
-
-  <input
-    type="text"
-    placeholder="City, Area or Buildings"
-    className="flex-shrink-0 w-[150px] px-4 py-2 text-black text-xs rounded-3xl outline-none"
-  />
-
-  <button className="flex-shrink-0 bg-red-700 hover:bg-red-800 text-white px-3 py-2 text-sm font-semibold rounded-3xl">
-    Sale
-  </button>
-
-  <button className="flex-shrink-0 bg-red-700 hover:bg-red-800 text-white px-3 py-2 text-sm font-semibold rounded-3xl">
-    Rent
-  </button>
-
-</div>
   
-
-        {/* First Home Block */}
-        <div className="relative w-full px-4 md:px-10 md:py-22 py-8 md:py-15 ">
-    <div
-      ref={scrollRef}
-      className="flex gap-2 md:gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
-    >
-      {properties.map((property, index) => (
-      <div
-      key={index}
-      className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[90%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[180px] rounded-xl overflow-hidden shadow-md bg-white relative"
-    >
-      {/* 360 Logo in the top-left corner */}
-      <div className="absolute top-4 left-4 z-20">
-        <Image
-          src="/360logo.png"
-          alt="360 Logo"
-          width={40}
-          height={40}
-          className="rounded-full bg-white/80 p-1 shadow"
-        />
-      </div>
-      <Image
-        src={property.image}
-        alt={property.title}
-        fill
-        className="w-full h-full object-cover"
-      />
-   
-          <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white drop-shadow max-w-[80%] md:max-w-[60%]">
-            <h3 className="text-xs md:text-sm font-semibold leading-tight mb-1">{property.title}</h3>
-            <p className="text-[0.6rem] md:text-xs leading-tight">{property.location}</p>
-          </div>
-          <div className="absolute bottom-2 md:bottom-4 right-2 md:right-4 bg-black/70 text-white px-2 py-1 rounded-full text-[0.6rem] md:text-xs font-semibold">
-            {property.price}
-          </div>
-        </div>
-      ))}
-    </div>
-
-    {showScrollButton && (
-      <button
-      onClick={scrollRight}
-      className="absolute right-0 md:right-2 top-1/2 transform -translate-y-1/2 
-                 bg-white border border-gray-300 rounded-full p-2 md:p-4 
-                 shadow-md z-10 hover:shadow-lg transition"
-    >
-     <ChevronRight 
-     className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
-   />
-   
-    </button>
-    )}
-  </div>
-</div>
-    <main className="w-full md:mt-4 mt-0">
-  <div className="flex flex-col lg:flex-row min-h-screen">  {/* Ensures full height on large screens */}
-
-    {/* Left Side - Image */}
-    <div className="w-full lg:w-1/2 h-[40vh] md:h-[50vh] lg:h-auto relative min-h-[400px]"> {/* Fixed height for image */}
+    <div className="w-full lg:w-1/2 h-[40vh] md:h-[50vh] lg:h-auto relative min-h-[400px]"> 
       <Image
         src="/formimage.jpg"
         alt="Property"
@@ -485,8 +475,8 @@ const Home = () => {
       />
     </div>
 
-    {/* Right Side - Form */}
-    <div className="w-full lg:w-1/2 flex items-center justify-center bg-[rgba(202,3,32,255)] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8">
+
+   <div className="w-full lg:w-1/2 flex items-center justify-center bg-[rgba(202,3,32,255)] py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8">
       <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl">
 
         <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-normal text-white mb-4 sm:mb-6 md:mb-8 text-center sm:text-left leading-snug">
@@ -550,8 +540,8 @@ const Home = () => {
       </div>
     </div>
 
-  </div>
-</main>
+  </div> 
+</main>*/}
 
 
       {/* Stats Section */}
@@ -569,7 +559,7 @@ const Home = () => {
         {/* Overlay Content */}
         <div className="relative z-10 px-2 sm:px-8 md:pt-2 my-4 text-black text-center bg-white/50">
       {/* Heading */}
-      <div className="mt-10 mb-6 md:mt-20 md:mb-28 text-center">
+      <div className="mt-10 mb-6 md:mb-0 md:mt-20 text-center">
 <h1 className="text-2xl md:text-4xl font-bold mb-2">
   Keller Williams
 </h1>
@@ -581,7 +571,7 @@ const Home = () => {
 
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 items-center justify-center md:grid-cols-4 gap-2 md:gap-8 mt-4 md:mt-0 max-w-full mx-2 md:mx-12">
+      <div className="grid grid-cols-2 items-center justify-center md:grid-cols-4 gap-2 md:gap-8  mt-10 md:mt-40 max-w-full mx-2 md:mx-12">
         {stats.map((stat, index) => (
           <motion.div
             key={index}
@@ -624,7 +614,144 @@ we hope to become your go-to property adviser for life. As we are also part of t
        
       </div>
     </div>
-    <div className="bg-gray-100 mt-290 md:mt-0  mx-2 md:mx-18 border-gray-100 md:border-l md:rounded-l-3xl flex flex-col md:flex-row">
+
+    <div className="flex flex-col items-center justify-center my-8 md:my-0  text-center px-2 mt-300 md:px-4 md:mb-30 bg-gray-100 border border-gray-100 rounded-3xl">
+  <h1 className="text-lg md:text-[2.5rem] mt-6 md:mt-10 font-bold mb-2 md:mb-4">
+    <span className="text-[rgba(202,3,32,255)]">OUR </span>TRENDING PROPERTIES
+  </h1>
+  <h2 className="text-base md:text-xl font-semibold text-gray-600 mb-4 md:mb-6">
+    Start Your Search <span className="text-[rgba(202,3,32,255)]">Here</span>
+  </h2>
+
+  <div className="hidden md:flex w-full max-w-full md:max-w-3xl p-2 bg-white  flex-col md:flex-row items-center gap-2 md:gap-3 rounded-full shadow-lg">
+    
+  <FaSearch className="text-gray-500 ml-3 md:text-xl text-sm" />
+  <input
+      type="text"
+      placeholder="City, Area or Buildings"
+      className="flex-1 w-full px-2 py-2 md:py-3 text-black text-base md:text-xl rounded-full outline-none"
+    />
+    <div className="flex gap-2 md:gap-3 w-full md:w-auto">
+      <button className="flex-1 md:flex-none bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 md:px-6 py-2 md:py-3 text-base md:text-xl font-semibold rounded-full">
+        Sale
+      </button>
+      <button className="flex-1 md:flex-none bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 md:px-6 py-2 md:py-3 text-base md:text-xl font-semibold rounded-full">
+        Rent
+      </button>
+    </div>
+  </div>
+
+  <div className="flex md:hidden w-full max-w-full p-2 bg-white items-center gap-2 rounded-full ">
+ 
+
+  <FaSearch className="text-gray-500 ml-2 text-sm" />
+            <input
+              type="text"
+              placeholder="City, Area or Buildings"
+              className="flex-shrink-0 w-[150px]  py-2 text-black text-xs rounded-full outline-none"
+            />
+            <button className="flex-shrink-0 bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-2 py-2 text-xs font-semibold rounded-full">
+              Sale
+            </button>
+            <button className="flex-shrink-0 bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-2 py-2 text-xs font-semibold rounded-full">
+              Rent
+            </button>
+  
+</div>
+  
+
+        {/* First Home Block */}
+        <div className="relative w-full px-4 md:px-10 md:py-22 py-8 md:py-15 ">
+    <div
+      ref={scrollRef}
+      className="flex gap-2 md:gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+      onMouseDown={handleMouseDown}
+      onMouseLeave={handleMouseLeave}
+      onMouseUp={handleMouseUp}
+      onMouseMove={handleMouseMove}
+      style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+    >
+      {loadingProperties ? (
+        <div className="w-full flex justify-center items-center h-40 text-lg">Loading properties...</div>
+      ) : properties.length === 0 ? (
+        <div className="w-full flex justify-center items-center h-40 text-lg">No properties found.</div>
+      ) : (
+        properties.map((property, index) => (
+          <div
+            key={index}
+            className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[90%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[180px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('selectedProperty', JSON.stringify(property));
+                window.location.href = '/propertydetails';
+              }
+            }}
+          >
+            {/* 360 Logo in the top-left corner */}
+            <div className="absolute top-4 left-4 z-20">
+              <Image
+                src="/360logo.png"
+                alt="360 Logo"
+                width={40}
+                height={40}
+                className="rounded-full bg-white/80 p-1 shadow"
+              />
+            </div>
+            {(
+              property.image ||
+              (Array.isArray(property.images) && property.images[0]) ||
+              (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+            ) ? (
+              <Image
+                src={
+                  property.image ||
+                  (Array.isArray(property.images) && property.images[0]) ||
+                  (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                  '/properties.jpg'
+                }
+                alt={property.title || property.property_title || 'Property'}
+                fill
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+                Coming Soon!
+              </div>
+            )}
+            <div className="absolute bottom-2 md:bottom-4 left-2 md:left-4 text-white drop-shadow max-w-[80%] md:max-w-[60%]">
+              <h3 className="text-xs md:text-sm font-semibold leading-tight mb-1">{property.title || property.property_title}</h3>
+              <p className="text-[0.6rem] md:text-xs leading-tight">
+                {typeof property.location === 'string'
+                  ? property.location
+                  : property.property_address?.city
+                    ? property.property_address.city
+                    : ''}
+              </p>
+            </div>
+            <div className="absolute bottom-2 md:bottom-4 right-2 md:right-4 bg-black/70 text-white px-2 py-1 rounded-full text-[0.6rem] md:text-xs font-semibold">
+              {property.price || property.price_value || ''}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+
+    {showScrollButton && (
+      <button
+      onClick={scrollRight}
+      className="absolute right-0 md:right-2 top-1/2 transform -translate-y-1/2 
+                 bg-white border border-gray-300 rounded-full p-2 md:p-4 
+                 shadow-md z-10 hover:shadow-lg transition"
+    >
+     <ChevronRight 
+     className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
+   />
+   
+    </button>
+    )}
+  </div>
+</div>
+    <div className="bg-gray-100 mt-10 md:mt-0  mx-2 md:mx-0 border-gray-100 md:border-l md:rounded-l-3xl flex flex-col md:flex-row">
 
 {/* Mobile Version: Stacked */}
 <div className="md:hidden flex flex-col">
@@ -632,7 +759,7 @@ we hope to become your go-to property adviser for life. As we are also part of t
   {/* Overlapping Text Box */}
   <div className="bg-gray-100 md:p-4 p-8 border-gray-100 border-l rounded-l-3xl">
     <p className="md:text-xl text-3xl font-bold text-gray-600">
-      <span className="text-red-700">Join us.</span> Our dynamic energy and innovative spirit bring the best and brightest together.
+      <span className="text-[rgba(202,3,32,255)]">Join us.</span> Our dynamic energy and innovative spirit bring the best and brightest together.
     </p>
   </div>
 
@@ -649,7 +776,7 @@ we hope to become your go-to property adviser for life. As we are also part of t
 
 
   {/* Left Red Box */}
-  <div className="bg-red-700 text-white flex items-center justify-center w-full h-32">
+  <div className="bg-[rgba(202,3,32,255)] text-white flex items-center justify-center w-full h-32">
     <p className="md:text-lg text-3xl font-bold text-left">
       Want to be an <br /> AGENT?
     </p>
@@ -659,10 +786,10 @@ we hope to become your go-to property adviser for life. As we are also part of t
   <div className="bg-white/80 p-4 w-full">
     <p className=" text-3xl md:text-sm font-bold py-8 md:py-0 text-gray-800 md:leading-relaxed">
       We offer the greatest rewards for <br />
-      <span className="text-red-700 font-bold">exceptional customer care.</span>
+      <span className="text-[rgba(202,3,32,255)] font-bold">exceptional customer care.</span>
     </p>
 
-    <button className="mt-4 bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2">
+    <button className="mt-4 bg-[rgba(202,3,32,255)] text-white px-4 py-2 rounded-md text-sm font-semibold flex items-center gap-2">
       <span className="whitespace-nowrap">Market Centre Search</span>
       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -672,11 +799,11 @@ we hope to become your go-to property adviser for life. As we are also part of t
 </div>
 
 {/* Laptop Version: Original Layout */}
-<div className="hidden md:flex w-full relative">
+<div className="hidden md:flex w-full relative  ">
   {/* Box with half-overlap */}
-  <div className="absolute top-0 z-10 bg-gray-100 p-6 w-140 border-gray-100 border-l rounded-l-3xl">
+  <div className="absolute top-0 z-10 bg-gray-100 p-6 w-140 border-gray-100 border-l rounded-l-3xl ">
     <p className="text-4xl font-bold text-gray-800">
-      <span className="text-red-700">Join us.</span> Our dynamic energy and innovative spirit bring the best and brightest together.
+      <span className="text-[rgba(202,3,32,255)]">Join us.</span> Our dynamic energy and innovative spirit bring the best and brightest together.
     </p>
   </div>
 
@@ -690,7 +817,7 @@ we hope to become your go-to property adviser for life. As we are also part of t
     <div className="absolute inset-0 bg-black/50 border-r rounded-r-3xl"></div>
   </div>
 
-  <div className="absolute top-90 z-10 bg-red-700 text-white flex items-center justify-center w-74 h-60">
+  <div className="absolute top-90 z-10 bg-[rgba(202,3,32,255)] text-white flex items-center justify-center w-74 h-60">
     <p className="text-3xl font-bold text-center">
       Want to be an <br /> AGENT?
     </p>
@@ -699,10 +826,10 @@ we hope to become your go-to property adviser for life. As we are also part of t
   <div className="absolute top-90 left-74 z-10 bg-white/80 p-6 w-[600px] h-60">
     <p className="text-3xl font-bold text-gray-800 leading-relaxed">
       We offer the greatest rewards for <br />
-      <span className="text-red-700 font-bold">exceptional customer care.</span>
+      <span className="text-[rgba(202,3,32,255)] font-bold">exceptional customer care.</span>
     </p>
 
-    <button className="mt-4 bg-red-700 text-white px-6 py-3 ml-110 rounded-md text-base font-semibold flex items-center gap-2">
+    <button className="mt-4 bg-[rgba(202,3,32,255)] text-white px-6 py-3 ml-110 rounded-md text-base font-semibold flex items-center gap-2">
       <span className="whitespace-nowrap">Market Centre Search</span>
       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -713,12 +840,12 @@ we hope to become your go-to property adviser for life. As we are also part of t
 
 </div>
 
-      <div className="flex flex-col md:flex-row items-center justify-center mx-2 md:mx-18 bg-white py-10 md:py-30 px-2 md:px-4">
+      <div className="flex flex-col md:flex-row items-center justify-center mx-2 md:mx-0 bg-white py-10 md:py-30 px-2 md:px-0">
 
 <div className="grid grid-cols-1 md:grid-cols-2 max-w-full w-full gap-0">
 
   {/* Left Red Box */}
-  <div className="bg-red-700 text-white p-6 md:p-14 py-15 md:py-0 flex md:border-l md:rounded-l-3xl flex-col justify-center">
+  <div className="bg-[rgba(202,3,32,255)] text-white p-6 md:p-14 py-15 md:py-0 flex md:border-l md:rounded-l-3xl flex-col justify-center">
     <p className="text-base md:text-xl font-semibold mb-2">| Download guide</p>
     <h2 className="text-3xl md:text-4xl font-bold mb-4 md:mb-6">How to sell your home</h2>
     <p className="text-base md:text-lg mb-4 md:mb-6 leading-relaxed">
@@ -729,11 +856,11 @@ we hope to become your go-to property adviser for life. As we are also part of t
   
   <input
     type="text"
-    placeholder="City,Area or Building"
+    placeholder="email"
     className="w-full px-4 py-2 text-black text-base outline-none rounded-3xl"
   />
 
-  <button className="w-full md:w-auto bg-red-700 hover:bg-red-800 text-white px-4 md:px-8 py-2 text-base font-semibold border rounded-3xl">
+  <button className="w-full md:w-auto bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 md:px-8 py-2 text-base font-semibold border rounded-3xl">
     Download
   </button>
 
@@ -742,11 +869,11 @@ we hope to become your go-to property adviser for life. As we are also part of t
   
   <input
     type="text"
-    placeholder="City,Area or Building"
+    placeholder="email"
     className="w-full px-4 py-2 text-black text-base outline-none rounded-3xl"
   />
   </div>
-  <button className="flex md:hidden mt-4 w-fit  bg-black hover:bg-red-800 text-white px-8 py-2 text-base font-semibold border-black rounded-3xl">
+  <button className="flex md:hidden mt-4 w-fit  bg-black hover:bg-red-950 text-white px-8 py-2 text-base font-semibold border-black rounded-3xl">
     Download
   </button>
 
@@ -773,11 +900,11 @@ we hope to become your go-to property adviser for life. As we are also part of t
       <div className="hidden md:flex w-full max-w-full md:max-w-md p-1 bg-white  flex-col md:flex-row items-center gap-2 rounded-3xl">
       <input
     type="text"
-    placeholder="City,Area or Building"
+    placeholder="email"
     className="w-full px-4 py-2 text-black text-base outline-none rounded-3xl"
   />
 
-  <button className="w-full md:w-auto bg-red-700 hover:bg-red-800 text-white px-4 md:px-8 py-2 text-base font-semibold border rounded-3xl">
+  <button className="w-full md:w-auto bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white px-4 md:px-8 py-2 text-base font-semibold border rounded-3xl">
     Download
   </button>
 
@@ -786,11 +913,11 @@ we hope to become your go-to property adviser for life. As we are also part of t
   
   <input
     type="text"
-    placeholder="City,Area or Building"
+    placeholder="email"
     className="w-full px-4 py-2 text-black text-base outline-none rounded-3xl"
   />
   </div>
-  <button className="flex md:hidden mt-4 w-fit  bg-black hover:bg-red-800 text-white px-8 py-2 text-base font-semibold border-black rounded-3xl">
+  <button className="flex md:hidden mt-4 w-fit  bg-black hover:bg-red-950 text-white px-8 py-2 text-base font-semibold border-black rounded-3xl">
     Download
   </button>
 
@@ -816,7 +943,7 @@ we hope to become your go-to property adviser for life. As we are also part of t
 
 {/* Testimonial Box */}
 <div className="relative bg-white p-6 md:p-20 max-w-full md:max-w-3xl md:mx-auto mx-4 text-left shadow-lg z-10 transition-all duration-500 ease-in-out">
-  <FaQuoteRight className="absolute text-4xl md:text-7xl text-red-700 -top-4 md:-top-8 mb-4 leading-none" />
+  <FaQuoteRight className="absolute text-4xl md:text-7xl text-[rgba(202,3,32,255)] -top-4 md:-top-8 mb-4 leading-none" />
 
   <AnimatePresence mode="wait">
     <motion.div
@@ -829,7 +956,7 @@ we hope to become your go-to property adviser for life. As we are also part of t
       <p className=" py-4 mb-4 md:mb-8 leading-relaxed">
         {testimonials[currentIndex].quote}
       </p>
-      <p className="text-red-700 font-bold  mb-2">
+      <p className="text-[rgba(202,3,32,255)] font-bold  mb-2">
         {testimonials[currentIndex].name}
       </p>
       <p className="italic  text-gray-600">
@@ -845,7 +972,7 @@ we hope to become your go-to property adviser for life. As we are also part of t
         key={idx}
         onClick={() => handleDotClick(idx)}
         className={`h-3 w-3 md:h-4 md:w-4 rounded-full ${
-          idx === currentIndex ? 'bg-red-700' : 'bg-gray-300'
+          idx === currentIndex ? 'bg-[rgba(202,3,32,255)]' : 'bg-gray-300'
         }`}
       />
     ))}

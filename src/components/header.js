@@ -65,7 +65,7 @@ const Header = () => {
       { label: 'BUYER GUIDE', href: '/buyer/buyerguid' }
     ] },
     { label: 'Search', key: 'search', submenu: [
-      { label: 'Active', href: '/properties/ctive' },
+      { label: 'Active', href: '/properties/active' },
       { label: 'Sold', href: '/properties/sold' },
       { label: 'Rent', href: '/properties/rent' },
       { label: 'Auction', href: '/properties/auction' },
@@ -98,21 +98,21 @@ const Header = () => {
       <header
         className={`
           pointer-events-auto
-          flex justify-between items-left h-16
+          flex justify-between items-left h-[63.5px]
           transition-all duration-300 ease-in-out
           translate-y-0
           bg-gray-950/90 backdrop-blur-sm
           ${isMobile ? (isAtTop ? 'm-10' : 'mx-6 my-0') : (desktopAtTop ? 'm-14' : 'mx-8 my-0')}
         `}
       >
-        <div className="flex-shrink-0 h-16 m-0 p-0 flex items-center">
+        <div className="flex-shrink-0 h-16 flex items-center -ml-1 md:-ml-1">
           <Link href="/">
             <Image 
               src="/kwlogohomee.png" 
               alt="KW Saudi Arabia Logo" 
               width={279}
               height={73}
-              className="md:h-17 h-10 w-auto object-contain mx-0 p-0"
+              className="md:h-[65px] h-10 w-auto object-contain"
               priority
             />
           </Link>
@@ -134,14 +134,18 @@ const Header = () => {
                     <FaChevronDown size={12} className="ml-1" />
                   </button>
                   <div className="absolute left-0 top-full min-w-[180px] bg-gray-950/95 shadow-lg rounded-b z-40 opacity-0 group-hover:opacity-100 group-hover:pointer-events-auto pointer-events-none transition-all duration-200 mt-0 py-2 px-2 space-y-1">
-                    {item.submenu.map(sub => (
-                      <Link
-                        href={sub.href}
-                        key={sub.href}
-                        className="block px-3 py-1 text-white text-[0.9rem] hover:text-[rgba(202,3,32,255)] whitespace-nowrap rounded transition-colors"
-                      >
-                        {toTitleCase(sub.label)}
-                      </Link>
+                    {item.submenu.map((sub, idx) => (
+                      <React.Fragment key={sub.href}>
+                        <Link
+                          href={sub.href}
+                          className="block px-3 py-1 text-white text-[0.9rem] hover:text-[rgba(202,3,32,255)] whitespace-nowrap rounded transition-colors"
+                        >
+                          {toTitleCase(sub.label)}
+                        </Link>
+                        {idx !== item.submenu.length - 1 && (
+                          <div className="h-px bg-gray-700 my-1 w-full" />
+                        )}
+                      </React.Fragment>
                     ))}
                   </div>
                 </>
@@ -155,7 +159,7 @@ const Header = () => {
               )}
             </div>
           ))}
-          <Link href="#" className="text-[0.8rem] ml-4 mr-8 text-white hover:text-gray-300 transition-colors">
+          <Link href="#" className="text-[0.9rem] ml-4 mr-8 text-white hover:text-gray-300 transition-colors">
             عربي
           </Link>
           <Link 
@@ -216,10 +220,15 @@ const Header = () => {
                 )}
                 {item.submenu && openSubmenu === item.key && (
                   <div className="mt-1 space-y-3 text-base text-gray-300">
-                    {item.submenu.map(sub => (
-                      <Link href={sub.href} key={sub.href} className="block hover:text-white">
-                        {toTitleCase(sub.label)}
-                      </Link>
+                    {item.submenu.map((sub, idx) => (
+                      <React.Fragment key={sub.href}>
+                        <Link href={sub.href} className="block hover:text-white">
+                          {toTitleCase(sub.label)}
+                        </Link>
+                        {idx !== item.submenu.length - 1 && (
+                          <div className="h-px bg-gray-700 my-1 w-full" />
+                        )}
+                      </React.Fragment>
                     ))}
                   </div>
                 )}

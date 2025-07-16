@@ -10,7 +10,11 @@ const nextConfig = {
       "c.pxhere.com",
       "images.unsplash.com",
       "images.pexels.com",
-      'www.kwuk.com'
+      'www.kwuk.com',
+      'photos.harstatic.com',
+      'i.pravatar.cc',
+      'api.dicebear.com',
+      'www.kw.com','encrypted-tbn0.gstatic.com'
     ],
   },
 };

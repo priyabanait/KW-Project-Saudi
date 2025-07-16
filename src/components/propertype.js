@@ -181,22 +181,26 @@ import {
     const [mapProjection, setMapProjection] = useState(null);
     // Helper to check if marker is near the bottom of the map (desktop only)
     const isNearBottom = (coords) => {
-      if (typeof window !== 'undefined' && window.innerWidth < 768) return false; // Only on desktop
-      if (!desktopMap || !mapProjection) return false;
-      const scale = Math.pow(2, desktopMap.getZoom());
-      const latLng = new window.google.maps.LatLng(coords.lat, coords.lng);
-      const proj = mapProjection.fromLatLngToPoint(latLng);
-      const bounds = desktopMap.getBounds();
-      if (!bounds) return false;
-      const ne = bounds.getNorthEast();
-      const sw = bounds.getSouthWest();
-      const topRight = mapProjection.fromLatLngToPoint(ne);
-      const bottomLeft = mapProjection.fromLatLngToPoint(sw);
-      const y = (proj.y - topRight.y) * scale;
-      const mapHeight = desktopMap.getDiv().clientHeight;
-      // If marker is in the bottom 30% of the map, return true
-      return y > mapHeight * 0.7;
-    };
+  if (!desktopMap || !mapProjection) return false;
+
+  const latLng = new window.google.maps.LatLng(coords.lat, coords.lng);
+  const projPoint = mapProjection.fromLatLngToPoint(latLng);
+  const scale = Math.pow(2, desktopMap.getZoom());
+  const bounds = desktopMap.getBounds();
+  if (!bounds) return false;
+
+  const ne = bounds.getNorthEast();
+  const sw = bounds.getSouthWest();
+  const topRight = mapProjection.fromLatLngToPoint(ne);
+  const bottomLeft = mapProjection.fromLatLngToPoint(sw);
+
+  const y = (projPoint.y - topRight.y) * scale;
+  const mapHeight = desktopMap.getDiv().clientHeight;
+
+  // Bottom 25% of map = risky zone
+  return y > mapHeight * 0.75;
+};
+
     
     const { isLoaded } = useJsApiLoader({
       googleMapsApiKey: "AIzaSyDG48YF2dsvPN0qHX3_vSaTJj6aqg3-Oc4"
@@ -276,16 +280,22 @@ import {
           setLoading(true);
           // Map priceRange to min/max price
           let minPrice = undefined, maxPrice = undefined;
-          if (priceRange === 'Below QAR 5,000') {
-            maxPrice = 5000;
-          } else if (priceRange === 'QAR 5,000 – 10,000') {
-            minPrice = 5000;
-            maxPrice = 10000;
-          } else if (priceRange === 'Above QAR 10,000') {
-            minPrice = 10000;
+          if (priceRange === 'Below QAR 50,000') {
+            maxPrice = 50000;
+          } else if (priceRange === 'QAR 50,000 – 100,000') {
+            minPrice = 50000;
+            maxPrice = 100000;
+          } else if (priceRange === 'Above QAR 100,000') {
+            minPrice = 100000;
           }
-          const response = await axios.post('http://localhost:5000/api/listings/list/properties', {
-            market_center: marketCenter === 'All' ? undefined : marketCenter,
+          // Map marketCenter to API value
+          const marketCenterMap = {
+            Jasmin: '50449',
+            Jeddah: '2414288',
+          };
+          const apiMarketCenter = marketCenterMap[marketCenter] || undefined;
+          const response = await axios.post('https://kw-backend-q6ej.vercel.app/api/listings/list/properties', {
+            market_center: apiMarketCenter,
             // list_category: propertyType,
             property_category: propertyCategory === 'All' ? undefined : propertyCategory,
             property_subtype: propertySubtype === 'All' ? undefined : propertySubtype,
@@ -605,9 +615,9 @@ import {
                 onChange={e => setPriceRange(e.target.value)}
               >
                 <option>Select Price Range</option>
-                <option>Below QAR 5,000</option>
-                <option>QAR 5,000 – 10,000</option>
-                <option>Above QAR 10,000</option>
+                <option>Below QAR 50,000</option>
+                <option>QAR 50,000 – 100,000</option>
+                <option>Above QAR 100,000</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <FaChevronDown className="h-4 w-4" />
@@ -745,7 +755,7 @@ import {
           </div>
         </div>
 
-        {/* Price Range Dropdown */}
+        {/* Price Range Dropdown (Mobile) */}
         <div className="relative w-full">
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             <FaMoneyBillWave className="text-gray-400" />
@@ -756,9 +766,9 @@ import {
             onChange={e => setPriceRange(e.target.value)}
           >
             <option>Select Price Range</option>
-            <option>Below QAR 5,000</option>
-            <option>QAR 5,000 – 10,000</option>
-            <option>Above QAR 10,000</option>
+            <option>Below QAR 20,000</option>
+            <option>QAR 20,000 – 25,000</option>
+            <option>Above QAR 25,000</option>
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <FaChevronDown className="h-4 w-4" />
@@ -771,12 +781,12 @@ import {
   
         {/* Title & Filters */}
         <div className="p-4 md:p-1 md:pt-8">
-        <div className="flex items-center gap-3">
+        {/* <div className="flex items-center gap-3">
  
   <p className="text-base font-medium underline">Real Estate </p>
   <FaChevronRight className="text-gray-400 h-3 cursor-pointer" />
   <p className="text-base font-medium underline">Properties for Rent</p>
-</div>
+</div> */}
           <h2 className="text-2xl md:text-3xl font-semibold mb-4 mt-10">
             Properties for {props.type}
           </h2>
@@ -784,7 +794,7 @@ import {
         </div>
 
         {/* Content: 2 Columns Split (Cards + Map) */}
-        <div className="flex flex-col md:flex-row gap-4 px-4 md:px-0 pb-8 overflow-y-auto">
+        <div className="flex flex-col md:flex-row gap-4 px-4 md:px-0 pb-8 ">
           {/* Mobile: Toggle between list and map */}
           {/* List view for mobile */}
           {viewMode === "list" && (
@@ -867,9 +877,8 @@ import {
           {/* Desktop: Always show both */}
          
           <div className="hidden md:flex w-full min-h-[80vh]">
-    {/* Left - Properties List */}
-    <div className="w-1/2 h-[80vh] overflow-y-auto pr-3 relative">
-    
+    {/* Left - Properties List (natural scroll) */}
+    <div className="w-1/2 pr-3">
       {/* Property Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
         {loading ? (
@@ -911,103 +920,75 @@ import {
       </div>
     </div>
 
-   
-    <div className="w-1/2 h-[80vh] sticky top-0">
-      <div className="w-full h-full bg-blue-100 rounded-lg overflow-hidden relative">
-       
-        {/* <div className="absolute top-12 left-4 z-40 flex flex-col gap-2">
-          {properties.map((property, idx) => {
-            const isFixed = hoveredProperty?.fixed && hoveredProperty?._id === property._id;
-          })}
-        </div> */}
-        
-     
-        {/* {hoveredProperty && (
-          <div className="absolute bottom-4 left-4 right-4 z-50 bg-white rounded-lg shadow-lg p-4 max-w-sm"> */}
-            {/* <div className="flex items-start gap-3"> */}
-  {/* <div className="relative w-20 h-30 flex-shrink-0"> */}
-
-    {/* <Image
-      src={getPropertyImages(hoveredProperty)[0] || '/placeholder1.jpg'}
-      alt={hoveredProperty.prop_type}
-      fill
-      className="object-cover rounded"
-    /> */}
-
-  
-    {/* <div className="absolute bottom-0 left-0 w-full bg-black bg-opacity-60 text-white text-[10px] px-1 py-1 rounded-b">
-      <p className="truncate">{hoveredProperty.property_address?.address}</p>
-      <p className="text-[11px] font-semibold mt-0.5">
-        {hoveredProperty.current_list_price} QAR/month
-      </p>
-    </div> */}
-  {/* </div> */}
-
- 
-  {/* <div className="flex-1 min-w-0">
-    <div className="flex items-center justify-between">
-      <h3 className="font-semibold text-sm truncate">{hoveredProperty.prop_type}</h3>
-      {hoveredProperty?.fixed && (
-        <button
-          onClick={() => setHoveredProperty(null)}
-          className="text-gray-500 hover:text-gray-700 text-lg font-bold"
-        >
-          ×
-        </button>
-      )}
-    </div>
-  </div> */}
-{/* </div> */}
-
-          {/* </div>
-        )} */}
+    {/* Right - Map (sticky) */}
+    <div className="w-1/2">
+      <div className="sticky top-20 w-full h-[80vh] bg-blue-100 rounded-lg overflow-hidden relative">
         {isLoaded && (
-  <GoogleMap
-    mapContainerStyle={{ width: '100%', height: '100%' }}
-    onLoad={(map) => {
-      setDesktopMap(map);
-      setMapProjection(map.getProjection());
-    }}
-  >
-    {(() => {
-      let coordSeen = {};
+          <GoogleMap
+            mapContainerStyle={{ width: '100%', height: '100%' }}
+            onLoad={(map) => {
+              setDesktopMap(map);
+              setMapProjection(map.getProjection());
+            }}
+          >
+            {(() => {
+              let coordSeen = {};
 
-      const shouldShowAbove = (coords) => {
-        if (typeof window !== 'undefined' && window.innerWidth < 768) return false; // Only apply on laptop/desktop
-        if (!desktopMap || !mapProjection) return false;
-        // Convert LatLng to Point
-        const latLng = new window.google.maps.LatLng(coords.lat, coords.lng);
-        const projPoint = mapProjection.fromLatLngToPoint(latLng);
-        const scale = Math.pow(2, desktopMap.getZoom());
-        // Get map bounds in world coordinates
-        const bounds = desktopMap.getBounds();
-        if (!bounds) return false;
-        const ne = bounds.getNorthEast();
-        const sw = bounds.getSouthWest();
-        const topRight = mapProjection.fromLatLngToPoint(ne);
-        const bottomLeft = mapProjection.fromLatLngToPoint(sw);
-        // Calculate pixel position
-        const x = (projPoint.x - bottomLeft.x) * scale;
-        const y = (projPoint.y - topRight.y) * scale;
-        const mapDiv = desktopMap.getDiv();
-        const mapHeight = mapDiv.clientHeight;
-        // Debug log
-        console.log('Marker pixel y:', y, 'Map height:', mapHeight, 'Show above:', y > mapHeight * 0.7);
-        // If marker is in the bottom 30% of the map, show card above
-        return y > mapHeight * 0.7;
-      };
+              const shouldShowAbove = (coords) => {
+                if (typeof window !== 'undefined' && window.innerWidth < 768) return false; // Only apply on laptop/desktop
+                if (!desktopMap || !mapProjection) return false;
+                // Convert LatLng to Point
+                const latLng = new window.google.maps.LatLng(coords.lat, coords.lng);
+                const projPoint = mapProjection.fromLatLngToPoint(latLng);
+                const scale = Math.pow(2, desktopMap.getZoom());
+                // Get map bounds in world coordinates
+                const bounds = desktopMap.getBounds();
+                if (!bounds) return false;
+                const ne = bounds.getNorthEast();
+                const sw = bounds.getSouthWest();
+                const topRight = mapProjection.fromLatLngToPoint(ne);
+                const bottomLeft = mapProjection.fromLatLngToPoint(sw);
+                // Calculate pixel position
+                const x = (projPoint.x - bottomLeft.x) * scale;
+                const y = (projPoint.y - topRight.y) * scale;
+                const mapDiv = desktopMap.getDiv();
+                const mapHeight = mapDiv.clientHeight;
+                // Debug log
+                console.log('Marker pixel y:', y, 'Map height:', mapHeight, 'Show above:', y > mapHeight * 0.7);
+                // If marker is in the bottom 30% of the map, show card above
+                return y > mapHeight * 0.7;
+              };
 
-      return properties.map((property, idx) => {
-        const coords = property.property_address?.coordinates_gs?.coordinates;
-        if (!coords) return null;
-        const key = coords.join(',');
-        coordSeen[key] = (coordSeen[key] || 0) + 1;
-        const offsetCoords = getOffsetCoords(coords, coordSeen[key] - 1);
-        const priceText = `${property.current_list_price} QAR`;
-        const isActive = (hoveredProperty && hoveredProperty._id === property._id);
-        const isFixed = hoveredProperty?.fixed && hoveredProperty?._id === property._id;
-        const showAbove = shouldShowAbove(offsetCoords);
+              return properties.map((property, idx) => {
+                const coords = property.property_address?.coordinates_gs?.coordinates;
+                if (!coords) return null;
+                const key = coords.join(',');
+                coordSeen[key] = (coordSeen[key] || 0) + 1;
+                const offsetCoords = getOffsetCoords(coords, coordSeen[key] - 1);
+                const priceText = `${property.current_list_price} QAR`;
+                const isActive = (hoveredProperty && hoveredProperty._id === property._id);
+                const isFixed = hoveredProperty?.fixed && hoveredProperty?._id === property._id;
+                const showAbove = shouldShowAbove(offsetCoords);
+const isNearBottom = (coords) => {
+  if (!desktopMap || !mapProjection) return false;
 
+  const latLng = new window.google.maps.LatLng(coords.lat, coords.lng);
+  const projPoint = mapProjection.fromLatLngToPoint(latLng);
+  const scale = Math.pow(2, desktopMap.getZoom());
+
+  const bounds = desktopMap.getBounds();
+  if (!bounds) return false;
+
+  const ne = bounds.getNorthEast();
+  const sw = bounds.getSouthWest();
+  const topRight = mapProjection.fromLatLngToPoint(ne);
+  const bottomLeft = mapProjection.fromLatLngToPoint(sw);
+
+  const y = (projPoint.y - topRight.y) * scale;
+  const mapHeight = desktopMap.getDiv().clientHeight;
+
+  return y > mapHeight * 0.7;  // You can tweak this % if needed
+};
         return (
           <React.Fragment key={idx}>
             {/* Price Badge Overlay */}
@@ -1026,18 +1007,35 @@ import {
                 onMouseLeave={() => {
                   if (!hoveredProperty?.fixed) setHoveredProperty(null);
                 }}
-                onClick={() => {
-                  if (hoveredProperty?.fixed && hoveredProperty?._id === property._id) return;
-                  setHoveredProperty({ ...property, fixed: true });
+              onClick={() => {
+  if (hoveredProperty?.fixed && hoveredProperty?._id === property._id) return;
+  setHoveredProperty({ ...property, fixed: true });
 
-                  // Pan the map up if the marker is near the bottom
-                  if (desktopMap && isNearBottom(offsetCoords)) {
-                    desktopMap.panTo({
-                      lat: offsetCoords.lat + 0.003, // Increase this value if the card is still cut off
-                      lng: offsetCoords.lng
-                    });
-                  }
-                }}
+  if (desktopMap && mapProjection) {
+    const latLng = new window.google.maps.LatLng(offsetCoords.lat, offsetCoords.lng);
+    const projPoint = mapProjection.fromLatLngToPoint(latLng);
+    const scale = Math.pow(2, desktopMap.getZoom());
+    const bounds = desktopMap.getBounds();
+
+    if (bounds) {
+      const ne = bounds.getNorthEast();
+      const sw = bounds.getSouthWest();
+      const topRight = mapProjection.fromLatLngToPoint(ne);
+      const bottomLeft = mapProjection.fromLatLngToPoint(sw);
+      const y = (projPoint.y - topRight.y) * scale;
+      const mapHeight = desktopMap.getDiv().clientHeight;
+
+      // If marker is below 65% of map height, pan up by the height of the property card (~300px or dynamic)
+      if (y > mapHeight * 0.65) {
+        const panAmount = Math.min(300, mapHeight * 0.3);  // Max 300px or 30% of map height
+        desktopMap.panBy(0, -panAmount);
+      }
+    }
+  }
+}}
+
+
+
 
                 style={{ position: 'relative', zIndex: 10 }}
               >
@@ -1047,74 +1045,93 @@ import {
 
             {/* Full Property Card Overlay */}
             {(isActive || isFixed) && (
-              <OverlayView
-                position={offsetCoords}
-                mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
-              >
-                <div
-                  className="bg-white rounded-lg shadow-lg max-w-xs w-50 z-50"
-                  style={{
-                    position: 'relative',
-                    marginTop: showAbove ? -300 : 40, // Try a larger negative value for above
-                    zIndex: 100,
-                  }}
-                  onMouseEnter={() => {
-                    if (!hoveredProperty?.fixed) setHoveredProperty(property);
-                  }}
-                  onMouseLeave={() => {
-                    if (!hoveredProperty?.fixed) setHoveredProperty(null);
-                  }}
-                >
-                  <div className="flex flex-col gap-3">
-                    <div className="relative w-full h-20 flex-shrink-0">
-                      <Image
-                        src={getPropertyImages(property)[0] || '/placeholder1.jpg'}
-                        alt={property.prop_type}
-                        fill
-                        className="object-cover rounded"
-                      />
-                      {isFixed && (
-                        <button
-                          onClick={() => setHoveredProperty(null)}
-                          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold bg-white rounded-full w-6 h-6 flex items-center justify-center"
-                        >
-                          ×
-                        </button>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0 p-2">
-                      <h3 className="font-semibold text-sm md:text-sm">{property.prop_type}</h3>
-                      <p className="text-[10px] text-gray-500 whitespace-normal break-words">{property.list_address?.address}</p>
-                      <div className="flex w-full items-center gap-2 text-sm my-2">
-                        <span className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-gray-200 p-2">
-                          <span className="relative h-3 w-3">
-                            <Image src={bedIconUrl} alt="bed" fill className="object-contain" />
-                          </span>
-                          <span className="text-[10px]">{property.total_bed}</span>
-                        </span>
-                        <span className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-gray-200 p-2">
-                          <span className="relative h-3 w-3">
-                            <Image src={bathIconUrl} alt="bath" fill className="object-contain" />
-                          </span>
-                          <span className="text-[10px]">{property.total_bath}</span>
-                        </span>
-                        <span className="inline-flex items-center gap-1 rounded-lg bg-gray-200 px-2 py-2 whitespace-nowrap">
-                          <span className="relative h-3 w-3">
-                            <Image src={areaIconUrl} alt="area" fill className="object-contain" />
-                          </span>
-                          <span className="text-[10px]">{property.lot_size_area} {property.lot_size_units}</span>
-                        </span>
-                      </div>
-                      <div className="mt-2 flex items-center justify-between">
-                        <p className="text-[10px] font-bold">{property.current_list_price} QAR/month</p>
-                        <button className="text-[10px] text-white p-2 rounded-lg bg-[rgba(202,3,32,255)]">
-                          Enquire now
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </OverlayView>
+             <OverlayView
+  position={offsetCoords}
+  mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+>
+  <div
+    className="bg-white rounded-lg shadow-lg max-w-xs w-50 z-50 cursor-pointer"
+    style={{
+      position: 'relative',
+      marginTop: showAbove ? -300 : 40,
+      zIndex: 100,
+    }}
+    onClick={() => {
+      localStorage.setItem('selectedProperty', JSON.stringify(property));
+      window.location.href = '/propertydetails';
+    }}
+    onMouseEnter={() => {
+      if (!hoveredProperty?.fixed) setHoveredProperty(property);
+    }}
+    onMouseLeave={() => {
+      if (!hoveredProperty?.fixed) setHoveredProperty(null);
+    }}
+  >
+    <div className="flex flex-col gap-3">
+      <div className="relative w-full h-20 flex-shrink-0">
+        <Image
+          src={getPropertyImages(property)[0] || '/placeholder1.jpg'}
+          alt={property.prop_type}
+          fill
+          className="object-cover rounded"
+        />
+        {isFixed && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Prevents triggering the parent click
+              setHoveredProperty(null);
+            }}
+            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-lg font-bold bg-white rounded-full w-6 h-6 flex items-center justify-center"
+          >
+            ×
+          </button>
+        )}
+      </div>
+      <div className="flex-1 min-w-0 p-2">
+        <h3 className="font-semibold text-sm md:text-sm">{property.prop_type}</h3>
+        <p className="text-[10px] text-gray-500 whitespace-normal break-words">
+          {property.list_address?.address}
+        </p>
+        <div className="flex w-full items-center gap-2 text-sm my-2">
+          <span className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-gray-200 p-2">
+            <span className="relative h-3 w-3">
+              <Image src={bedIconUrl} alt="bed" fill className="object-contain" />
+            </span>
+            <span className="text-[10px]">{property.total_bed}</span>
+          </span>
+          <span className="flex flex-1 items-center justify-center gap-1 rounded-lg bg-gray-200 p-2">
+            <span className="relative h-3 w-3">
+              <Image src={bathIconUrl} alt="bath" fill className="object-contain" />
+            </span>
+            <span className="text-[10px]">{property.total_bath}</span>
+          </span>
+          <span className="inline-flex items-center gap-1 rounded-lg bg-gray-200 px-2 py-2 whitespace-nowrap">
+            <span className="relative h-3 w-3">
+              <Image src={areaIconUrl} alt="area" fill className="object-contain" />
+            </span>
+            <span className="text-[10px]">
+              {property.lot_size_area} {property.lot_size_units}
+            </span>
+          </span>
+        </div>
+        <div className="mt-2 flex items-center justify-between">
+          <p className="text-[10px] font-bold">{property.current_list_price} QAR/month</p>
+          <button
+            className="text-[10px] text-white p-2 rounded-lg bg-[rgba(202,3,32,255)]"
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent parent click (prevents navigating)
+              localStorage.setItem('selectedProperty', JSON.stringify(property));
+              window.location.href = '/propertydetails';
+            }}
+          >
+            Enquire now
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</OverlayView>
+
             )}
           </React.Fragment>
         );

@@ -11,8 +11,78 @@ import { FaSearch, FaCheckCircle,FaBars, FaGavel, FaTimes,FaStar, FaGlobeAmerica
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 const Properties = () => {
-  const scrollRef = useRef(null);
-  const [showScrollButton, setShowScrollButton] = useState(false);
+  // Create refs and drag state for each carousel
+  const residentialScrollRef = useRef(null);
+  const commercialScrollRef = useRef(null);
+  const soldScrollRef = useRef(null);
+  const rentalScrollRef = useRef(null);
+  const auctionScrollRef = useRef(null);
+  const newDevScrollRef = useRef(null);
+  const internationalScrollRef = useRef(null);
+
+  // Drag state for each carousel
+  const [dragState, setDragState] = useState({
+    residential: { isDragging: false, startX: 0, scrollLeft: 0 },
+    commercial: { isDragging: false, startX: 0, scrollLeft: 0 },
+    sold: { isDragging: false, startX: 0, scrollLeft: 0 },
+    rental: { isDragging: false, startX: 0, scrollLeft: 0 },
+    auction: { isDragging: false, startX: 0, scrollLeft: 0 },
+    newDev: { isDragging: false, startX: 0, scrollLeft: 0 },
+    international: { isDragging: false, startX: 0, scrollLeft: 0 },
+  });
+
+  // Helper to get ref and state key for each carousel
+  const getCarouselConfig = (key) => {
+    switch (key) {
+      case 'residential': return { ref: residentialScrollRef, stateKey: 'residential' };
+      case 'commercial': return { ref: commercialScrollRef, stateKey: 'commercial' };
+      case 'sold': return { ref: soldScrollRef, stateKey: 'sold' };
+      case 'rental': return { ref: rentalScrollRef, stateKey: 'rental' };
+      case 'auction': return { ref: auctionScrollRef, stateKey: 'auction' };
+      case 'newDev': return { ref: newDevScrollRef, stateKey: 'newDev' };
+      case 'international': return { ref: internationalScrollRef, stateKey: 'international' };
+      default: return { ref: null, stateKey: '' };
+    }
+  };
+
+  // Drag handlers for each carousel
+  const handleMouseDown = (key) => (e) => {
+    const { ref, stateKey } = getCarouselConfig(key);
+    setDragState((prev) => ({
+      ...prev,
+      [stateKey]: {
+        ...prev[stateKey],
+        isDragging: true,
+        startX: e.pageX - ref.current.offsetLeft,
+        scrollLeft: ref.current.scrollLeft,
+      },
+    }));
+  };
+
+  const handleMouseLeave = (key) => () => {
+    const { stateKey } = getCarouselConfig(key);
+    setDragState((prev) => ({
+      ...prev,
+      [stateKey]: { ...prev[stateKey], isDragging: false },
+    }));
+  };
+
+  const handleMouseUp = (key) => () => {
+    const { stateKey } = getCarouselConfig(key);
+    setDragState((prev) => ({
+      ...prev,
+      [stateKey]: { ...prev[stateKey], isDragging: false },
+    }));
+  };
+
+  const handleMouseMove = (key) => (e) => {
+    const { ref, stateKey } = getCarouselConfig(key);
+    if (!dragState[stateKey].isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - ref.current.offsetLeft;
+    const walk = (x - dragState[stateKey].startX) * 1;
+    ref.current.scrollLeft = dragState[stateKey].scrollLeft - walk;
+  };
 
   // Dynamic property types state
   const [propertyTypes, setPropertyTypes] = useState([]);
@@ -28,11 +98,19 @@ const Properties = () => {
       setLoadingListings(true);
       setListingsError(null);
       try {
-        const res = await fetch('http://localhost:5000/api/listings/list/properties', {
+        const res = await fetch('https://kw-backend-q6ej.vercel.app/api/listings/list/properties', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            limit: 50,
+            
+            page: 1,
+
+          })
         });
         const data = await res.json();
+        console.log(data);
+        
         let fetched = [];
         if (Array.isArray(data?.data)) {
           fetched = data.data;
@@ -47,27 +125,122 @@ const Properties = () => {
     fetchListings();
   }, []);
 
-  useEffect(() => {
-    const el = scrollRef.current;
+  // Show scroll button state for each carousel
+  const [showScrollButton, setShowScrollButton] = useState({
+    residential: false,
+    commercial: false,
+    sold: false,
+    rental: false,
+    auction: false,
+    newDev: false,
+    international: false,
+  });
 
+  // Check overflow for each carousel
+  useEffect(() => {
+    const el = residentialScrollRef.current;
     const checkOverflow = () => {
       if (el && el.scrollWidth > el.clientWidth) {
-        setShowScrollButton(true);
+        setShowScrollButton((prev) => ({ ...prev, residential: true }));
       } else {
-        setShowScrollButton(false);
+        setShowScrollButton((prev) => ({ ...prev, residential: false }));
       }
     };
-
-    checkOverflow(); // Initial check
+    checkOverflow();
     window.addEventListener("resize", checkOverflow);
     return () => window.removeEventListener("resize", checkOverflow);
   }, [listings]);
 
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+  useEffect(() => {
+    const el = commercialScrollRef.current;
+    const checkOverflow = () => {
+      if (el && el.scrollWidth > el.clientWidth) {
+        setShowScrollButton((prev) => ({ ...prev, commercial: true }));
+      } else {
+        setShowScrollButton((prev) => ({ ...prev, commercial: false }));
+      }
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [listings]);
+
+  useEffect(() => {
+    const el = soldScrollRef.current;
+    const checkOverflow = () => {
+      if (el && el.scrollWidth > el.clientWidth) {
+        setShowScrollButton((prev) => ({ ...prev, sold: true }));
+      } else {
+        setShowScrollButton((prev) => ({ ...prev, sold: false }));
+      }
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [listings]);
+
+  useEffect(() => {
+    const el = rentalScrollRef.current;
+    const checkOverflow = () => {
+      if (el && el.scrollWidth > el.clientWidth) {
+        setShowScrollButton((prev) => ({ ...prev, rental: true }));
+      } else {
+        setShowScrollButton((prev) => ({ ...prev, rental: false }));
+      }
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [listings]);
+
+  useEffect(() => {
+    const el = auctionScrollRef.current;
+    const checkOverflow = () => {
+      if (el && el.scrollWidth > el.clientWidth) {
+        setShowScrollButton((prev) => ({ ...prev, auction: true }));
+      } else {
+        setShowScrollButton((prev) => ({ ...prev, auction: false }));
+      }
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [listings]);
+
+  useEffect(() => {
+    const el = newDevScrollRef.current;
+    const checkOverflow = () => {
+      if (el && el.scrollWidth > el.clientWidth) {
+        setShowScrollButton((prev) => ({ ...prev, newDev: true }));
+      } else {
+        setShowScrollButton((prev) => ({ ...prev, newDev: false }));
+      }
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [listings]);
+
+  useEffect(() => {
+    const el = internationalScrollRef.current;
+    const checkOverflow = () => {
+      if (el && el.scrollWidth > el.clientWidth) {
+        setShowScrollButton((prev) => ({ ...prev, international: true }));
+      } else {
+        setShowScrollButton((prev) => ({ ...prev, international: false }));
+      }
+    };
+    checkOverflow();
+    window.addEventListener("resize", checkOverflow);
+    return () => window.removeEventListener("resize", checkOverflow);
+  }, [listings]);
+
+  // Generic scroll function for each carousel
+  const scrollRight = (ref) => {
+    if (ref.current) {
+      ref.current.scrollBy({ left: 300, behavior: "smooth" });
     }
-  }
+  };
   const [isMenuOpen, setIsMenuOpen] = useState(false);
        const [isVisible, setIsVisible] = useState(true);  
        const [isAtTop, setIsAtTop] = useState(true);  
@@ -113,48 +286,6 @@ const Properties = () => {
          window.addEventListener('scroll', handleScroll, { passive: true });  
          return () => window.removeEventListener('scroll', handleScroll);  
        }, []);
-       const menuItems = [
-         { label: 'PROPERTIES', key: 'properties',  submenu: [
-           { label: 'ACTIVE', href: '/properties/active' },
-           { label: 'SOLD', href: '/properties/sold' },
-           { label: 'RENT', href: '/properties/rent' },
-           { label: 'AUCTION', href: '/properties/auction' },
-           { label: 'INTERNATIONAL', href: 'https://www.kw.com/search/sale?viewport=56.41671222773751%2C120.63362495324327%2C-14.684966046563696%2C-6.807781296756721' }
-         ]},
-         { label: 'MARKET CENTER', key: 'market', submenu: [
-           { label: 'ALL MC', href: '/marketCenter' },
-           { label: 'JASMINE', href: '/riyadh' },
-           { label: 'JEDDAH', href: '/jeddah' }
-         ] },
-         { label: 'BUYER', key: 'buyer', submenu: [
-           { label: 'SEARCH PROPERTY', href: '/properties' },
-           { label: 'AUCTION', href: '/properties/auction' },
-           { label: 'NEW DEVELOPMENT', href: '/properties/newdevelopment' },
-           { label: 'BUYING GUIDE', href: '/buyer/buyerguid' }
-         ]},
-         { label: 'TENANT', key: 'tenant', submenu: [
-           { label: 'RENT SEARCH', href: '/properties/rent' },
-           { label: 'TENANT GUIDE', href: '/tenant' }
-         ] },
-         { label: 'SELLER', key: 'seller',  submenu: [
-           { label: 'SEARCH AGENT', href: '/agent' },
-           { label: 'FIVE STEPS TO SELL', href: '/seller' },
-           { label: 'SELLER GUIDE', href: 'seller/sellerguid' }
-         ]},
-         { label: 'OUR CULTURE', key: 'culture', submenu: [
-           { label: 'OUR PROMISE', href: '/ourpromise' },
-           { label: 'ABOUT US', href: '/ourCulture' },
-           { label: 'WHY KW', href: '/ourCulture/whyKW' },
-           { label: 'KW TRAINING', href: '/culture/training' },
-           { label: 'KW TECHNOLOGY', href: '/ourCulture/kwuniversity"' }
-         ] },
-         { label: 'FRANCHISE', key: 'franchise',href: '/franchise'   },
-    { label: 'LOGIN', key: 'login',href: '/franchise' },
-    { label: 'CONTACT US', key: 'contact',href: '/contactUs' },
-    { label: 'JOIN US', key: 'join' ,href: '/joinus'},
-    { label: 'INSTANT VALUATION', key: 'valuation',href: '/instantvaluation' },
-    { label: 'TERMS & POLICY', key: 'terms',href: '#' },
-       ];
       
      
        useEffect(() => {  
@@ -186,50 +317,50 @@ const Properties = () => {
          return () => window.removeEventListener('scroll', handleScroll);  
        }, []);
      
-  const categories = [
-    {
-      image:'/residential.png',
-      title: 'Residential',
-      subtitle: 'Active Properties',
-      href: '/residential'
-    },
-    {
-      image:'/commercial.png',
-      title: 'Commercial',
-      subtitle: 'Active Properties',
-      href: '/commercial'
-    },
-    {
-      image:'/sold3.png',
-      title: 'Sold',
-      subtitle: 'Properties',
-      href: '/sold'
-    },
-    {
-      image:'/rental.png',
-      title: 'Rental',
-      subtitle: 'Properties',
-      href: '/rental'
-    },
-    {
-      image:'/auction.png',
-      title: 'Auction',
-      subtitle: 'Properties',
-      href: '/auction'
-    },
-    {
-      image:'/newdevelopment.png',
-      title: 'New',
-      subtitle: 'Development',
-      href: '/new-development'
-    },
-    {
-      image:'/international.png',
-      title: 'International',
-      subtitle: 'Properties',
-      href: '/international'
-    }
-  ];
+  // const categories = [
+  //   {
+  //     image:'/residential.png',
+  //     title: 'Residential',
+  //     subtitle: 'Active Properties',
+  //     href: '/residential'
+  //   },
+  //   {
+  //     image:'/commercial.png',
+  //     title: 'Commercial',
+  //     subtitle: 'Active Properties',
+  //     href: '/commercial'
+  //   },
+  //   {
+  //     image:'/sold3.png',
+  //     title: 'Sold',
+  //     subtitle: 'Properties',
+  //     href: '/sold'
+  //   },
+  //   {
+  //     image:'/rental.png',
+  //     title: 'Rental',
+  //     subtitle: 'Properties',
+  //     href: '/rental'
+  //   },
+  //   {
+  //     image:'/auction.png',
+  //     title: 'Auction',
+  //     subtitle: 'Properties',
+  //     href: '/auction'
+  //   },
+  //   {
+  //     image:'/newdevelopment.png',
+  //     title: 'New',
+  //     subtitle: 'Development',
+  //     href: '/new-development'
+  //   },
+  //   {
+  //     image:'/international.png',
+  //     title: 'International',
+  //     subtitle: 'Properties',
+  //     href: '/international'
+  //   }
+  // ];
 
   // Add refs for each property section
   const residentialRef = useRef(null);
@@ -257,9 +388,15 @@ const Properties = () => {
       setLoadingTypes(true);
       setTypesError(null);
       try {
-        const res = await fetch('http://localhost:5000/api/listings/list/properties', {
+        const res = await fetch('https://kw-backend-q6ej.vercel.app/api/listings/list/properties', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            limit: 50,
+           
+            page: 1,
+           
+          })
         });
         const data = await res.json();
         let listings = [];
@@ -278,95 +415,89 @@ const Properties = () => {
   }, []);
 
   return (
-    <div className="min-h-screen ">
+    <div className="relative p-6 md:p-8 ">
       <Header></Header>
+      <div className="absolute top-0 left-0 w-[100px] h-[100px] md:w-[150px] md:h-[150px] bg-[rgba(202,3,32,255)] z-0"></div>
 
-      <main className="max-w-full mx-auto px-4 mt-10 md:mt-35 py-8 md:py-4">
-        {/* Icon and Title */}
-        <div className="text-center mb-10">
-        <div className="mx-auto md:mb-4 mb-2 relative w-15 h-15 md:w-[90px] md:h-[90px]">
-  <Image 
-    src="/property.jpg" 
-    alt="property" 
-    fill 
-    className="object-cover rounded-full"
-  />
-</div>
-
-  <h1 className="text-3xl mx-10 md:text-2xl md:tracking-[0.2em] tracking-[0.1em]font-normal mb-4">Properties In Saudi Arabia</h1>
-  <p className="text-[0.8rem] md:text-[0.9rem] md:tracking-[0.1em] text-gray-600 max-w-full mx-auto px-4">
-    Looking For A New Home And Not Sure Which Neighborhood Suits You? Explore Everything You 
-  </p>
-  <p className="text-[0.8rem] md:text-[0.9rem] md:tracking-[0.1em] text-gray-600 max-w-full mx-auto px-4">
-   Need To Know About The Communities In Doha. View Nearby Locations, Landmarks, Reviews, 
-  </p>
-  <p className="text-[0.8rem] md:text-[0.9rem] md:tracking-[0.1em] text-gray-600 max-w-full mx-auto px-4">
-  Prices, FAQ&rsquo;s, And More.
-</p>
-
-</div>
-
-{/* Search Section */}
-<div className="max-w-[920px] mx-auto md:mb-20">
-  {/* Laptop View (unchanged) */}
-  <div className="hidden md:flex flex-row w-full shadow-md overflow-hidden rounded-full border">
-    {/* Search Input */}
-    <div className="flex-1 relative">
-      <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
-      <input
-        type="text"
-        placeholder="City, Area or Building"
-        className="w-full pl-12 pr-4 py-3 text-sm md:text-base text-gray-800 focus:outline-none focus:ring-0"
-      />
+{/* Hero Section */}
+<div className="relative min-h-[74vh] md:min-h-screen flex items-center justify-center bg-gray-100">
+<section className="relative w-full h-[74vh] md:h-screen flex items-center justify-center " >
+  <main className="max-w-full mx-auto px-4 w-full flex flex-col items-center justify-center">
+    {/* Icon and Title */}
+    <div className="text-center flex flex-col items-center justify-center">
+      <div className="mx-auto flex justify-center items-center md:mb-4 mb-2 relative w-15 h-15 md:w-[90px] md:h-[90px] ">
+        <Image 
+          src="/property.jpg" 
+          alt="property" 
+          fill 
+          className="object-cover rounded-full "
+        />
+      </div>
+      <h1 className="text-3xl mx-10 md:text-2xl md:tracking-[0.2em] tracking-[0.1em] font-normal mb-4">Properties In Saudi Arabia</h1>
+      <p className="text-[0.8rem] md:text-[0.9rem] md:tracking-[0.1em] text-gray-600 max-w-full mx-auto px-4">
+        Looking For A New Home And Not Sure Which Neighborhood Suits You? Explore Everything You 
+      </p>
+      <p className="text-[0.8rem] md:text-[0.9rem] md:tracking-[0.1em] text-gray-600 max-w-full mx-auto px-4">
+        Need To Know About The Communities In Doha. View Nearby Locations, Landmarks, Reviews, 
+      </p>
+      <p className="text-[0.8rem] md:text-[0.9rem] md:tracking-[0.1em] text-gray-600 max-w-full mx-auto px-4">
+        Prices, FAQ&rsquo;s, And More.
+      </p>
     </div>
-
-    <div className="md:w-48 w-20 border-l border-gray-400 flex items-center">
-  <select className="w-full py-3 px-4 text-sm md:text-base bg-white text-gray-700 focus:outline-none focus:ring-0">
-    <option value="">Property Type</option>
-    <option value="apartment">Apartment</option>
-    <option value="villa">Villa</option>
-    <option value="office">Office</option>
-  </select>
+    {/* Search Section */}
+    <div className="max-w-[920px] mx-auto mt-10 w-full flex flex-col items-center justify-center">
+      {/* Laptop View (unchanged) */}
+      <div className="hidden md:flex flex-row w-full shadow-md overflow-hidden rounded-full border bg-white">
+        {/* Search Input */}
+        <div className="flex-1 relative">
+          <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
+          <input
+            type="text"
+            placeholder="City, Area or Building"
+            className="w-full pl-12 pr-4 py-3 text-sm md:text-base text-gray-800 focus:outline-none focus:ring-0"
+          />
+        </div>
+        <div className="md:w-48 w-20 border-l border-gray-400 flex items-center">
+          <select className="w-full py-3 px-4 text-sm md:text-base bg-white text-gray-700 focus:outline-none focus:ring-0">
+            <option value="">Property Type</option>
+            <option value="apartment">Apartment</option>
+            <option value="villa">Villa</option>
+            <option value="office">Office</option>
+          </select>
+        </div>
+        {/* Search Button */}
+        <button className="bg-[rgba(202,3,32,255)] text-white px-12 py-3 text-sm md:text-base font-medium border-none outline-none">
+          Search
+        </button>
+      </div>
+      {/* Mobile View (search input and dropdown in one group, button below) remains unchanged */}
+      <div className="md:hidden flex flex-col gap-2 mx-4 w-full items-center justify-center">
+        <div className="flex w-full max-w-md mx-auto">
+          {/* Search Input */}
+          <div className="flex-1 relative">
+            <FaSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
+            <input
+              type="text"
+              placeholder="City, Area or Building"
+              className="w-full pl-10 pr-2 py-2 text-[0.8rem] md:text-sm border border-gray-500 rounded-l-lg focus:outline-none focus:ring-0"
+            />
+          </div>
+          {/* Property Type Dropdown */}
+          <select className="w-32 py-2 px-2 text-sm border border-gray-500 border-l-0 rounded-r-lg focus:outline-none focus:ring-0">
+            <option value="">Type</option>
+            <option value="apartment">Apartment</option>
+            <option value="villa">Villa</option>
+          </select>
+        </div>
+        {/* Search Button (full width below) */}
+        <button className="bg-[rgba(202,3,32,255)] text-white justify-center items-center font-semibold w-30 py-2 text-xs rounded-full mt-1 focus:outline-none focus:ring-0 block mx-auto">
+          Search
+        </button>
+      </div>
+    </div>
+  </main>
+</section>
 </div>
-
-
-    {/* Search Button */}
-    <button className="bg-[rgba(202,3,32,255)] text-white px-12 py-3 text-sm md:text-base font-medium border-none outline-none">
-  Search
-</button>
-
-  </div>
-
-
-
-  {/* Mobile View (search input and dropdown in one group, button below) */}
-  <div className="md:hidden flex flex-col gap-2 mx-4">
-  <div className="flex w-full max-w-md mx-auto">
-  {/* Search Input */}
-  <div className="flex-1 relative">
-    <FaSearch className="absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
-    <input
-      type="text"
-      placeholder="City, Area or Building"
-      className="w-full pl-10 pr-2 py-2 text-[0.8rem] md:text-sm border border-gray-500 rounded-l-lg focus:outline-none focus:ring-0"
-    />
-  </div>
-
-  {/* Property Type Dropdown */}
-  <select className="w-32 py-2 px-2 text-sm border border-gray-500 border-l-0 rounded-r-lg focus:outline-none focus:ring-0">
-    <option value="">Type</option>
-    <option value="apartment">Apartment</option>
-    <option value="villa">Villa</option>
-  </select>
-</div>
-
-    {/* Search Button (full width below) */}
-    <button className="bg-[rgba(202,3,32,255)] text-white justify-center items-center font-semibold w-30 py-2 text-xs rounded-full mt-1 focus:outline-none focus:ring-0 block mx-auto">
-  Search
-</button>
-  </div>
-</div>
-
 
         {/* Property Categories */}
         {/* Mobile: horizontal scroll for first 4, rest centered below */}
@@ -497,43 +628,69 @@ const Properties = () => {
       <div className="text-center text-gray-500 py-10">No listings found.</div>
     ) : (
       <div
-        ref={scrollRef}
+        ref={residentialScrollRef}
         className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+        onMouseDown={handleMouseDown('residential')}
+        onMouseLeave={handleMouseLeave('residential')}
+        onMouseUp={handleMouseUp('residential')}
+        onMouseMove={handleMouseMove('residential')}
+        style={{ cursor: dragState.residential.isDragging ? 'grabbing' : 'grab', scrollSnapType: 'x mandatory' }}
       >
-        {listings.map((property, index) => (
-          <div
-            key={property._kw_meta?.id || property.id || index}
-            className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative"
-          >
-            <Image
-              src={
+        {listings
+          .filter(
+            property =>
+              (property.propertyType && ['residential', 'apartment', 'villa', 'house'].includes(property.propertyType.toLowerCase())) ||
+              (property.prop_type && ['residential', 'apartment', 'villa', 'house'].includes(property.prop_type.toLowerCase()))
+          )
+          .map((property, index) => (
+            <div
+              key={property._kw_meta?.id || property.id || index}
+              className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+              onClick={() => {
+                localStorage.setItem('selectedProperty', JSON.stringify(property));
+                window.location.href = '/propertydetails';
+              }}
+              style={{ scrollSnapAlign: 'start' }}
+            >
+              {(
                 property.image ||
                 (Array.isArray(property.images) && property.images[0]) ||
-                (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
-                '/property.jpg'
-              }
-              alt={property.title || property.prop_type || 'Property'}
-              fill
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-4 left-4 text-white drop-shadow">
-              <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
-              <p className="text-sm">
-                {typeof property.location === 'string'
-                  ? property.location
-                  : property.city || property.region || property.municipality || '-'}
-              </p>
+                (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+              ) ? (
+                <Image
+                  src={
+                    property.image ||
+                    (Array.isArray(property.images) && property.images[0]) ||
+                    (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                    '/property.jpg'
+                  }
+                  alt={property.title || property.prop_type || 'Property'}
+                  fill
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+                Coming Soon!
+                </div>
+              )}
+              <div className="absolute bottom-4 left-4 text-white drop-shadow">
+                <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
+                <p className="text-sm">
+                  {typeof property.location === 'string'
+                    ? property.location
+                    : property.city || property.region || property.municipality || '-'}
+                </p>
+              </div>
+              <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
+              </div>
             </div>
-            <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
-              {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     )}
-    {showScrollButton && !loadingListings && listings.length > 0 && (
+    {showScrollButton.residential && !loadingListings && listings.length > 0 && (
       <button
-        onClick={scrollRight}
+        onClick={() => scrollRight(residentialScrollRef)}
         className="absolute right-0 top-1/2 transform -translate-y-1/2 \
               bg-white border border-gray-300 rounded-full p-2 md:p-4 \
               shadow-md z-10 hover:shadow-lg transition"
@@ -587,43 +744,69 @@ const Properties = () => {
       <div className="text-center text-gray-500 py-10">No listings found.</div>
     ) : (
       <div
-        ref={scrollRef}
+        ref={commercialScrollRef}
         className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+        onMouseDown={handleMouseDown('commercial')}
+        onMouseLeave={handleMouseLeave('commercial')}
+        onMouseUp={handleMouseUp('commercial')}
+        onMouseMove={handleMouseMove('commercial')}
+        style={{ cursor: dragState.commercial.isDragging ? 'grabbing' : 'grab', scrollSnapType: 'x mandatory' }}
       >
-        {listings.map((property, index) => (
-          <div
-            key={property._kw_meta?.id || property.id || index}
-            className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative"
-          >
-            <Image
-              src={
+        {listings
+          .filter(
+            property =>
+              (property.propertyType && ['commercial', 'office', 'shop'].includes(property.propertyType.toLowerCase())) ||
+              (property.prop_type && ['commercial', 'office', 'shop'].includes(property.prop_type.toLowerCase()))
+          )
+          .map((property, index) => (
+            <div
+              key={property._kw_meta?.id || property.id || index}
+              className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+              onClick={() => {
+                localStorage.setItem('selectedProperty', JSON.stringify(property));
+                window.location.href = '/propertydetails';
+              }}
+              style={{ scrollSnapAlign: 'start' }}
+            >
+              {(
                 property.image ||
                 (Array.isArray(property.images) && property.images[0]) ||
-                (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
-                '/property.jpg'
-              }
-              alt={property.title || property.prop_type || 'Property'}
-              fill
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-4 left-4 text-white drop-shadow">
-              <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
-              <p className="text-sm">
-                {typeof property.location === 'string'
-                  ? property.location
-                  : property.city || property.region || property.municipality || '-'}
-              </p>
+                (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+              ) ? (
+                <Image
+                  src={
+                    property.image ||
+                    (Array.isArray(property.images) && property.images[0]) ||
+                    (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                    '/property.jpg'
+                  }
+                  alt={property.title || property.prop_type || 'Property'}
+                  fill
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+                Coming Soon!
+                </div>
+              )}
+              <div className="absolute bottom-4 left-4 text-white drop-shadow">
+                <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
+                <p className="text-sm">
+                  {typeof property.location === 'string'
+                    ? property.location
+                    : property.city || property.region || property.municipality || '-'}
+                </p>
+              </div>
+              <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
+              </div>
             </div>
-            <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
-              {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
     )}
-    {showScrollButton && !loadingListings && listings.length > 0 && (
+    {showScrollButton.commercial && !loadingListings && listings.length > 0 && (
       <button
-        onClick={scrollRight}
+        onClick={() => scrollRight(commercialScrollRef)}
         className="absolute right-0 top-1/2 transform -translate-y-1/2 \
               bg-white border border-gray-300 rounded-full p-2 md:p-4 \
               shadow-md z-10 hover:shadow-lg transition"
@@ -679,45 +862,70 @@ const Properties = () => {
     <div className="text-center text-gray-500 py-10">No listings found.</div>
   ) : (
     <div
-      ref={scrollRef}
+      ref={soldScrollRef}
       className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+      onMouseDown={handleMouseDown('sold')}
+      onMouseLeave={handleMouseLeave('sold')}
+      onMouseUp={handleMouseUp('sold')}
+      onMouseMove={handleMouseMove('sold')}
+      style={{ cursor: dragState.sold.isDragging ? 'grabbing' : 'grab', scrollSnapType: 'x mandatory' }}
     >
-      {listings.map((property, index) => (
-        <div
-          key={property._kw_meta?.id || property.id || index}
-          className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative"
-        >
-          <Image
-            src={
+      {listings
+        .filter(
+          property =>
+            (property.propertyType && property.propertyType.toLowerCase() === 'sold') ||
+            (property.list_status && property.list_status.toLowerCase() === 'sold')
+        )
+        .map((property, index) => (
+          <div
+            key={property._kw_meta?.id || property.id || index}
+            className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+            onClick={() => {
+              localStorage.setItem('selectedProperty', JSON.stringify(property));
+              window.location.href = '/propertydetails';
+            }}
+            style={{ scrollSnapAlign: 'start' }}
+          >
+            {(
               property.image ||
               (Array.isArray(property.images) && property.images[0]) ||
-              (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
-              '/property.jpg'
-            }
-            alt={property.title || property.prop_type || 'Property'}
-            fill
-            className="w-full h-full object-cover"
-          />
-       
-          <div className="absolute bottom-4 left-4 text-white drop-shadow">
-            <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
-            <p className="text-sm">
-              {typeof property.location === 'string'
-                ? property.location
-                : property.city || property.region || property.municipality || '-'}
-            </p>
+              (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+            ) ? (
+              <Image
+                src={
+                  property.image ||
+                  (Array.isArray(property.images) && property.images[0]) ||
+                  (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                  '/property.jpg'
+                }
+                alt={property.title || property.prop_type || 'Property'}
+                fill
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+              Coming Soon!
+              </div>
+            )}
+            <div className="absolute bottom-4 left-4 text-white drop-shadow">
+              <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
+              <p className="text-sm">
+                {typeof property.location === 'string'
+                  ? property.location
+                  : property.city || property.region || property.municipality || '-'}
+              </p>
+            </div>
+            <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
+              {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
+            </div>
           </div>
-          <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
-            {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
-          </div>
-        </div>
-      ))}
+        ))}
     </div>
   )}
 
-  {showScrollButton && !loadingListings && listings.length > 0 && (
+  {showScrollButton.sold && !loadingListings && listings.length > 0 && (
     <button
-    onClick={scrollRight}
+    onClick={() => scrollRight(soldScrollRef)}
     className="absolute right-0 top-1/2 transform -translate-y-1/2 
                bg-white border border-gray-300 rounded-full p-2 md:p-4 
                shadow-md z-10 hover:shadow-lg transition"
@@ -738,7 +946,7 @@ const Properties = () => {
       Click Here
     </button>
     </Link>
-         {/* sold Property Cards Section */}
+         {/* rent Property Cards Section */}
          <div ref={rentalRef} className="md:mt-10 mt-4 md:mx-12 scroll-mt-24">
   <div className="flex items-center justify-between md:mx-10 flex-wrap gap-4">
     <p className="flex items-center text-xl md:text-3xl font-normal"> 
@@ -771,25 +979,58 @@ const Properties = () => {
     <div className="text-center text-gray-500 py-10">No listings found.</div>
   ) : (
     <div
-      ref={scrollRef}
+      ref={rentalScrollRef}
       className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+      onMouseDown={handleMouseDown('rental')}
+      onMouseLeave={handleMouseLeave('rental')}
+      onMouseUp={handleMouseUp('rental')}
+      onMouseMove={handleMouseMove('rental')}
+      style={{ cursor: dragState.rental.isDragging ? 'grabbing' : 'grab', scrollSnapType: 'x mandatory' }}
     >
-      {listings.map((property, index) => (
-        <div
-          key={property._kw_meta?.id || property.id || index}
-          className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative"
-        >
-          <Image
-            src={
+      {listings
+        .filter(
+          property => {
+            const type = property.propertyType ? property.propertyType.toLowerCase() : '';
+            const propType = property.prop_type ? property.prop_type.toLowerCase() : '';
+            const listCat = property.list_category ? property.list_category.toLowerCase() : '';
+            return (
+              ['rental', 'rent'].includes(type) ||
+              ['rental', 'rent'].includes(propType) ||
+              ['rental', 'for rent'].includes(listCat)
+            );
+          }
+        )
+        .map((property, index) => (
+          <div
+            key={property._kw_meta?.id || property.id || index}
+            className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+            onClick={() => {
+              localStorage.setItem('selectedProperty', JSON.stringify(property));
+              window.location.href = '/propertydetails';
+            }}
+            style={{ scrollSnapAlign: 'start' }}
+          >
+            {(
               property.image ||
               (Array.isArray(property.images) && property.images[0]) ||
-              (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
-              '/property.jpg'
-            }
-            alt={property.title || property.prop_type || 'Property'}
-            fill
-            className="w-full h-full object-cover"
-          />
+              (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+            ) ? (
+              <Image
+                src={
+                  property.image ||
+                  (Array.isArray(property.images) && property.images[0]) ||
+                  (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                  '/property.jpg'
+                }
+                alt={property.title || property.prop_type || 'Property'}
+                fill
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+              Coming Soon!
+              </div>
+            )}
        
           <div className="absolute bottom-4 left-4 text-white drop-shadow">
             <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
@@ -807,9 +1048,9 @@ const Properties = () => {
     </div>
   )}
 
-  {showScrollButton && !loadingListings && listings.length > 0 && (
+  {showScrollButton.rental && !loadingListings && listings.length > 0 && (
      <button
-     onClick={scrollRight}
+     onClick={() => scrollRight(rentalScrollRef)}
      className="absolute right-0 top-1/2 transform -translate-y-1/2 
                 bg-white border border-gray-300 rounded-full p-2 md:p-4 
                 shadow-md z-10 hover:shadow-lg transition"
@@ -838,79 +1079,105 @@ const Properties = () => {
   className="w-8 h-8 md:w-16 md:h-16 mr-5"></Image>
       <span className="text-gray-500">Auction Properties</span>
     </p>
-
     {/* Right: Button */}
     <Link href="/properties/auction">
     <button className="hidden md:flex text-sm md:text-base font-semibold bg-[rgba(202,3,32,255)] text-white px-4 py-2 rounded-lg hover:bg-red-950 transition">
       Click Here To View All Auction Properties
     </button>
     </Link>
-    
   </div>
-
- 
-          {/* First Home Block */}
-          <div className=" mb-2 md:mb-10">
-           {/* First Home Block */}
-      <div className="relative w-full md:px-10 px-6 md:py-10 py-5 bg-white">
-  {loadingListings ? (
-    <div className="text-center text-gray-500 py-10">Loading listings...</div>
-  ) : listingsError ? (
-    <div className="text-center text-red-500 py-10">{listingsError}</div>
-  ) : listings.length === 0 ? (
-    <div className="text-center text-gray-500 py-10">No listings found.</div>
-  ) : (
-    <div
-      ref={scrollRef}
-      className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
-    >
-      {listings.map((property, index) => (
-        <div
-          key={property._kw_meta?.id || property.id || index}
-          className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative"
-        >
-          <Image
-            src={
-              property.image ||
-              (Array.isArray(property.images) && property.images[0]) ||
-              (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
-              '/property.jpg'
-            }
-            alt={property.title || property.prop_type || 'Property'}
-            fill
-            className="w-full h-full object-cover"
-          />
-       
-          <div className="absolute bottom-4 left-4 text-white drop-shadow">
-            <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
-            <p className="text-sm">
-              {typeof property.location === 'string'
-                ? property.location
-                : property.city || property.region || property.municipality || '-'}
-            </p>
+  <div className=" mb-2 md:mb-10">
+    <div className="relative w-full md:px-10 px-6 md:py-10 py-5 bg-white">
+      {loadingListings ? (
+        <div className="text-center text-gray-500 py-10">Loading listings...</div>
+      ) : listingsError ? (
+        <div className="text-center text-red-500 py-10">{listingsError}</div>
+      ) : (() => {
+        const auctionListings = listings.filter(property => {
+          const type = property.propertyType ? property.propertyType.toLowerCase() : '';
+          const propType = property.prop_type ? property.prop_type.toLowerCase() : '';
+          const listCat = property.list_category ? property.list_category.toLowerCase() : '';
+          return type === 'auction' || propType === 'auction' || listCat === 'auction';
+        });
+        if (auctionListings.length === 0) {
+          return (
+            <div className="w-full h-[200px] flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+            Coming Soon!
+            </div>
+          );
+        }
+        return (
+          <div
+            ref={auctionScrollRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+            onMouseDown={handleMouseDown('auction')}
+            onMouseLeave={handleMouseLeave('auction')}
+            onMouseUp={handleMouseUp('auction')}
+            onMouseMove={handleMouseMove('auction')}
+            style={{ cursor: dragState.auction.isDragging ? 'grabbing' : 'grab', scrollSnapType: 'x mandatory' }}
+          >
+            {auctionListings.map((property, index) => (
+              <div
+                key={property._kw_meta?.id || property.id || index}
+                className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+                onClick={() => {
+                  localStorage.setItem('selectedProperty', JSON.stringify(property));
+                  window.location.href = '/propertydetails';
+                }}
+                style={{ scrollSnapAlign: 'start' }}
+              >
+                {(
+                  property.image ||
+                  (Array.isArray(property.images) && property.images[0]) ||
+                  (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+                ) ? (
+                  <Image
+                    src={
+                      property.image ||
+                      (Array.isArray(property.images) && property.images[0]) ||
+                      (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                      '/property.jpg'
+                    }
+                    alt={property.title || property.prop_type || 'Property'}
+                    fill
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+                  Coming Soon!
+                  </div>
+                )}
+                <div className="absolute bottom-4 left-4 text-white drop-shadow">
+                  <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
+                  <p className="text-sm">
+                    {typeof property.location === 'string'
+                      ? property.location
+                      : property.city || property.region || property.municipality || '-'}
+                  </p>
+                </div>
+                <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                  {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
-            {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-
-  {showScrollButton && !loadingListings && listings.length > 0 && (
-    <button
-    onClick={scrollRight}
-    className="absolute right-0 top-1/2 transform -translate-y-1/2 
-               bg-white border border-gray-300 rounded-full p-2 md:p-4 
+        );
+      })()}
+      {showScrollButton.auction && !loadingListings && listings.length > 0 && (
+        <button
+          onClick={() => scrollRight(auctionScrollRef)}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 \
+               bg-white border border-gray-300 rounded-full p-2 md:p-4 \
                shadow-md z-10 hover:shadow-lg transition"
-  >
-   <ChevronRight 
-   className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
- />
- 
-  </button>
-  )}
-</div>
+        >
+          <ChevronRight 
+            className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
+          />
+        </button>
+      )}
+    </div>
+  
+
            
           </div>
         </div>
@@ -931,81 +1198,109 @@ const Properties = () => {
         className="w-8 h-8 md:w-16 md:h-16 mr-5"></Image>
       <span className="text-gray-500">New Development</span>
     </p>
-
     {/* Right: Button */}
     <Link href="/properties/newdevelopment">
     <button className="hidden md:flex text-sm md:text-base font-semibold bg-[rgba(202,3,32,255)] text-white px-4 py-2 rounded-lg hover:bg-red-950 transition">
       Click Here To View All New Development Properties
     </button>
     </Link>
-    
-
   </div>
- 
-
-          {/* First Home Block */}
-          <div className=" mb-2 md:mb-10">
-         {/* First Home Block */}
-      <div className="relative w-full px-6 md:px-10 md:py-10 py-5 bg-white">
-  {loadingListings ? (
-    <div className="text-center text-gray-500 py-10">Loading listings...</div>
-  ) : listingsError ? (
-    <div className="text-center text-red-500 py-10">{listingsError}</div>
-  ) : listings.length === 0 ? (
-    <div className="text-center text-gray-500 py-10">No listings found.</div>
-  ) : (
-    <div
-      ref={scrollRef}
-      className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
-    >
-      {listings.map((property, index) => (
-        <div
-          key={property._kw_meta?.id || property.id || index}
-          className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative"
-        >
-          <Image
-            src={
-              property.image ||
-              (Array.isArray(property.images) && property.images[0]) ||
-              (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
-              '/property.jpg'
-            }
-            alt={property.title || property.prop_type || 'Property'}
-            fill
-            className="w-full h-full object-cover"
-          />
-       
-          <div className="absolute bottom-4 left-4 text-white drop-shadow">
-            <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
-            <p className="text-sm">
-              {typeof property.location === 'string'
-                ? property.location
-                : property.city || property.region || property.municipality || '-'}
-            </p>
+  <div className=" mb-2 md:mb-10">
+    <div className="relative w-full px-6 md:px-10 md:py-10 py-5 bg-white">
+      {loadingListings ? (
+        <div className="text-center text-gray-500 py-10">Loading listings...</div>
+      ) : listingsError ? (
+        <div className="text-center text-red-500 py-10">{listingsError}</div>
+      ) : (() => {
+        const newDevListings = listings.filter(property => {
+          const type = property.propertyType ? property.propertyType.toLowerCase() : '';
+          const propType = property.prop_type ? property.prop_type.toLowerCase() : '';
+          const listCat = property.list_category ? property.list_category.toLowerCase() : '';
+          return (
+            ['new development', 'newdevelopment', 'development'].includes(type) ||
+            ['new development', 'newdevelopment', 'development'].includes(propType) ||
+            ['new development', 'newdevelopment', 'development'].includes(listCat)
+          );
+        });
+        if (newDevListings.length === 0) {
+          return (
+            <div className="w-full h-[200px] flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+            Coming Soon!
+            </div>
+          );
+        }
+        return (
+          <div
+            ref={newDevScrollRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+            onMouseDown={handleMouseDown('newDev')}
+            onMouseLeave={handleMouseLeave('newDev')}
+            onMouseUp={handleMouseUp('newDev')}
+            onMouseMove={handleMouseMove('newDev')}
+            style={{ cursor: dragState.newDev.isDragging ? 'grabbing' : 'grab', scrollSnapType: 'x mandatory' }}
+          >
+            {newDevListings.map((property, index) => (
+              <div
+                key={property._kw_meta?.id || property.id || index}
+                className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+                onClick={() => {
+                  localStorage.setItem('selectedProperty', JSON.stringify(property));
+                  window.location.href = '/propertydetails';
+                }}
+                style={{ scrollSnapAlign: 'start' }}
+              >
+                {(
+                  property.image ||
+                  (Array.isArray(property.images) && property.images[0]) ||
+                  (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+                ) ? (
+                  <Image
+                    src={
+                      property.image ||
+                      (Array.isArray(property.images) && property.images[0]) ||
+                      (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                      '/property.jpg'
+                    }
+                    alt={property.title || property.prop_type || 'Property'}
+                    fill
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+                  Coming Soon!
+                  </div>
+                )}
+                <div className="absolute bottom-4 left-4 text-white drop-shadow">
+                  <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
+                  <p className="text-sm">
+                    {typeof property.location === 'string'
+                      ? property.location
+                      : property.city || property.region || property.municipality || '-'}
+                  </p>
+                </div>
+                <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                  {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
-            {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-
-  {showScrollButton && !loadingListings && listings.length > 0 && (
-    <button
-    onClick={scrollRight}
-    className="absolute right-0 top-1/2 transform -translate-y-1/2 
-               bg-white border border-gray-300 rounded-full p-2 md:p-4 
+        );
+      })()}
+      {showScrollButton.newDev && !loadingListings && listings.length > 0 && (
+        <button
+          onClick={() => scrollRight(newDevScrollRef)}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 \
+               bg-white border border-gray-300 rounded-full p-2 md:p-4 \
                shadow-md z-10 hover:shadow-lg transition"
-  >
-   <ChevronRight 
-   className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
- />
- 
-  </button>
-  )}
-</div>
-           
+        >
+          <ChevronRight 
+            className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
+          />
+        </button>
+      )}
+    </div>
+
+   
           </div>
         </div>
         <Link href="/properties/newdevelopment">
@@ -1025,80 +1320,105 @@ const Properties = () => {
         className="w-8 h-8 md:w-16 md:h-16 mr-5"></Image>
       <span className="text-gray-500">International Properties</span>
     </p>
-
     {/* Right: Button */}
     <Link href="https://www.kw.com/search/sale?viewport=56.41671222773751%2C120.63362495324327%2C-14.684966046563696%2C-6.807781296756721">
     <button className="hidden md:flex text-sm font-semibold md:text-base  bg-[rgba(202,3,32,255)] text-white px-4 py-2 rounded-lg hover:bg-red-950 transition">
       Click Here To View All International Properties
     </button>
     </Link>
-    </div>
-    
- 
-
-
-          {/* First Home Block */}
-          <div className=" mb-2">
-            {/* First Home Block */}
-      <div className="relative w-full px-6 md:px-10 md:py-10 py-5 bg-white">
-  {loadingListings ? (
-    <div className="text-center text-gray-500 py-10">Loading listings...</div>
-  ) : listingsError ? (
-    <div className="text-center text-red-500 py-10">{listingsError}</div>
-  ) : listings.length === 0 ? (
-    <div className="text-center text-gray-500 py-10">No listings found.</div>
-  ) : (
-    <div
-      ref={scrollRef}
-      className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
-    >
-      {listings.map((property, index) => (
-        <div
-          key={property._kw_meta?.id || property.id || index}
-          className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative"
-        >
-          <Image
-            src={
-              property.image ||
-              (Array.isArray(property.images) && property.images[0]) ||
-              (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
-              '/property.jpg'
-            }
-            alt={property.title || property.prop_type || 'Property'}
-            fill
-            className="w-full h-full object-cover"
-          />
-       
-          <div className="absolute bottom-4 left-4 text-white drop-shadow">
-            <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
-            <p className="text-sm">
-              {typeof property.location === 'string'
-                ? property.location
-                : property.city || property.region || property.municipality || '-'}
-            </p>
+  </div>
+  <div className=" mb-2">
+    <div className="relative w-full px-6 md:px-10 md:py-10 py-5 bg-white">
+      {loadingListings ? (
+        <div className="text-center text-gray-500 py-10">Loading listings...</div>
+      ) : listingsError ? (
+        <div className="text-center text-red-500 py-10">{listingsError}</div>
+      ) : (() => {
+        const internationalListings = listings.filter(property => {
+          const type = property.propertyType ? property.propertyType.toLowerCase() : '';
+          const propType = property.prop_type ? property.prop_type.toLowerCase() : '';
+          const listCat = property.list_category ? property.list_category.toLowerCase() : '';
+          return type === 'international' || propType === 'international' || listCat === 'international';
+        });
+        if (internationalListings.length === 0) {
+          return (
+            <div className="w-full h-[200px] flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+              Coming Soon!
+            </div>
+          );
+        }
+        return (
+          <div
+            ref={internationalScrollRef}
+            className="flex gap-4 overflow-x-auto scroll-smooth no-scrollbar w-full"
+            onMouseDown={handleMouseDown('international')}
+            onMouseLeave={handleMouseLeave('international')}
+            onMouseUp={handleMouseUp('international')}
+            onMouseMove={handleMouseMove('international')}
+            style={{ cursor: dragState.international.isDragging ? 'grabbing' : 'grab', scrollSnapType: 'x mandatory' }}
+          >
+            {internationalListings.map((property, index) => (
+              <div
+                key={property._kw_meta?.id || property.id || index}
+                className="flex-shrink-0 basis-full sm:basis-1/2 md:basis-1/3 max-w-[80%] sm:max-w-[50%] md:max-w-[30%] md:h-[330px] h-[200px] rounded-xl overflow-hidden shadow-md bg-white relative cursor-pointer"
+                onClick={() => {
+                  localStorage.setItem('selectedProperty', JSON.stringify(property));
+                  window.location.href = '/propertydetails';
+                }}
+                style={{ scrollSnapAlign: 'start' }}
+              >
+                {(
+                  property.image ||
+                  (Array.isArray(property.images) && property.images[0]) ||
+                  (Array.isArray(property.photos) && property.photos[0]?.ph_url)
+                ) ? (
+                  <Image
+                    src={
+                      property.image ||
+                      (Array.isArray(property.images) && property.images[0]) ||
+                      (Array.isArray(property.photos) && property.photos[0]?.ph_url) ||
+                      '/property.jpg'
+                    }
+                    alt={property.title || property.prop_type || 'Property'}
+                    fill
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-red-200 via-white to-red-100 text-[rgba(202,3,32,255)] font-bold text-lg md:text-2xl animate-pulse rounded-xl border-2 border-dashed border-[rgba(202,3,32,255)]">
+                  Coming Soon!
+                  </div>
+                )}
+                <div className="absolute bottom-4 left-4 text-white drop-shadow">
+                  <h3 className="text-md font-semibold">{property.title || property.prop_type || 'Property'}</h3>
+                  <p className="text-sm">
+                    {typeof property.location === 'string'
+                      ? property.location
+                      : property.city || property.region || property.municipality || '-'}
+                  </p>
+                </div>
+                <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
+                  {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="absolute bottom-4 right-4 bg-black/70 text-white px-2 py-1 rounded-full text-sm font-semibold">
-            {property.price ? `SAR ${property.price}` : property.current_list_price || ''}
-          </div>
-        </div>
-      ))}
-    </div>
-  )}
-
-  {showScrollButton && !loadingListings && listings.length > 0 && (
-    <button
-    onClick={scrollRight}
-    className="absolute right-0 top-1/2 transform -translate-y-1/2 
-               bg-white border border-gray-300 rounded-full p-2 md:p-4 
+        );
+      })()}
+      {showScrollButton.international && !loadingListings && listings.length > 0 && (
+        <button
+          onClick={() => scrollRight(internationalScrollRef)}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 \
+               bg-white border border-gray-300 rounded-full p-2 md:p-4 \
                shadow-md z-10 hover:shadow-lg transition"
-  >
-   <ChevronRight 
-   className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
- />
+        >
+          <ChevronRight 
+            className="cursor-pointer text-[rgba(202,3,32,255)] w-6 h-6 md:w-[50px] md:h-[50px]" 
+          />
+        </button>
+      )}
+    </div>
  
-  </button>
-  )}
-</div>
+
            
           </div>
         </div>
@@ -1107,7 +1427,7 @@ const Properties = () => {
       Click Here
     </button>
     </Link>
-      </main>
+      
       {/* How Will You Think image and KW logo bar */}
       <div className="flex flex-col">
         <div className="order-1 md:order-2 flex flex-col items-center justify-center">
@@ -1135,7 +1455,7 @@ const Properties = () => {
       </div>
       {/* Red horizontal line */}
       <div className="hidden md:flex justify-center items-center my-20 col-span-2 sm:col-span-3 md:col-span-4 lg:col-span-8">
-        <hr className="md:w-160 w-60 mx-auto bg-[rgba(202,3,32,255)] border-0  h-[1.5px]" />
+        <hr className="md:w-160 w-60 mx-auto bg-[rgba(202,3,32,255)] border-0  h-[2px]" />
       </div>
       {/* Dynamic Property Types Section */}
      

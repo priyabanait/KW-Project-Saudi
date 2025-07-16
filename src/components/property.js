@@ -1,172 +1,138 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 const Properties = () => {
-     const [price, setPrice] = useState(750000);
-     const [visibleCount, setVisibleCount] = useState(6);
- 
-//      const fetchListings = async () => {
-//   try {
-//     const response = await fetch(
-//       'https://partners.api.kw.com/v2/listings/region/50394?page[offset]=1&page[limit]=100',
-//       {
-//         method: 'GET',
-//         headers: {
-//           Authorization: 'Basic b2FoNkRibjE2dHFvOE52M0RaVXk0NHFVUXAyRjNHYjI6eHRscnJmNUlqYVZpckl3Mg==',
-//           Accept: 'application/json',
-//         },
-//       }
-//     );
-// console.log(response);
+  const [price, setPrice] = useState(750000);
+  const [visibleCount, setVisibleCount] = useState(6);
 
-//     if (!response.ok) {
-//       throw new Error(`HTTP error! status: ${response.status}`);
-//     }
+  const [propertyType, setPropertyType] = useState('PROPERTY TYPE');
+  const [marketCenter, setMarketCenter] = useState('MARKET CENTER');
+  const [propertySubType, setPropertySubType] = useState('PROPERTY SUBTYPE');
+  const [city, setCity] = useState('CITY');
 
-//     const data = await response.json();
-//     console.log('API data:', data);
-//   } catch (err) {
-//     console.error('Failed to fetch listings:', err);
-//   }
-// };
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-// fetchListings();
+  useEffect(() => {
+    async function fetchProperties() {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('https://kw-backend-q6ej.vercel.app/api/listings/list/properties', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            limit: 6,
+            max_price: 858000,
+            min_price: 572000,
+            page: 1,
+            property_category: 'Residential'
+          })
+        });
 
 
-  const properties = [
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043179/listing/734aaecdaf1936be42f85a35/cv7r6851g1lc70qjejgg.jpeg",
-      price: 750000,
-      agent: "Meshary Almalki",
-      type: "Residential",
-      beds: 4,
-      baths: 2,
-      area: 280,
-      location: "Jeddah, Saudi Arabia",
-    },
-     {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000095310/listing/266bf11f6f1a642adf96b812/cukvcdqhr9cs770mt8h0.png",
-      price: 960000,
-      agent: "Saad Alotaibi",
-      type: "Commercial",
-      beds: 0,
-      baths: 2,
-      area: 850,
-      location: "Tabuk, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043542/listing/30cbbba08226bd44d555e39b/cu4ddknndonc773t63hg.png",
-      price: 580000,
-      agent: "Aisha Alghamdi",
-      type: "Residential",
-      beds: 2,
-      baths: 1,
-      area: 200,
-      location: "Hail, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043542/listing/46a12c34c40bc918adfe272e/cu940vrpaooc70pb9f4g.png",
-      price: 715000,
-      agent: "Khaled Alrashid",
-      type: "Residential",
-      beds: 3,
-      baths: 2,
-      area: 310,
-      location: "Taif, Saudi Arabia",
-    },
+
+        const data = await res.json();
+        let fetched = [];
+        if (Array.isArray(data?.data)) {
+          fetched = data.data;
+        }
+        console.log('Fetched properties:', fetched.slice(0, 2)); // Debug: log first 2 properties
+        setProperties(fetched);
+      } catch (err) {
+        setError('Failed to load properties');
+        console.error('Error fetching properties:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProperties();
+  }, []);
+
+  // Filtering logic inside the component
+  const filterBy = (prop, key, value) => {
+    if (!value || value === key || value === 'All') return true;
+    const v = value.toLowerCase().trim();
     
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043179/listing/e36de373fe8179a94c991478/cudvqtahr9cs770mmdi0.jpeg",
-      price: 980000,
-      agent: "Badr Alzahrani",
-      type: "Residential",
-      beds: 4,
-      baths: 3,
-      area: 370,
-      location: "Al Khobar, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043179/listing/4a588fa29f9735dc22d6a40a/cudvs69u8mjc70kegq9g.jpeg",
-      price: 675000,
-      agent: "Huda Aljohani",
-      type: "Residential",
-      beds: 3,
-      baths: 2,
-      area: 290,
-      location: "Jazan, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043179/listing/7a67ea5d225fc6d8aab293b9/cudvognklprc7765jj0g.jpeg",
-      price: 870000,
-      agent: "Talal Alnasser",
-      type: "Commercial",
-      beds: 0,
-      baths: 2,
-      area: 720,
-      location: "Najran, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000095310/listing/5d94e50f0f72b839a8d718fb/cukvipfklprc7765qgc0.png",
-      price: 535000,
-      agent: "Sarah Alotaibi",
-      type: "Residential",
-      beds: 2,
-      baths: 1,
-      area: 230,
-      location: "Al Baha, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043542/listing/5c1a9082279a92531156e9f1/cuksspqhr9cs770mt59g.png",
-      price: 1020000,
-      agent: "Mansour Aljaber",
-      type: "Residential",
-      beds: 5,
-      baths: 4,
-      area: 450,
-      location: "Sakaka, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043542/listing/d4ec15602aac7608656baa02/cuhn3vihr9cs770mpu1g.png",
-      price: 780000,
-      agent: "Laila Alnami",
-      type: "Commercial",
-      beds: 0,
-      baths: 2,
-      area: 640,
-      location: "Madinah, Saudi Arabia",
-    },
-     {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043179/listing/e36de373fe8179a94c991478/cudvqtahr9cs770mmdi0.jpeg",
-      price: 980000,
-      agent: "Badr Alzahrani",
-      type: "Residential",
-      beds: 4,
-      baths: 3,
-      area: 370,
-      location: "Al Khobar, Saudi Arabia",
-    },
-    {
-      image: "https://storage.googleapis.com/attachment-listing-prod-5af4/2000043542/listing/f5f164daabf06943d4ee27d4/cuh2t42hr9cs770mp0n0.png",
-      price: 695000,
-      agent: "Salem Alsuwailem",
-      type: "Residential",
-      beds: 3,
-      baths: 2,
-      area: 305,
-      location: "Buraydah, Saudi Arabia",
-    },
-  ];
+    if (key === 'PROPERTY TYPE') {
+      const propType = String(prop.type || prop.prop_type || '').toLowerCase().trim();
+      return propType.includes(v) || v.includes(propType);
+    }
+    
+    if (key === 'MARKET CENTER') {
+      const marketCenter = String(prop.market_center || prop.center || '').toLowerCase().trim();
+      return marketCenter.includes(v) || v.includes(marketCenter);
+    }
+    
+    if (key === 'PROPERTY SUBTYPE') {
+      const subType = String(prop.subtype || prop.property_subtype || '').toLowerCase().trim();
+      return subType.includes(v) || v.includes(subType);
+    }
+    
+    if (key === 'CITY') {
+      const cityValues = [
+        prop.city,
+        prop.region,
+        prop.municipality,
+        prop.list_address?.city,
+        prop.property_address?.city
+      ].filter(val => val != null && val !== undefined).map(val => String(val).toLowerCase().trim());
+      
+      return cityValues.some(city => city.includes(v) || v.includes(city));
+    }
+    
+    return true;
+  };
+
+  const filteredProperties = properties.filter(prop => {
+    // Filter by price
+    const propPrice = prop.price || prop.current_list_price || 0;
+    if (propPrice > price) return false;
+    
+    // Filter by property type
+    if (!filterBy(prop, 'PROPERTY TYPE', propertyType)) return false;
+    
+    // Filter by market center
+    if (!filterBy(prop, 'MARKET CENTER', marketCenter)) return false;
+    
+    // Filter by property subtype
+    if (!filterBy(prop, 'PROPERTY SUBTYPE', propertySubType)) return false;
+    
+    // Filter by city
+    if (!filterBy(prop, 'CITY', city)) return false;
+    
+    return true;
+  });
+
+  // Debug: Log filter counts
+  useEffect(() => {
+    if (properties.length > 0) {
+      console.log('Filter states:', {
+        propertyType,
+        marketCenter,
+        propertySubType,
+        city,
+        price,
+        totalProperties: properties.length,
+        filteredCount: filteredProperties.length
+      });
+    }
+  }, [propertyType, marketCenter, propertySubType, city, price, properties, filteredProperties]);
 
   const bedIconUrl = "/bed.png";
   const bathIconUrl = "/bath.png";
   const areaIconUrl = "/area.png";
-    return (
-        <div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 text-[10px] md:text-xs w-full mt-4 md:mt-12 max-w-full px-4 md:px-34">
+  return (
+    <div>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-4 text-[10px] md:text-xs w-full mt-4 md:mt-12 max-w-full px-4 md:px-34">
   {/* Row 1 - First two dropdowns */}
   <div className="col-span-1">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
+    <select
+      className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center"
+      value={propertyType}
+      onChange={e => setPropertyType(e.target.value)}
+    >
       <option>PROPERTY TYPE</option>
       <option>All</option>
       <option>Commercial</option>
@@ -177,7 +143,11 @@ const Properties = () => {
   </div>
   
   <div className="col-span-1">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
+    <select
+      className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center"
+      value={marketCenter}
+      onChange={e => setMarketCenter(e.target.value)}
+    >
       <option>MARKET CENTER</option>
       <option>All</option>
       <option>Jasmin</option>
@@ -187,7 +157,11 @@ const Properties = () => {
 
   {/* Row 2 - Next two dropdowns */}
   <div className="col-span-1 mt-3 md:mt-0">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
+    <select
+      className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center"
+      value={propertySubType}
+      onChange={e => setPropertySubType(e.target.value)}
+    >
       <option>PROPERTY SUBTYPE</option>
       <option>All</option>
       <option>Apartment</option>
@@ -209,7 +183,11 @@ const Properties = () => {
   </div>
 
   <div className="col-span-1 mt-3 md:mt-0">
-    <select className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center">
+    <select
+      className="w-full text-sm md:text-[0.9rem] md:leading-normal p-1 md:p-0 flex justify-center text-center"
+      value={city}
+      onChange={e => setCity(e.target.value)}
+    >
       <option>CITY</option>
       <option>All</option>
       <option>ALRIYADH</option>
@@ -232,8 +210,6 @@ const Properties = () => {
     </select>
   </div>
 
- 
-
   <div className="flex flex-col col-span-2 md:col-span-1 items-center md:items-start text-center md:text-left md:ml-10">
   <label htmlFor="price" className="mb-1 mr-33 md:mr-0 text-gray-700 text-sm md:text-[0.9rem] leading-tight ">
     PRICE
@@ -244,7 +220,8 @@ const Properties = () => {
     min="0"
     max="1000000"
     step="10000"
-    defaultValue="1000000"
+    value={price}
+    onChange={e => setPrice(Number(e.target.value))}
     className="w-40 h-1 bg-black rounded-lg appearance-none 
       [&::-webkit-slider-thumb]:appearance-none 
       [&::-webkit-slider-thumb]:h-4 
@@ -252,103 +229,122 @@ const Properties = () => {
       [&::-webkit-slider-thumb]:rounded-full 
       [&::-webkit-slider-thumb]:bg-[rgba(202,3,32,255)]"
   />
-  <span className="md:text-[0.9rem] text-sm mt-4 ml-35 md:ml-28">750000 SAR</span>
+  <span className="md:text-[0.9rem] text-sm mt-4 ml-35 md:ml-28">{price.toLocaleString()} SAR</span>
 </div>
 
       </div>
 
       <p className="md:mt-6 mt-2 md:text-[0.9rem] text-sm leading-tight ml-6 text-gray-700">
-        Total Listings : <span className="text-[rgba(202,3,32,255)] font-semibold">{properties.length}</span>
+        Total Listings : <span className="text-[rgba(202,3,32,255)] font-semibold">{filteredProperties.length}</span>
       </p>
 
       <div className="min-h-screen p-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {properties.slice(0, visibleCount).map((prop, idx) => (
-  <div key={idx} className="bg-gray-100 rounded-3xl overflow-hidden w-full">
-    <div className="relative w-full h-60">
-      <Link href={`/properties/propertyDetails`} passHref>
-       
-          <Image
-            src={prop.image}
-            alt="property"
-            fill
-            className="object-cover rounded-3xl cursor-pointer hover:opacity-90 transition-opacity"
-          />
-     
-      </Link>
-    
-              </div>
-              <div className="p-4">
-                <div className="flex justify-between items-baseline mb-1 md:my-6 my-4">
-                  <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                    <span className="relative w-5 h-5">
-                      <Image src='/currency.png' alt="currency" fill className="object-cover rounded-3xl" />
-                    </span>
-                    {prop.price.toLocaleString()}
-                  </h2>
-                  <p className="text-sm">{prop.agent}</p>
+        {loading ? (
+          <div className="flex justify-center items-center h-60">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[rgba(202,3,32,255)] border-solid"></div>
+          </div>
+        ) : error ? (
+          <div className="text-red-500">{error}</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProperties.slice(0, visibleCount).map((prop, idx) => (
+              <div
+                key={prop._kw_meta?.id || prop.id || idx}
+                className="bg-gray-100 rounded-3xl overflow-hidden w-full cursor-pointer"
+                onClick={() => {
+                  localStorage.setItem('selectedProperty', JSON.stringify(prop));
+                  window.location.href = '/propertydetails';
+                }}
+              >
+                <div className="relative w-full h-60">
+                  <Image
+                    src={
+                      prop.image ||
+                      (Array.isArray(prop.images) && prop.images[0]) ||
+                      (Array.isArray(prop.photos) && prop.photos[0]?.ph_url) ||
+                      '/property.jpg'
+                    }
+                    alt={prop.title || prop.prop_type || 'property'}
+                    fill
+                    className="object-cover rounded-3xl cursor-pointer hover:opacity-90 transition-opacity"
+                  />
                 </div>
-
-                <div className="flex justify-between items-center md:my-6 my-4">
-                  <div className="flex items-center text-sm mb-2">
-                    <span className="flex items-center gap-2 mr-4">
-                      <span className="relative w-6 h-6">
-                        <Image src={bathIconUrl} alt="bath" fill className="object-contain" />
+                <div className="p-4">
+                  <div className="flex justify-between items-baseline mb-1 md:my-6 my-4">
+                    <h2 className="text-2xl font-semibold text-gray-800 flex items-center gap-2">
+                      <span className="relative w-5 h-5">
+                        <Image src='/currency.png' alt="currency" fill className="object-cover rounded-3xl" />
                       </span>
-                      {prop.baths}
-                    </span>
-                    <span className="flex items-center gap-2 mr-4">
-                      <span className="relative w-6 h-6">
-                        <Image src={bedIconUrl} alt="bed" fill className="object-contain" />
-                      </span>
-                      {prop.beds}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <span className="relative w-6 h-6">
-                        <Image src={areaIconUrl} alt="area" fill className="object-contain" />
-                      </span>
-                      {prop.area}
-                    </span>
+                      {(prop.price || prop.current_list_price || 0).toLocaleString()}
+                    </h2>
+                    <p className="text-sm">{prop.agent || prop.agent_name || '-'}</p>
                   </div>
-                  <p className="text-[0.7rem] mb-2">{prop.type}</p>
-                </div>
 
-                <p className="text-xs">{prop.location}</p>
-                <button className="mt-10 w-full bg-black text-white py-2 rounded-full md:text-base text-sm hover:bg-[rgba(202,3,32,255)] transition">
-                  View Property Details
-                </button>
+                  <div className="flex justify-between items-center md:my-6 my-4">
+                    <div className="flex items-center text-sm mb-2">
+                      <span className="flex items-center gap-2 mr-4">
+                        <span className="relative w-6 h-6">
+                          <Image src={bathIconUrl} alt="bath" fill className="object-contain" />
+                        </span>
+                        {prop.total_bath || prop.baths || prop.bathrooms || 0}
+                      </span>
+                      <span className="flex items-center gap-2 mr-4">
+                        <span className="relative w-6 h-6">
+                          <Image src={bedIconUrl} alt="bed" fill className="object-contain" />
+                        </span>
+                        {prop.total_bed || prop.beds || prop.bedrooms || 0}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <span className="relative w-6 h-6">
+                          <Image src={areaIconUrl} alt="area" fill className="object-contain" />
+                        </span>
+                        {prop.lot_size_area || prop.area || prop.sqft || 0} {prop.lot_size_units || ''}
+                      </span>
+                    </div>
+                    <p className="text-base mb-2">{prop.type || prop.prop_type || '-'}</p>
+                  </div>
+
+                  <p className="text-lg">
+                    {
+                      typeof prop.list_address?.address === 'string' ? prop.list_address.address
+                      : typeof prop.property_address?.address === 'string' ? prop.property_address.address
+                      : typeof prop.location === 'string' ? prop.location
+                      : prop.city || prop.region || prop.municipality || '-'
+                    }
+                  </p>
+                  <button className="mt-10 w-full bg-black text-white py-2 rounded-full font-semibold md:text-base text-sm hover:bg-[rgba(202,3,32,255)] transition">
+                    View Property Details
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {visibleCount < properties.length && (
+      {visibleCount < filteredProperties.length && !loading && !error && (
         <div className="flex justify-center items-center md:mt-5">
-         <button
-  className="md:w-3/6 w-40 md:py-2 py-2 mb-10 md:mb-0 px-4  bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white text-xs md:text-lg font-semibold rounded-full transition whitespace-nowrap"
-  onClick={() => setVisibleCount(c => c + 6)}
->
-  View More Properties..
-</button>
-
+          <button
+            className="md:w-3/6 w-40 md:py-2 py-2 mb-10 md:mb-0 px-4  bg-[rgba(202,3,32,255)] hover:bg-red-950 text-white text-xs md:text-lg font-semibold rounded-full transition whitespace-nowrap"
+            onClick={() => setVisibleCount(c => c + 6)}
+          >
+            View More Properties..
+          </button>
         </div>
       )}
-<div className="hidden md:flex justify-center py-4 md:py-16">
+      <div className="hidden md:flex justify-center py-4 md:py-16">
         <Image
           src="/howwillyouthink.png"
           alt="How Will You Thrive"
           width={800}
           height={400}
-         className="w-70 h-20 md:w-[950px] md:h-[400px] object-contain"
+          className="w-70 h-20 md:w-[950px] md:h-[400px] object-contain"
         />
       </div>
 
       <hr className="hidden md:block w-6/12 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px] mt-5 md:mt-20 mb-16" />
-     
-   
-        </div>
-    );
+    </div>
+  );
 }
 
 export default Properties;

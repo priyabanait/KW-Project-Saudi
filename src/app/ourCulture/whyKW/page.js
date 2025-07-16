@@ -99,12 +99,12 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
           <React.Fragment key={index}>
             <div className="grid grid-cols-12 items-stretch hover:bg-[rgba(202,3,32,255)] group transition duration-300 px-4 min-h-[120px]">
               {/* Number */}
-              <div className=" md:ml-30 col-span-2 md:col-span-1 flex items-center justify-center text-2xl md:text-4xl text-gray-400 group-hover:text-black font-light">
+              <div className="md:ml-30 col-span-2 md:col-span-1 flex items-center justify-center text-5xl  text-gray-500 group-hover:text-black font-normal">
                 {section.number}
               </div>
 
               {/* Title */}
-              <div className=" md:ml-46 col-span-4 md:col-span-4 flex items-center text-xs font-semibold tracking-wide text-black group-hover:text-white">
+              <div className="md:ml-46 col-span-4 md:col-span-4 flex items-center text-base font-semibold tracking-wide text-black group-hover:text-white">
                 {section.title}
               </div>
 
@@ -114,7 +114,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
               </div>
 
               {/* Description */}
-              <div className="col-span-5 md:col-span-6 flex items-center text-[0.6rem] md:text-[0.6rem]  leading-relaxed text-gray-700 group-hover:text-white py-4">
+              <div className="col-span-5 md:col-span-6 flex items-center text-[0.6rem] md:text-[1rem]  leading-relaxed text-gray-700 group-hover:text-white py-4">
                 {section.description}
               </div>
             </div>
@@ -131,8 +131,8 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
         <div className="max-w-full mx-auto text-center md:mt-16">
         
          
-          <p className="mt-2 md:mt-8 text-xs md:text-xs">WHY KELLER WILLIAMS SAUDI ?</p>
-           <hr className="w-32 md:w-60 mx-auto bg-[rgba(202,3,32,255)] h-[1.5px] mt-4 md:mt-8" />
+          <p className="mt-2 md:mt-8 text-base font-semibold md:text-xl">WHY KELLER WILLIAMS SAUDI ?</p>
+           <hr className="w-32 md:w-80 mx-auto bg-[rgba(202,3,32,255)] h-[1.5px] border-0 mt-4 md:mt-8" />
         
         </div>
       </main>
@@ -144,12 +144,12 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
           <React.Fragment key={index}>
             <div className="grid grid-cols-12 items-stretch hover:bg-[rgba(202,3,32,255)] group transition duration-300 px-4 min-h-[120px]">
               {/* Number */}
-              <div className=" md:ml-30 col-span-2 md:col-span-1 flex items-center justify-center text-2xl md:text-4xl text-gray-400 group-hover:text-black font-light">
+              <div className="md:ml-30 col-span-2 md:col-span-1 flex items-center justify-center text-5xl  text-gray-500 group-hover:text-black font-normal">
                 {section.number}
               </div>
 
               {/* Title */}
-              <div className=" md:ml-46 col-span-4 md:col-span-4 flex items-center text-xs font-semibold tracking-wide text-black group-hover:text-white">
+              <div className="md:ml-46 col-span-4 md:col-span-4 flex items-center text-base font-semibold tracking-wide text-black group-hover:text-white">
                 {section.title}
               </div>
 
@@ -159,7 +159,7 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
               </div>
 
               {/* Description */}
-              <div className="col-span-5 md:col-span-6 flex items-center text-[0.6rem] md:text-[0.6rem]  leading-relaxed text-gray-700 group-hover:text-white py-4">
+              <div className="col-span-5 md:col-span-6 flex items-center text-[0.6rem] md:text-[1rem]  leading-relaxed text-gray-700 group-hover:text-white py-4">
                 {section.description}
               </div>
             </div>
@@ -182,8 +182,8 @@ By partnering with KW, you gain access to our state-of-the-art technology, empow
         />
       </div>
 
-                <div className=" ml-22 w-[1px] bg-[rgba(202,3,32,255)] h-auto md:h-28 my-4 group-hover:opacity-0 transition-opacity duration-300"></div>
-      <hr className="w-8/12 md:w-5/12 mx-auto bg- h-[1.5px] mt-2 md:mt-14 mb-10" />
+                {/* <div className=" ml-22 w-[1px] bg-[rgba(202,3,32,255)] h-auto md:h-28 my-4 group-hover:opacity-0 transition-opacity duration-300"></div> */}
+      <hr className="w-8/12 md:w-5/12 mx-auto bg-[rgba(202,3,32,255)] border-0 h-[1.5px] mt-2 md:mt-14 mb-10" />
       <Footer />
     </div>
   );

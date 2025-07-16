@@ -22,7 +22,15 @@ export const getExternalListings = async (req, res) => {
     const perPage = Number(req.body.limit ?? req.query.limit ?? 50);
     const marketCenterFilter = req.body.market_center ?? req.query.market_center;
     const listCategoryFilter = req.body.list_category ?? req.query.list_category;
+    const propertyCategoryFilter = req.body.property_category ?? req.query.property_category;
+    const propertySubtypeFilter = req.body.property_subtype ?? req.query.property_subtype;
+    const locationFilter = req.body.location ?? req.query.location;
+    const minPrice = req.body.min_price ?? req.query.min_price;
+    const maxPrice = req.body.max_price ?? req.query.max_price;
+    const propertyType = req.body.property_type ?? req.query.property_type;
 
+
+    console.log(marketCenterFilter,"market center ")
     // 2. Set up headers for API
     const headers = {
       Authorization:
@@ -33,7 +41,7 @@ export const getExternalListings = async (req, res) => {
     // 3. Fetch all listings from the API (loop through all pages)
     let allListings = [];
     let offset = 0;
-    const apiLimit = 50; // API max per page
+    const apiLimit = 20000; // Use the largest allowed by the KW API
     let total = 0;
     let first = true;
     do {
@@ -70,6 +78,45 @@ export const getExternalListings = async (req, res) => {
       allListings = allListings.filter(item => {
         const val = item.list_category || item.status || item.property_status || '';
         return String(val).toLowerCase() === lc;
+      });
+    }
+    // New: property_category filter
+    if (propertyCategoryFilter !== undefined) {
+      const pc = String(propertyCategoryFilter).toLowerCase();
+      allListings = allListings.filter(item => {
+        const val = item.property_category || item.prop_type || '';
+        return String(val).toLowerCase() === pc;
+      });
+    }
+    // New: property_subtype filter
+    if (propertySubtypeFilter !== undefined) {
+      const ps = String(propertySubtypeFilter).toLowerCase();
+      allListings = allListings.filter(item => {
+        const val = item.property_subtype || item.subtype || '';
+        return String(val).toLowerCase() === ps;
+      });
+    }
+    // New: location filter
+    if (locationFilter !== undefined) {
+      const loc = String(locationFilter).toLowerCase();
+      allListings = allListings.filter(item => {
+        const val = item.location || item.list_address?.city || item.list_address?.address || '';
+        return String(val).toLowerCase().includes(loc);
+      });
+    }
+    // New: min_price and max_price filter
+    if (minPrice !== undefined) {
+      const min = Number(minPrice);
+      allListings = allListings.filter(item => {
+        const price = Number(item.current_list_price ?? item.price ?? 0);
+        return price >= min;
+      });
+    }
+    if (maxPrice !== undefined) {
+      const max = Number(maxPrice);
+      allListings = allListings.filter(item => {
+        const price = Number(item.current_list_price ?? item.price ?? 0);
+        return price <= max;
       });
     }
 

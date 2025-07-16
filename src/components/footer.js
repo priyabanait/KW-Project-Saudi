@@ -27,14 +27,14 @@ const Footer = () => {
           <hr className="block md:hidden w-20 md:w-5/12 border-0 mx-auto bg-[rgba(202,3,32,255)]  h-[2px] mt-1 md:mt-14 mb-5" />
           
           <div className="flex flex-col items-center justify-center mb-2 md:hidden w-full">
-            <span className="text-sm mb-2">EMAIL  <span className="inline-block w-2" />  - <span className="inline-block w-4" />  <span className="text-[0.8rem] font-bold">info@kwsaudiarabia.com</span></span>
+            <span className="text-sm mb-2">EMAIL  <span className="inline-block w-2" />  - <span className="inline-block w-4" />  <span className="text-[0.8rem] font-bold">INFO@KWSAUDIARABIA.COM</span></span>
             <span className="text-sm">TELEPHONE  <span className="inline-block w-2" /> - <span className="inline-block w-4" />  <span className="text-[0.8rem] font-bold">9200-15671</span></span>
           </div>
           
           {/* Email - Desktop */}
           <div className="hidden md:flex flex-col md:flex-row items-center md:items-start justify-center md:justify-start text-[1rem] mb-1 md:mb-0">
             <span className="font-normal md:mr-1">EMAIL<span className="inline-block w-4" />-<span className="inline-block w-4" /></span>
-            <span className='font-bold'>info@kwsaudiarabia.com</span>
+            <span className='font-bold'>INFO@KWSAUDIARABIA.COM</span>
           </div>
 
           {/* Telephone - Desktop */}

@@ -319,7 +319,7 @@ const PropertyDetails = () => {
         <div className="absolute left-1/2 -top-14 -translate-x-1/2 z-10">
         <div className="mx-auto w-28 h-28 rounded-full overflow-hidden shadow-lg">
       <Image
-        src="https://avatar.kwconnect.com/2000043179.jpeg"
+        src="https://avatar"
         alt="Agent"
         width={80}
         height={80}

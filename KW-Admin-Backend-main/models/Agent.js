@@ -9,7 +9,8 @@ const agentSchema = new mongoose.Schema({
   city: { type: String },                           // e.g., "Jeddah"
   email: { type: String, required: true, unique: true },
   phone: { type: String },
-  profileImage: { type: String },                   // e.g., "Untitled design (9).jpg"
+  profileImage: { type: String },
+  photo: { type: String },                   // e.g., "Untitled design (9).jpg"
   active: { type: Boolean, default: true }
 }, { timestamps: true });
 
