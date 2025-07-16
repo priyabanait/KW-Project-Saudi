@@ -152,7 +152,7 @@ import Box from "@/components/box";
             </span>
           </div>
           <div className="mt-2 flex items-center justify-between">
-            <p className="text-lg font-bold">{property.current_list_price} QAR/month</p>
+            <p className="text-lg font-bold">{property.current_list_price} SAR/month</p>
             <button className="text-sm text-white p-2 rounded-lg bg-[rgba(202,3,32,255)]">
               Enquire now
             </button>
@@ -282,12 +282,12 @@ import Box from "@/components/box";
           setLoading(true);
           // Map priceRange to min/max price
           let minPrice = undefined, maxPrice = undefined;
-          if (priceRange === 'Below QAR 50,000') {
+          if (priceRange === 'Below SAR 50,000') {
             maxPrice = 50000;
-          } else if (priceRange === 'QAR 50,000 – 100,000') {
+          } else if (priceRange === 'SAR 50,000 – 100,000') {
             minPrice = 50000;
             maxPrice = 100000;
-          } else if (priceRange === 'Above QAR 100,000') {
+          } else if (priceRange === 'Above SAR 100,000') {
             minPrice = 100000;
           }
           // Map marketCenter to API value
@@ -632,9 +632,9 @@ import Box from "@/components/box";
                 onChange={e => setPriceRange(e.target.value)}
               >
                 <option>Select Price Range</option>
-                <option>Below QAR 50,000</option>
-                <option>QAR 50,000 – 100,000</option>
-                <option>Above QAR 100,000</option>
+                <option>Below SAR 50,000</option>
+                <option>SAR 50,000 – 100,000</option>
+                <option>Above SAR 100,000</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <FaChevronDown className="h-4 w-4" />
@@ -784,9 +784,9 @@ import Box from "@/components/box";
             onChange={e => setPriceRange(e.target.value)}
           >
             <option>Select Price Range</option>
-            <option>Below QAR 20,000</option>
-            <option>QAR 20,000 – 25,000</option>
-            <option>Above QAR 25,000</option>
+            <option>Below SAR 20,000</option>
+            <option>SAR 20,000 – 25,000</option>
+            <option>Above SAR 25,000</option>
           </select>
           <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
             <FaChevronDown className="h-4 w-4" />
@@ -873,7 +873,7 @@ import Box from "@/components/box";
                         key={idx}
                         position={{ lat: coords[1], lng: coords[0] }}
                         label={{
-                          text: `${property.current_list_price} QAR`,
+                          text: `${property.current_list_price} SAR`,
                           fontSize: "13px",
                           fontWeight: "bold",
                           color: 'black',
@@ -974,7 +974,7 @@ import Box from "@/components/box";
                 const key = coords.join(',');
                 coordSeen[key] = (coordSeen[key] || 0) + 1;
                 const offsetCoords = getOffsetCoords(coords, coordSeen[key] - 1);
-                const priceText = `${property.current_list_price} QAR`;
+                const priceText = `${property.current_list_price} SAR`;
                 const isActive = (hoveredProperty && hoveredProperty._id === property._id);
                 const isFixed = hoveredProperty?.fixed && hoveredProperty?._id === property._id;
                 const showAbove = shouldShowAbove(offsetCoords);
@@ -1095,7 +1095,7 @@ import Box from "@/components/box";
                                 </span>
                               </div>
                               <div className="mt-2 flex items-center justify-between">
-                                <p className="text-[10px] font-bold">{property.current_list_price} QAR/month</p>
+                                <p className="text-[10px] font-bold">{property.current_list_price} SAR/month</p>
                                 <button
                                   className="text-[10px] text-white p-2 rounded-lg bg-[rgba(202,3,32,255)]"
                                   onClick={(e) => {

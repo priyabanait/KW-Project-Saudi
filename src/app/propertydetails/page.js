@@ -220,7 +220,7 @@ export default function PropertyListing() {
     if (!price) return 'Price on request';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'QAR',
+      currency: 'SAR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(price);
@@ -343,7 +343,7 @@ export default function PropertyListing() {
             </span>
           </div>
           <div className="mt-2 flex items-center justify-between">
-            <p className="text-lg font-bold">{similarProperty.current_list_price} QAR/month</p>
+            <p className="text-lg font-bold">{similarProperty.current_list_price} SAR/month</p>
             <button className="text-sm text-white p-2 rounded-lg bg-[rgba(202,3,32,255)]">Enquire now</button>
           </div>
         </div>
